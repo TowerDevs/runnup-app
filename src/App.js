@@ -9,6 +9,20 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 
+var firebaseConfig = {
+  apiKey: "AIzaSyC7W9d_ZR-Uu0dcRRGd1c7yHWVVdEJ3in8",
+  authDomain: "runnup-ceb10.firebaseapp.com",
+  databaseURL: "https://runnup-ceb10.firebaseio.com",
+  projectId: "runnup-ceb10",
+  storageBucket: "runnup-ceb10.appspot.com",
+  messagingSenderId: "606725057896",
+  appId: "1:606725057896:web:c5e7b9ca0864fb88af7add",
+  measurementId: "G-NRNQXE9QD4"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
