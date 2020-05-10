@@ -1,5 +1,15 @@
 /* ACTION TYPE CONSTANTS BELOW */
 
+// Errors
 export const ERRORS_RETURNED = "ERRORS_RETURNED";
 export const ERRORS_LOGGED = "ERRORS_LOGGED";
 export const ERRORS_CLEARED = "ERRORS_CLEARED";
+
+// Routes
+export const ROUTES_REQUESTED = "ROUTES_REQUESTED";
+export const ROUTES_ERROR = "ROUTES_ERROR";
+export const ROUTE_CREATED = "ROUTE_CREATED";
+export const ROUTES_FETCHED = "ROUTES_FETCHED";
+export const ROUTE_READ = "ROUTE_READ";
+export const ROUTE_UPDATED = "ROUTE_UPDATED";
+export const ROUTE_DELETED = "ROUTE_DELETED";
