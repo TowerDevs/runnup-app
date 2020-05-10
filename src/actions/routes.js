@@ -1,8 +1,6 @@
 import {
     
 } from "./types";
-import { routesRef } from "../config/firebase";
-
 
 const setLoading = () => {
     return {
@@ -12,26 +10,20 @@ const setLoading = () => {
 
 export const createRoute = route => dispatch => {
     dispatch(setLoading());
-
-
 };
 
 export const fetchRoutes = () => dispatch => {
     dispatch(setLoading());
-
 };
 
-export const returnRoute = id => dispatch => {
+export const readRoute = id => dispatch => {
     dispatch(setLoading());
-
 };
 
 export const updateRoute = (id, route) => dispatch => {
     dispatch(setLoading());
-
 };
 
 export const deleteRoute = id => dispatch => {
     dispatch(setLoading());
-
 };

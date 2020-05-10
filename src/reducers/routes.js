@@ -1,7 +1,7 @@
 import {
     ROUTES_REQUESTED, ROUTES_ERROR,
     ROUTE_CREATED, ROUTES_FETCHED,
-    ROUTE_RETURNED, ROUTE_UPDATED, ROUTE_DELETED
+    ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
 } from "../actions/types";
 
 const initialState = {
@@ -33,7 +33,7 @@ export default (state = initialState, action) => {
                 isLoading: false,
                 routes: action.payload
             };
-        case ROUTE_RETURNED:
+        case ROUTE_READ:
             return {
                 ...state,
                 isLoading: false,
