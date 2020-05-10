@@ -1,3 +1,4 @@
+import firebase from "firebase";
 import {
     FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN,
@@ -22,5 +23,11 @@ const firebaseConfig = {
 };
 
 // TODO: Install and init firebase
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+const dbRef = firebase.database().ref();
+
+// Children
+export const routesRef = dbRef.child("routes");
+export const runsRef = dbRef.child("runs");
