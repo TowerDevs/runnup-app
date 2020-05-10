@@ -1,3 +1,4 @@
+import * as firebase from 'firebase';
 import {
     FIREBASE_API_KEY,
     FIREBASE_AUTH_DOMAIN,
@@ -21,6 +22,11 @@ const firebaseConfig = {
     measurementId: FIREBASE_MEASUREMENT_ID
 };
 
-// TODO: Install and init firebase
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
+const dbRef = firebase.database().ref();
+
+export default refs = {
+    errorsRef: dbRef.child("errors")
+};
