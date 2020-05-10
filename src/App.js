@@ -9,18 +9,31 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import LinkingConfiguration from './navigation/LinkingConfiguration';
 
+import {
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_DATABASE_URL,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID,
+  FIREBASE_MEASUREMENT_ID
+} from "react-native-dotenv";
+
+// TODO: Probably shouldn't do this in App.js
+// TODO: This is untested
+var firebaseConfig = {
+  apiKey: FIREBASE_API_KEY,
+  authDomain: FIREBASE_AUTH_DOMAIN,
+  databaseURL: FIREBASE_DATABASE_URL,
+  projectId: FIREBASE_PROJECT_ID,
+  storageBucket: FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+  appId: FIREBASE_APP_ID,
+  measurementId: FIREBASE_MEASUREMENT_ID
+};
+
 // TODO: Install and init firebase
-// var firebaseConfig = {
-//   apiKey: "AIzaSyC7W9d_ZR-Uu0dcRRGd1c7yHWVVdEJ3in8",
-//   authDomain: "runnup-ceb10.firebaseapp.com",
-//   databaseURL: "https://runnup-ceb10.firebaseio.com",
-//   projectId: "runnup-ceb10",
-//   storageBucket: "runnup-ceb10.appspot.com",
-//   messagingSenderId: "606725057896",
-//   appId: "1:606725057896:web:c5e7b9ca0864fb88af7add",
-//   measurementId: "G-NRNQXE9QD4"
-// };
-// // Initialize Firebase
 // firebase.initializeApp(firebaseConfig);
 // firebase.analytics();
 
