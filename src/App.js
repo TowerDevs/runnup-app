@@ -1,76 +1,71 @@
-import { Ionicons } from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { SplashScreen } from 'expo';
-import * as Font from 'expo-font';
-import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { SplashScreen } from "expo";
+import * as Font from "expo-font";
+import React, { Component } from "react";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
-import LinkingConfiguration from './navigation/LinkingConfiguration';
+import BottomTabNavigator from "./navigation/BottomTabNavigator";
+import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
-import {
-  FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN,
-  FIREBASE_DATABASE_URL,
-  FIREBASE_PROJECT_ID,
-  FIREBASE_STORAGE_BUCKET,
-  FIREBASE_MESSAGING_SENDER_ID,
-  FIREBASE_APP_ID,
-  FIREBASE_MEASUREMENT_ID
-} from "react-native-dotenv";
+import { connect } from "react-redux";
+import { logErrors } from "./actions/errors";
+import PropTypes from "prop-types";
 
-// TODO: Probably shouldn't do this in App.js
-// TODO: This is untested
-var firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  databaseURL: FIREBASE_DATABASE_URL,
-  projectId: FIREBASE_PROJECT_ID,
-  storageBucket: FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  measurementId: FIREBASE_MEASUREMENT_ID
-};
-
-// TODO: Install and init firebase
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+// TODO: Import firebase once config is tested
 
 const Stack = createStackNavigator();
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
 
-  // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
-    async function loadResourcesAndDataAsync() {
+class App extends Component {
+  state = {
+    isLoadingComplete: false
+  };
+
+  static propTypes = {
+    logErrors: PropTypes.func.isRequired
+  };
+
+  componentDidMount() {
+    const { logErrors } = this.props;
+
+    const loadResourcesAndDataAsync = async () => {
       try {
         SplashScreen.preventAutoHide();
 
         // Load fonts
         await Font.loadAsync({
           ...Ionicons.font,
-          'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+          "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
         });
       } catch (e) {
-        // We might want to provide this error information to an error reporting service
         console.warn(e);
+        logErrors(e);
       } finally {
-        setLoadingComplete(true);
+        this.setState({ isLoadingComplete: true });
         SplashScreen.hide();
-      }
-    }
+      };
+    };
 
     loadResourcesAndDataAsync();
-  }, []);
+  };
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return null;
-  } else {
+  render() {
+    const { isLoadingComplete } = this.state;
+    const { skipLoadingScreen } = this.props;
+
+    if (!isLoadingComplete && !skipLoadingScreen) return null;
+
     return (
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
+        {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
         <NavigationContainer linking={LinkingConfiguration}>
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
@@ -79,11 +74,12 @@ export default function App(props) {
       </View>
     );
   }
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+const mapStateToProps = state => ({
+
 });
+
+const mapDispatchToProps = { logErrors };
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
