@@ -13,8 +13,6 @@ import { connect } from "react-redux";
 import { logErrors } from "./actions/errors";
 import PropTypes from "prop-types";
 
-// TODO: Import firebase once config is tested
-
 const Stack = createStackNavigator();
 
 const styles = StyleSheet.create({
