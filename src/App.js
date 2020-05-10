@@ -12,33 +12,7 @@ import LinkingConfiguration from "./navigation/LinkingConfiguration";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import {
-  FIREBASE_API_KEY,
-  FIREBASE_AUTH_DOMAIN,
-  FIREBASE_DATABASE_URL,
-  FIREBASE_PROJECT_ID,
-  FIREBASE_STORAGE_BUCKET,
-  FIREBASE_MESSAGING_SENDER_ID,
-  FIREBASE_APP_ID,
-  FIREBASE_MEASUREMENT_ID
-} from "react-native-dotenv";
-
-// TODO: Probably shouldn"t do this in App.js
-// TODO: This is untested
-var firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
-  authDomain: FIREBASE_AUTH_DOMAIN,
-  databaseURL: FIREBASE_DATABASE_URL,
-  projectId: FIREBASE_PROJECT_ID,
-  storageBucket: FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
-  appId: FIREBASE_APP_ID,
-  measurementId: FIREBASE_MEASUREMENT_ID
-};
-
-// TODO: Install and init firebase
-// firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+// TODO: Import firebase once config is tested
 
 const Stack = createStackNavigator();
 
