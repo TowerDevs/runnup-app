@@ -1,4 +1,4 @@
-import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED } from "../types";
+import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED } from "./types";
 // import Firebase HTTP client
 
 export const returnErrors = (message, status, id = null) => {
@@ -8,10 +8,10 @@ export const returnErrors = (message, status, id = null) => {
     };
 };
 
-export const logErrors = (error, errorInfo) => dispatch => {
+export const logErrors = error => dispatch => {
 
     /* Replace with Firebase client and respective logging route */
-    axios.post("/api/v1/errors", { error, errorInfo })
+    axios.post("/api/v1/errors", error)
     .then(res => dispatch({
         type: ERRORS_LOGGED,
         payload: res.data

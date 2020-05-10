@@ -3,25 +3,40 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { SplashScreen } from "expo";
 import * as Font from "expo-font";
-import * as React from "react";
+import React, { Component } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
-import { Provider } from "react-redux";
-import store from "./store";
+import { connect } from "react-redux";
+import { logErrors } from "./actions/errors";
+import PropTypes from "prop-types";
 
 // TODO: Import firebase once config is tested
 
 const Stack = createStackNavigator();
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
 
-  // Load any resources or data that we need prior to rendering the app
-  React.useEffect(() => {
-    async function loadResourcesAndDataAsync() {
+class App extends Component {
+  state = {
+    isLoadingComplete: false
+  };
+
+  static propTypes = {
+    logErrors: PropTypes.func.isRequired
+  };
+
+  componentDidMount() {
+    const { logErrors } = this.props;
+
+    const loadResourcesAndDataAsync = async () => {
       try {
         SplashScreen.preventAutoHide();
 
@@ -31,21 +46,24 @@ export default function App(props) {
           "space-mono": require("./assets/fonts/SpaceMono-Regular.ttf"),
         });
       } catch (e) {
-        // We might want to provide this error information to an error reporting service
         console.warn(e);
+        logErrors(e);
       } finally {
-        setLoadingComplete(true);
+        this.setState({ isLoadingComplete: true });
         SplashScreen.hide();
-      }
-    }
+      };
+    };
 
     loadResourcesAndDataAsync();
-  }, []);
+  };
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) return null;
+  render() {
+    const { isLoadingComplete } = this.state;
+    const { skipLoadingScreen } = this.props;
 
-  return (
-    <Provider store={store}>
+    if (!isLoadingComplete && !skipLoadingScreen) return null;
+
+    return (
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
         <NavigationContainer linking={LinkingConfiguration}>
@@ -54,13 +72,12 @@ export default function App(props) {
           </Stack.Navigator>
         </NavigationContainer>
       </View>
-    </Provider>
-  );
+    );
+  }
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-});
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = { logErrors };
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
