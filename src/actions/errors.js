@@ -19,9 +19,9 @@ export const logErrors = (error, errorInfo) => dispatch => {
     .catch(err => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "LOGGING_ERROR"));
 
-        else if(err.request) dispatch(returnErrors(err.response.data, err.response.status, "LOGGING_ERROR"));
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "LOGGING_ERROR"));
 
-        dispatch(returnErrors(err.response.data, err.response.status, "LOGGING_ERROR"));
+        dispatch(returnErrors("An internal error occurred", 500, "LOGGING_ERROR"));
     });
 };
 
