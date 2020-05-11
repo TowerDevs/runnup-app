@@ -1,5 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
+import { FontAwesome5 } from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -21,7 +23,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={HomeScreen}
         options={{
           title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="home" />,
         }}
       />
       <BottomTab.Screen
@@ -29,7 +31,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={MappingScreen}
         options={{
           title: 'Map',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="map" />,
         }}
       />
     </BottomTab.Navigator>
