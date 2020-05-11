@@ -2,6 +2,8 @@ import * as React from 'react';
 import MapView from 'react-native-maps';
 import { StyleSheet, Dimensions, View } from 'react-native';
 
+import Layout from '../constants/Layout';
+
 export default function MapScreen() {
   return (
     <View style={styles.container}>
@@ -18,7 +20,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Layout.window.width,
+    height: Layout.window.height,
   },
 });
