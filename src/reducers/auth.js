@@ -4,7 +4,9 @@ import {
     REGISTER_SUCCESS, REGISTER_FAILED,
     DEREGISTER_SUCCESS, DEREGISTER_FAILED,
     LOGIN_SUCCESS, LOGIN_FAILED,
-    LOGOUT_SUCCESS
+    LOGOUT_SUCCESS,
+    EMAIL_TOKEN_SENT, EMAIL_TOKEN_ERROR, EMAIL_VERIFIED,
+    PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED
 } from "../actions/types";
 
 const initialState = {
@@ -20,6 +22,14 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: true
+            };
+        case EMAIL_TOKEN_SENT:
+        case EMAIL_VERIFIED:
+        case PASSWORD_TOKEN_SENT:
+        case PASSWORD_TOKEN_VERIFIED:
+            return {
+                ...state,
+                isLoading: false
             };
         case USER_LOADED:
             return {
@@ -48,6 +58,8 @@ export default (state = initialState, action) => {
         case LOGOUT_SUCCESS:
         case DEREGISTER_SUCCESS:
         case DEREGISTER_FAILED:
+        case EMAIL_TOKEN_ERROR:
+        case PASSWORD_TOKEN_ERROR:
             return {
                 ...state,
                 token: null,
