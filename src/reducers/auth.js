@@ -2,6 +2,7 @@ import {
     AUTH_ERROR,
     USER_REQUESTED, USER_LOADED,
     REGISTER_SUCCESS, REGISTER_FAILED,
+    DEREGISTER_SUCCESS, DEREGISTER_FAILED,
     LOGIN_SUCCESS, LOGIN_FAILED,
     LOGOUT_SUCCESS
 } from "../actions/types";
@@ -45,6 +46,8 @@ export default (state = initialState, action) => {
         case REGISTER_FAILED:
         case LOGIN_FAILED:
         case LOGOUT_SUCCESS:
+        case DEREGISTER_SUCCESS:
+        case DEREGISTER_FAILED:
             return {
                 ...state,
                 token: null,
