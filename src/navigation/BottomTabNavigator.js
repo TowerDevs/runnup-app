@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
-import MapScreen from '../screens/MapScreen';
+import MappingScreen from '../screens/MappingScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -26,7 +26,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Map"
-        component={MapScreen}
+        component={MappingScreen}
         options={{
           title: 'Map',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
