@@ -1,6 +1,6 @@
 import * as React from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Layout from '../constants/Layout';
 
