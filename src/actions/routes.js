@@ -1,10 +1,10 @@
 import {
     ROUTES_REQUESTED,
     ROUTE_CREATED, ROUTES_FETCHED,
-    ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
+    // ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
 } from "./types";
 import { returnErrors } from "./errors";
-import axios from "axios";
+import axios from 'axios';
 
 const setLoading = () => {
     return {
@@ -96,7 +96,7 @@ export const deleteRoute = id => dispatch => {
     dispatch(setLoading());
 
     axios.delete(`/api/v1/routes/${id}`)
-    .then(res => dispatch({
+    .then(() => dispatch({
         type: ROUTES_FETCHED,
         payload: id
     }))
