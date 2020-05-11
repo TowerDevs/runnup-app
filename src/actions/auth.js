@@ -1,4 +1,4 @@
-import { AUTH_ERROR, USER_REQUESTED, USER_LOADED, REGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./types";
+import { AUTH_ERROR, USER_REQUESTED, USER_LOADED, REGISTER_SUCCESS, DEREGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./types";
 import { returnErrors } from "./errors";
 import axios from 'axios';
 
@@ -30,6 +30,25 @@ export const registerUser = user => dispatch => {
         }
 
         dispatch(returnErrors("An internal error occurred", 500, "REGISTER_FAILED"));
+        dispatch({ type: AUTH_ERROR });
+    });
+};
+
+export const deleteUser = () => dispatch => {
+    axios.delete("/api/v1/users")
+    .then(() => dispatch({
+        type: DEREGISTER_SUCCESS
+    }))
+    .catch(err => {
+        if(err.response) {
+            dispatch(returnErrors(err.response.data, err.response.status, "DEREGISTER_FAILED"))
+            dispatch({ type: AUTH_ERROR });
+        } else if(err.request) {
+            dispatch(returnErrors(err.request.data, err.request.status, "DEREGISTER_FAILED"));
+            dispatch({ type: AUTH_ERROR });
+        }
+
+        dispatch(returnErrors("An internal error occurred", 500, "DEREGISTER_FAILED"));
         dispatch({ type: AUTH_ERROR });
     });
 };
