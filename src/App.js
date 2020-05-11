@@ -23,13 +23,13 @@ const styles = StyleSheet.create({
 });
 
 class App extends Component {
-  state = {
-    isLoadingComplete: false
-  };
+  constructor() {
+    super()
+    this.state = {
+      isLoadingComplete: false
+    };
+  }
 
-  static propTypes = {
-    logErrors: PropTypes.func.isRequired
-  };
 
   componentDidMount() {
     const { logErrors } = this.props;
@@ -49,11 +49,11 @@ class App extends Component {
       } finally {
         this.setState({ isLoadingComplete: true });
         SplashScreen.hide();
-      };
+      }
     };
 
     loadResourcesAndDataAsync();
-  };
+  }
 
   render() {
     const { isLoadingComplete } = this.state;
@@ -72,9 +72,18 @@ class App extends Component {
       </View>
     );
   }
+}
+
+App.propTypes = {
+  logErrors: PropTypes.func.isRequired,
+  skipLoadingScreen: PropTypes.bool
 };
 
-const mapStateToProps = state => ({});
+App.defaultProps = {
+  skipLoadingScreen: false
+};
+
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = { logErrors };
 
