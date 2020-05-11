@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
-import PropTypes from 'prop-types';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -27,7 +26,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Map"
+        name="Mapping"
         component={MappingScreen}
         options={{
           title: 'Map',
