@@ -27,3 +27,12 @@ export const ROUTES_FETCHED = "ROUTES_FETCHED";
 export const ROUTE_READ = "ROUTE_READ";
 export const ROUTE_UPDATED = "ROUTE_UPDATED";
 export const ROUTE_DELETED = "ROUTE_DELETED";
+
+// Runs
+export const RUNS_REQUESTED = "RUNS_REQUESTED";
+export const RUNS_ERROR = "RUNS_ERROR";
+export const RUN_CREATED = "RUN_CREATED";
+export const RUNS_FETCHED = "RUNS_FETCHED";
+export const RUN_READ = "RUN_READ";
+export const RUN_UPDATED = "RUN_UPDATED";
+export const RUN_DELETED = "RUN_DELETED";
