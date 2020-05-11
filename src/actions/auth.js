@@ -1,6 +1,6 @@
 import { AUTH_ERROR, USER_REQUESTED, USER_LOADED, REGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS } from "./types";
 import { returnErrors } from "./errors";
-import axios from "axios";
+import axios from 'axios';
 
 const setLoading = () => {
     return {
@@ -27,7 +27,7 @@ export const registerUser = user => dispatch => {
         } else if(err.request) {
             dispatch(returnErrors(err.request.data, err.request.status, "REGISTER_FAILED"));
             dispatch({ type: AUTH_ERROR });
-        };
+        }
 
         dispatch(returnErrors("An internal error occurred", 500, "REGISTER_FAILED"));
         dispatch({ type: AUTH_ERROR });
@@ -49,7 +49,7 @@ export const loadUser = () => dispatch => {
         } else if(err.request) {
             dispatch(returnErrors(err.request.data, err.request.status, "AUTH_ERROR"));
             dispatch({ type: AUTH_ERROR });
-        };
+        }
 
         dispatch(returnErrors("An internal error occurred", 500, "AUTH_ERROR"));
         dispatch({ type: AUTH_ERROR });
@@ -75,7 +75,7 @@ export const loginUser = credentials => dispatch => {
         } else if(err.request) {
             dispatch(returnErrors(err.request.data, err.request.status, "LOGIN_FAILED"));
             dispatch({ type: AUTH_ERROR });
-        };
+        }
 
         dispatch(returnErrors("An internal error occurred", 500, "LOGIN_FAILED"));
         dispatch({ type: AUTH_ERROR });
