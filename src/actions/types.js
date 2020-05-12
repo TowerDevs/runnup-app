@@ -47,3 +47,12 @@ export const RUNS_FETCHED = "RUNS_FETCHED";
 export const RUN_READ = "RUN_READ";
 export const RUN_UPDATED = "RUN_UPDATED";
 export const RUN_DELETED = "RUN_DELETED";
+
+// Friends
+export const FRIENDS_REQUESTED = "FRIENDS_REQUESTED";
+export const FRIENDS_ERROR = "FRIENDS_ERROR";
+export const FRIENDS_FETCHED = "FRIENDS_FETCHED";
+export const FRIEND_ADDED = "FRIEND_ADDED";
+export const FRIEND_READ = "FRIEND_READ";
+export const FRIEND_ACCEPTED = "FRIEND_ACCEPTED"
+export const FRIEND_DELETED = "FRIEND_DELETED";
