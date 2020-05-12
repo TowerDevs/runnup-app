@@ -26,7 +26,7 @@ const App = ({ skipLoadingScreen }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    async function loadResourcesAndDataAsync() {
+    const loadResourcesAndDataAsync = async () => {
       try {
         SplashScreen.preventAutoHide();
 
@@ -41,8 +41,8 @@ const App = ({ skipLoadingScreen }) => {
       } finally {
         setLoadingComplete(true);
         SplashScreen.hide();
-      };
-    };
+      }
+    }
 
     loadResourcesAndDataAsync();
   }, []);
