@@ -4,7 +4,7 @@ import {
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
 } from "./types";
 import { returnErrors } from "./errors";
-import axios from "axios";
+import axios from 'axios';
 
 const setLoading = () => {
     return {
@@ -57,7 +57,7 @@ export const readRoute = id => dispatch => {
 
     axios.get(`/api/v1/routes/${id}`)
     .then(res => dispatch({
-        type: ROUTES_FETCHED,
+        type: ROUTE_READ,
         payload: res.data
     }))
     .catch(err => {
@@ -80,7 +80,7 @@ export const updateRoute = (id, route) => dispatch => {
 
     axios.put(`/api/v1/routes/${id}`, route, config)
     .then(res => dispatch({
-        type: ROUTES_FETCHED,
+        type: ROUTE_UPDATED,
         payload: res.data
     }))
     .catch(err => {
@@ -96,8 +96,8 @@ export const deleteRoute = id => dispatch => {
     dispatch(setLoading());
 
     axios.delete(`/api/v1/routes/${id}`)
-    .then(res => dispatch({
-        type: ROUTES_FETCHED,
+    .then(() => dispatch({
+        type: ROUTE_DELETED,
         payload: id
     }))
     .catch(err => {
