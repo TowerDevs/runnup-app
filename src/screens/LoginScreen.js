@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     View,
     Button,
@@ -6,15 +6,17 @@ import {
     TextInput,
     StyleSheet
 } from "react-native";
-import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+// import PropTypes from "prop-types";
+
+import { useSelector, useDispatch } from "react-redux";
 import { loginUser } from "../actions/auth";
 
 const LoginScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const error = useSelector(state => state.error);
     const dispatch = useDispatch();
 
     return (
@@ -22,6 +24,8 @@ const LoginScreen = () => {
             <Text style={styles.header}>
                 Login
             </Text>
+
+            { error ? <Text style={styles.error}>{error.message}</Text> : null }
 
             <TextInput
                 style={styles.input}
@@ -37,8 +41,13 @@ const LoginScreen = () => {
 
             <Button
                 style={styles.button}
+                title="Login"
                 onPress={() => dispatch(loginUser({ email, password }))}
             />
+
+            <Text>
+                Don&apos;t have an account?
+            </Text>
 
         </View>
     );
@@ -58,6 +67,9 @@ const styles = StyleSheet.create({
 
     },
     logo: {
+
+    },
+    error: {
 
     },
     input: {

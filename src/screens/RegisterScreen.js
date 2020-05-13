@@ -6,9 +6,10 @@ import {
     TextInput,
     StyleSheet
 } from "react-native";
-import PropTypes from "prop-types";
 
-import { useDispatch } from "react-redux";
+// import PropTypes from "prop-types";
+
+import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "../actions/auth";
 
 const RegisterScreen = () => {
@@ -16,6 +17,7 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const error = useSelector(state => state.error);
     const dispatch = useDispatch();
 
     return (
@@ -23,6 +25,8 @@ const RegisterScreen = () => {
             <Text style={styles.header}>
                 Create Account
             </Text>
+
+            { error ? <Text>{error.message}</Text> : null }
 
             <TextInput
                 style={styles.input}
@@ -44,8 +48,13 @@ const RegisterScreen = () => {
 
             <Button
                 style={styles.button}
+                title="Create Account"
                 onPress={() => dispatch(registerUser({ name, email, password }))}
             />
+
+            <Text>
+                Already have an account?
+            </Text>
 
         </View>
     );
