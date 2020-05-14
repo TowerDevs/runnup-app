@@ -1,11 +1,17 @@
 import * as React from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, Dimensions, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+
+import Layout from '../constants/Layout';
+import { MetricsContainer } from '../components/Metrics'
 
 export default function MapScreen() {
   return (
     <View style={styles.container}>
       <MapView style={styles.mapStyle}/>
+      <MetricsContainer 
+        style={styles.metricContainer}
+      />
     </View>
   );
 }
@@ -18,7 +24,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Layout.window.width,
+    height: Layout.window.height,
   },
+  metricContainer: {
+    position: 'absolute'
+  }
 });
