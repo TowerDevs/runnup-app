@@ -2,9 +2,9 @@ import {
     RUNS_REQUESTED,
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED
-
 } from "./types";
 import { returnErrors } from "./errors";
+import { tokenConfig } from "./auth";
 import axios from 'axios';
 
 const setLoading = () => {
@@ -13,16 +13,10 @@ const setLoading = () => {
     };
 };
 
-export const createRun = run => dispatch => {
+export const createRun = run => (dispatch, getState) => {
     dispatch(setLoading());
 
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.post("/api/v1/runs", run, config)
+    axios.post("/api/v1/runs", run, tokenConfig(getState))
     .then(res => dispatch({
         type: RUN_CREATED,
         payload: res.data
@@ -36,10 +30,10 @@ export const createRun = run => dispatch => {
     });
 };
 
-export const fetchRuns = () => dispatch => {
+export const fetchRuns = () => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/runs")
+    axios.get("/api/v1/runs", tokenConfig(getState))
     .then(res => dispatch({
         type: RUNS_FETCHED,
         payload: res.data
@@ -53,10 +47,10 @@ export const fetchRuns = () => dispatch => {
     });
 };
 
-export const readRun = id => dispatch => {
+export const readRun = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get(`/api/v1/runs/${id}`)
+    axios.get(`/api/v1/runs/${id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: RUN_READ,
         payload: res.data
@@ -70,16 +64,10 @@ export const readRun = id => dispatch => {
     });
 };
 
-export const updateRun = (id, run) => dispatch => {
+export const updateRun = (id, run) => (dispatch, getState) => {
     dispatch(setLoading());
 
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.put(`/api/v1/runs/${id}`, run, config)
+    axios.put(`/api/v1/runs/${id}`, run, tokenConfig(getState))
     .then(res => dispatch({
         type: RUN_UPDATED,
         payload: res.data
@@ -93,10 +81,10 @@ export const updateRun = (id, run) => dispatch => {
     });
 };
 
-export const deleteRun = id => dispatch => {
+export const deleteRun = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/runs/${id}`)
+    axios.delete(`/api/v1/runs/${id}`, tokenConfig(getState))
     .then(() => dispatch({
         type: RUN_DELETED,
         payload: id
