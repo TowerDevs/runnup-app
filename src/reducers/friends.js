@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     isLoading: false,
-    friends: []
+    data: []
 };
 
 export default (state = initialState, action) => {
@@ -25,19 +25,19 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                friends: [...state.friends, action.payload]
+                data: [...state.data, action.payload]
             }
         case FRIENDS_FETCHED:
             return {
                 ...state,
                 isLoading: false,
-                friends: action.payload
+                data: action.payload
             }
         case FRIEND_READ:
             return {
                 ...state,
                 isLoading: false,
-                friends: state.friend.map(friend => {
+                data: state.data.map(friend => {
                     const { id } = action.payload;
 
                     if(friend.id !== id) return friend;
@@ -51,7 +51,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                friends: state.friends.map(friend => {
+                data: state.data.map(friend => {
                     const { _id } = action.payload;
 
                     if(friend._id != _id) return friend;
@@ -66,7 +66,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                friends: state.friends.filter(friend => friend.id !== action.payload)
+                data: state.data.filter(friend => friend.id !== action.payload)
             };
         default:
             return state;
