@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     isLoading: false,
-    routes: []
+    data: []
 };
 
 export default (state = initialState, action) => {
@@ -25,19 +25,19 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                routes: [...state.routes, action.payload]
+                data: [...state.data, action.payload]
             };
         case ROUTES_FETCHED:
             return {
                 ...state,
                 isLoading: false,
-                routes: action.payload
+                data: action.payload
             };
         case ROUTE_READ:
             return {
                 ...state,
                 isLoading: false,
-                routes: state.routes.map(route => {
+                data: state.data.map(route => {
                     const { id } = action.payload;
 
                     if(route.id !== id) return route;
@@ -51,13 +51,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                routes: state.routes.map(route => {
+                data: state.data.map(route => {
                     const { id } = action.payload;
 
                     if(route.id !== id) return route;
 
                     return {
-                        ...state.routes,
+                        ...state.data,
                         route: {
 
                         }
@@ -68,7 +68,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                routes: state.routes.filter(route => route.id !== action.payload)
+                data: state.data.filter(route => route.id !== action.payload)
             };
         default:
             return state;

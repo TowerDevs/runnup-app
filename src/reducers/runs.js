@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     isLoading: false,
-    runs: []
+    data: []
 };
 
 export default (state = initialState, action) => {
@@ -25,19 +25,19 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                runs: [...state.runs, action.payload]
+                data: [...state.data, action.payload]
             };
         case RUNS_FETCHED:
             return {
                 ...state,
                 isLoading: false,
-                runs: action.payload
+                data: action.payload
             };
         case RUN_READ:
             return {
                 ...state,
                 isLoading: false,
-                runs: state.runs.map(run => {
+                data: state.data.map(run => {
                     const { id } = action.payload;
 
                     if(run.id !== id) return run;
@@ -51,13 +51,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                runs: state.runs.map(run => {
+                data: state.data.map(run => {
                     const { id } = action.payload;
 
                     if(run.id !== id) return run;
 
                     return {
-                        ...state.runs,
+                        ...state.data,
                         run: {
 
                         }
@@ -68,7 +68,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                runs: state.runs.filter(run => run.id !== action.payload)
+                data: state.data.filter(run => run.id !== action.payload)
             };
         default:
             return state;
