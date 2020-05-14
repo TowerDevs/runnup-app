@@ -7,12 +7,23 @@ import { returnErrors } from "./errors";
 import { tokenConfig } from "./auth";
 import axios from 'axios';
 
+/**
+ * @desc Sets the Run reducer state to "isLoading"
+ * @returns {Object} - contains the action type
+ */
 const setLoading = () => {
     return {
         type: RUNS_REQUESTED
     };
 };
 
+/**
+ * @desc Create a new run for the user
+ * @param {Object} run - properties for the new Run
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const createRun = run => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -30,6 +41,12 @@ export const createRun = run => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Fetch a list of the user's runs
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const fetchRuns = () => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -47,6 +64,13 @@ export const fetchRuns = () => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Return a single run to preview
+ * @param {string} id - ObjectId of the run to return
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const readRun = id => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -64,6 +88,14 @@ export const readRun = id => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Update an existing run
+ * @param {string} id - ObjectId of the run to update
+ * @param {function} dispatch - dispatch the action Object
+ * @param {Object} run - properties of the revised run
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const updateRun = (id, run) => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -81,6 +113,13 @@ export const updateRun = (id, run) => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Delete ane existing run
+ * @param {string} id - ObjectId of the run to delete
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const deleteRun = id => (dispatch, getState) => {
     dispatch(setLoading());
 

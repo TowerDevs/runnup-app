@@ -7,12 +7,23 @@ import { returnErrors } from "./errors";
 import { tokenConfig } from "./auth";
 import axios from "axios";
 
+/**
+ * @desc Sets the friends reducer state to "Loading.."
+ * @returns {Object} - contains the action type
+ */
 export const setLoading = () => {
     return {
         type: FRIENDS_REQUESTED
     };
 };
 
+/**
+ * @desc Send a friend request to the designated email address
+ * @param {Object} friend - new friend's info
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const sendFriendRequest = friend => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -30,6 +41,12 @@ export const sendFriendRequest = friend => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Retrieve a list of the user's friends
+ * @param {function} dispatch - function to dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const fetchFriends = () => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -47,6 +64,13 @@ export const fetchFriends = () => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Return the details of a user's friend
+ * @param {string} id - the ObjectId of the specified friend
+ * @param {function} dispatch - function to dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const readFriend = id => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -64,6 +88,13 @@ export const readFriend = id => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Accept the friend request from the specified friend
+ * @param {string} id - the ObjectId of the specified friend
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const acceptFriendRequest = id => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -81,6 +112,13 @@ export const acceptFriendRequest = id => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Delete the friend with the specified ObjectId
+ * @param {string} id - the ObjectId of the specified friend
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const deleteFriend = id => (dispatch, getState) => {
     dispatch(setLoading());
 
