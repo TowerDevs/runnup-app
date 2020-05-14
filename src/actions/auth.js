@@ -1,6 +1,6 @@
 import { AUTH_ERROR, USER_REQUESTED, USER_LOADED, REGISTER_SUCCESS, DEREGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS, EMAIL_TOKEN_SENT, EMAIL_VERIFIED, PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_VERIFIED } from "./types";
 import { returnErrors } from "./errors";
-import axios from 'axios';
+import axios from "axios";
 
 const setLoading = () => {
     return {
@@ -34,8 +34,8 @@ export const registerUser = user => dispatch => {
     });
 };
 
-export const deleteUser = () => dispatch => {
-    axios.delete("/api/v1/users")
+export const deleteUser = () => (dispatch, getState) => {
+    axios.delete("/api/v1/users", tokenConfig(getState))
     .then(() => dispatch({
         type: DEREGISTER_SUCCESS
     }))
@@ -53,10 +53,10 @@ export const deleteUser = () => dispatch => {
     });
 };
 
-export const loadUser = () => dispatch => {
+export const loadUser = () => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/users")
+    axios.get("/api/v1/users", tokenConfig(getState))
     .then(res => dispatch({
         type: USER_LOADED,
         payload: res.data
@@ -101,8 +101,8 @@ export const loginUser = credentials => dispatch => {
     });
 };
 
-export const logoutUser = () => dispatch => {
-    axios.delete("/api/v1/users/access-token")
+export const logoutUser = () => (dispatch, getState) => {
+    axios.delete("/api/v1/users/access-token", tokenConfig(getState))
     .then(() => dispatch({
         type: LOGOUT_SUCCESS
     }))
@@ -111,80 +111,74 @@ export const logoutUser = () => dispatch => {
     });
 };
 
-export const sendEmailToken = token => dispatch => {
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.post("/api/v1/users/email/token", token, config)
-    .then(res => dispatch({
-        type: EMAIL_TOKEN_SENT,
-        payload: res.data
+export const sendEmailToken = () => dispatch => {
+    axios.get("/v1/users/email/token")
+    .then(() => dispatch({
+        type: EMAIL_TOKEN_SENT
     }))
     .catch(err => {
-        if(err.response) {
-            dispatch(returnErrors(err.response.data, err.response.status, "EMAIL_TOKEN_ERROR"))
-        } else if(err.request) {
-            dispatch(returnErrors(err.request.data, err.request.status, "EMAIL_TOKEN_ERROR"));
-        }
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "EMAIL_TOKEN_ERROR"));
+
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "EMAIL_TOKEN_ERROR"));
 
         dispatch(returnErrors("An internal error occurred", 500, "EMAIL_TOKEN_ERROR"));
     });
 };
 
-export const verifyEmailToken = token => dispatch => {
-    axios.put(`/api/v1/users/email/token/${token}`, null)
+export const verifyEmail = token => dispatch => {
+    axios.get(`/v1/users/email/token/${token}`)
     .then(() => dispatch({
         type: EMAIL_VERIFIED
     }))
     .catch(err => {
-        if(err.response) {
-            dispatch(returnErrors(err.response.data, err.response.status, "EMAIL_TOKEN_ERROR"))
-        } else if(err.request) {
-            dispatch(returnErrors(err.request.data, err.request.status, "EMAIL_TOKEN_ERROR"));
-        }
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "EMAIL_TOKEN_ERROR"));
+
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "EMAIL_TOKEN_ERROR"));
 
         dispatch(returnErrors("An internal error occurred", 500, "EMAIL_TOKEN_ERROR"));
     });
 };
 
-export const sendPasswordToken = token => dispatch => {
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.post("/api/v1/users/password/token", token, config)
-    .then(res => dispatch({
-        type: PASSWORD_TOKEN_SENT,
-        payload: res.data
+export const requestNewPassword = () => dispatch => {
+    axios.get("/v1/users/password")
+    .then(() => dispatch({
+        type: PASSWORD_TOKEN_SENT
     }))
     .catch(err => {
-        if(err.response) {
-            dispatch(returnErrors(err.response.data, err.response.status, "PASSWORD_TOKEN_ERROR"))
-        } else if(err.request) {
-            dispatch(returnErrors(err.request.data, err.request.status, "PASSWORD_TOKEN_ERROR"));
-        }
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "PASSWORD_TOKEN_ERROR"));
+
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status,"PASSWORD_TOKEN_ERROR"));
 
         dispatch(returnErrors("An internal error occurred", 500, "PASSWORD_TOKEN_ERROR"));
     });
 };
 
 export const verifyPasswordToken = token => dispatch => {
-    axios.put(`/api/v1/users/password/token/${token}`, null)
+    axios.get(`/v1/users/password/${token}`)
     .then(() => dispatch({
         type: PASSWORD_TOKEN_VERIFIED
     }))
     .catch(err => {
-        if(err.response) {
-            dispatch(returnErrors(err.response.data, err.response.status, "PASSWORD_TOKEN_ERROR"))
-        } else if(err.request) {
-            dispatch(returnErrors(err.request.data, err.request.status, "PASSWORD_TOKEN_ERROR"));
-        }
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "PASSWORD_TOKEN_ERROR"));
+
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "PASSWORD_TOKEN_ERROR"));
 
         dispatch(returnErrors("An internal error occurred", 500, "PASSWORD_TOKEN_ERROR"));
     });
+};
+
+export const tokenConfig = getState => {
+    const token = getState().auth.token;
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    if (token) {
+        config.headers["x-auth-token"] = token;
+    }
+
+    return config;
 };
