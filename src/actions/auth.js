@@ -2,12 +2,22 @@ import { AUTH_ERROR, USER_REQUESTED, USER_LOADED, REGISTER_SUCCESS, DEREGISTER_S
 import { returnErrors } from "./errors";
 import axios from 'axios';
 
+/**
+ * @desc Set the Auth branch to isLoading
+ * @returns {Object} - loading async action type
+ */
 const setLoading = () => {
     return {
         type: USER_REQUESTED
     };
 };
 
+/**
+ * @desc Create a new user account
+ * @param  {Object} user - contains the user's name, email, and password
+ * @param {function} dispatch - function to dispatch the action
+ * @returns {Object} - the new User and the access token for automatic login upon registration
+ */
 export const registerUser = user => dispatch => {
     const config = {
         headers: {
@@ -34,6 +44,11 @@ export const registerUser = user => dispatch => {
     });
 };
 
+/**
+ * @desc Fetch the user's primary details
+ * @param {function} dispatch - function for dispatching the action
+ * @returns {Object} - returns the user's _id, name, email, etc.
+ */
 export const deleteUser = () => dispatch => {
     axios.delete("/api/v1/users")
     .then(() => dispatch({
@@ -75,6 +90,12 @@ export const loadUser = () => dispatch => {
     });
 };
 
+/**
+ * @desc Create a new access token for the user's login
+ * @param  {Object} credentials - contains the email and password of the attempted login
+ * @param {function} dispatch - function to dispatch the action
+ * @returns {Object} - contains the newly created access token for the login
+ */
 export const loginUser = credentials => dispatch => {
     const config = {
         headers: {
@@ -101,6 +122,11 @@ export const loginUser = credentials => dispatch => {
     });
 };
 
+/**
+ * @desc Delete the access token from asyncStorage and logout the user
+ * @param {function} dispatch - function to dispatch the action Object
+ * @returns {Object} - contains the action type
+ */
 export const logoutUser = () => dispatch => {
     axios.delete("/api/v1/users/access-token")
     .then(() => dispatch({
