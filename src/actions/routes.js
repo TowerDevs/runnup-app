@@ -4,6 +4,7 @@ import {
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
 } from "./types";
 import { returnErrors } from "./errors";
+import { tokenConfig } from "./auth";
 import axios from 'axios';
 
 const setLoading = () => {
@@ -12,16 +13,10 @@ const setLoading = () => {
     };
 };
 
-export const createRoute = route => dispatch => {
+export const createRoute = route => (dispatch, getState) => {
     dispatch(setLoading());
 
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.post("/api/v1/routes", route, config)
+    axios.post("/api/v1/routes", route, tokenConfig(getState))
     .then(res => dispatch({
         type: ROUTE_CREATED,
         payload: res.data
@@ -35,10 +30,10 @@ export const createRoute = route => dispatch => {
     });
 };
 
-export const fetchRoutes = () => dispatch => {
+export const fetchRoutes = () => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/routes")
+    axios.get("/api/v1/routes", tokenConfig(getState))
     .then(res => dispatch({
         type: ROUTES_FETCHED,
         payload: res.data
@@ -52,10 +47,10 @@ export const fetchRoutes = () => dispatch => {
     });
 };
 
-export const readRoute = id => dispatch => {
+export const readRoute = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get(`/api/v1/routes/${id}`)
+    axios.get(`/api/v1/routes/${id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: ROUTE_READ,
         payload: res.data
@@ -69,16 +64,10 @@ export const readRoute = id => dispatch => {
     });
 };
 
-export const updateRoute = (id, route) => dispatch => {
+export const updateRoute = (id, route) => (dispatch, getState) => {
     dispatch(setLoading());
 
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.put(`/api/v1/routes/${id}`, route, config)
+    axios.put(`/api/v1/routes/${id}`, route, tokenConfig(getState))
     .then(res => dispatch({
         type: ROUTE_UPDATED,
         payload: res.data
@@ -92,10 +81,10 @@ export const updateRoute = (id, route) => dispatch => {
     });
 };
 
-export const deleteRoute = id => dispatch => {
+export const deleteRoute = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/routes/${id}`)
+    axios.delete(`/api/v1/routes/${id}`, tokenConfig(getState))
     .then(() => dispatch({
         type: ROUTE_DELETED,
         payload: id

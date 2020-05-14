@@ -4,6 +4,7 @@ import {
     FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED
 } from "./types";
 import { returnErrors } from "./errors";
+import { tokenConfig } from "./auth";
 import axios from "axios";
 
 export const setLoading = () => {
@@ -12,16 +13,10 @@ export const setLoading = () => {
     };
 };
 
-export const sendFriendRequest = friend => dispatch => {
+export const sendFriendRequest = friend => (dispatch, getState) => {
     dispatch(setLoading());
 
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    axios.post("/api/v1/friends", friend, config)
+    axios.post("/api/v1/friends", friend, tokenConfig(getState))
     .then(res => dispatch({
         type: FRIEND_ADDED,
         payload: res.data
@@ -35,10 +30,10 @@ export const sendFriendRequest = friend => dispatch => {
     });
 };
 
-export const fetchFriends = () => dispatch => {
+export const fetchFriends = () => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/friends")
+    axios.get("/api/v1/friends", tokenConfig(getState))
     .then(res => dispatch({
         type: FRIENDS_FETCHED,
         payload: res.data
@@ -52,10 +47,10 @@ export const fetchFriends = () => dispatch => {
     });
 };
 
-export const readFriend = id => dispatch => {
+export const readFriend = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.get(`/api/v1/friends${id}`)
+    axios.get(`/api/v1/friends${id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: FRIEND_READ,
         payload: res.data
@@ -69,10 +64,10 @@ export const readFriend = id => dispatch => {
     });
 };
 
-export const acceptFriendRequest = id => dispatch => {
+export const acceptFriendRequest = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.put(`/api/v1/friends${id}`)
+    axios.put(`/api/v1/friends${id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: FRIEND_ACCEPTED,
         payload: res.data
@@ -86,11 +81,11 @@ export const acceptFriendRequest = id => dispatch => {
     });
 };
 
-export const deleteFriend = id => dispatch => {
+export const deleteFriend = id => (dispatch, getState) => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/friends${id}`)
-    .then(res => dispatch({
+    axios.delete(`/api/v1/friends${id}`, tokenConfig(getState))
+    .then(() => dispatch({
         type: FRIEND_DELETED,
         payload: id
     }))
@@ -102,4 +97,3 @@ export const deleteFriend = id => dispatch => {
         dispatch(returnErrors("An internal error occurred", 500, "FRIENDS_ERROR"));
     });
 };
-
