@@ -176,9 +176,7 @@ export const tokenConfig = getState => {
         }
     };
 
-    if (token) {
-        config.headers["x-auth-token"] = token;
-    }
+    if (token) config.headers["Authorization"] = `Basic ${token}`;
 
     return config;
 };
