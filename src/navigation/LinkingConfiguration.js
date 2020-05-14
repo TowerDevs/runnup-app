@@ -9,7 +9,8 @@ export default {
         Register: 'register',
         Login: 'login',
         Home: 'home',
-        Mapping: 'mapping'
+        Mapping: 'mapping',
+        Activity: 'activity'
       },
     },
   },
