@@ -5,7 +5,7 @@ import { StyleSheet, View, Modal, Text, TouchableOpacity, TextInput } from 'reac
 import Styles from '../constants/Styles';
 import Layout from '../constants/Layout';
 import Colors from '../constants/Colors';
-import Time from '../utils/time';
+import { Time } from '../utils/time';
 
 // TODO: Remove and use store
 const TEST_ROUTE_DATA = {
