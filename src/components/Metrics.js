@@ -26,9 +26,9 @@ const SAVE_BUTTON_WIDTH = CONTAINER_WIDTH / 1.5;
 
 // Enum of editable fields
 const EDITABLE = {
-  PACE: "pace",
-  DURATION: "duration",
-  CALORIES: "calories"
+  PACE: "PACE",
+  DURATION: "DURATION",
+  CALORIES: "CALORIES"
 };
 
 // TODO: Rename to Metrics
@@ -55,23 +55,12 @@ export function MetricsContainer(props) {
       {
         entering !== null &&
         <View style={[Styles.centeredView, { position: "absolute" }]}>
-          <Modal transparent={true}>
-            <View style={Styles.centeredView}>
-              <View style={styles.modal}>
-                <Text style={{marginBottom: 10}}>
-                  Enter a target {entering}
-                </Text>
-                <TextInput
-                  autoFocus={true}
-                  value={inputValue}
-                  onChangeText={(val) => setInputValue(val)}
-                  style={styles.input}
-                  returnKeyType="done"
-                  onEndEditing={() => endEditMetric()}
-                />
-              </View>
-            </View>
-          </Modal>
+          <MetricInputModal
+            entering={entering}
+            value={inputValue}
+            onChangeText={val => setInputValue(val)}
+            onEndEditing={endEditMetric}
+          />
         </View>
       }
 
@@ -151,6 +140,35 @@ Metric.propTypes = {
   label: PropTypes.string.isRequired,
   editable: PropTypes.bool,
   locked: PropTypes.bool
+}
+
+function MetricInputModal({entering, value, onChangeText, onEndEditing}) {
+  return (
+    <Modal transparent={true}>
+      <View style={Styles.centeredView}>
+        <View style={styles.modal}>
+          <Text style={{ marginBottom: 10 }}>
+            Enter a target {entering}
+          </Text>
+          <TextInput
+            autoFocus={true}
+            value={value}
+            onChangeText={onChangeText}
+            style={styles.input}
+            returnKeyType="done"
+            onEndEditing={onEndEditing}
+          />
+        </View>
+      </View>
+    </Modal>
+  )
+}
+
+MetricInputModal.propTypes = {
+  entering: PropTypes.oneOf(Object.values(EDITABLE)).isRequired,
+  value: PropTypes.string.isRequired,
+  onChangeText: PropTypes.func.isRequired,
+  onEndEditing: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
