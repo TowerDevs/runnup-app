@@ -7,12 +7,23 @@ import { returnErrors } from "./errors";
 import { tokenConfig } from "./auth";
 import axios from 'axios';
 
+/**
+ * @desc Set the Routes reducer to a loading state
+ * @returns {Object} - contains the action type
+ */
 const setLoading = () => {
     return {
         type: ROUTES_REQUESTED
     };
 };
 
+/**
+ * @desc Create a new route for the user
+ * @param {Object} route - contains the new route properties
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const createRoute = route => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -30,6 +41,12 @@ export const createRoute = route => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Fetch a list of the user's routes
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const fetchRoutes = () => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -47,6 +64,13 @@ export const fetchRoutes = () => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Return a single route to preview
+ * @param {Object} id - ObjectId of the route to return
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const readRoute = id => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -64,6 +88,14 @@ export const readRoute = id => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Update an existing route
+ * @param {Object} id - ObjectId of the route to update
+ * @param {Object} route - properties of the revised route
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const updateRoute = (id, route) => (dispatch, getState) => {
     dispatch(setLoading());
 
@@ -81,6 +113,13 @@ export const updateRoute = (id, route) => (dispatch, getState) => {
     });
 };
 
+/**
+ * @desc Delete an existing route
+ * @param {Object} id - ObjectId of the route to delete
+ * @param {function} dispatch - dispatch the action Object
+ * @param {function} getState - fetches the auth token from the reducer
+ * @returns {Object} - contains the action type and server payload
+ */
 export const deleteRoute = id => (dispatch, getState) => {
     dispatch(setLoading());
 

@@ -45,7 +45,7 @@ export const registerUser = user => dispatch => {
 };
 
 /**
- * @desc Fetch the user's primary details
+ * @desc Delete the user's account
  * @param {function} dispatch - function for dispatching the action
  * @returns {Object} - returns the user's _id, name, email, etc.
  */
@@ -137,6 +137,11 @@ export const logoutUser = () => dispatch => {
     });
 };
 
+/**
+ * @desc Send a token to the user's email to verify their email address
+ * @param {function} dispatch - function to dispatch the action Object
+ * @returns {Object} - contains the action type
+ */
 export const sendEmailToken = () => dispatch => {
     axios.get("/v1/users/email/token")
     .then(() => dispatch({
@@ -151,6 +156,11 @@ export const sendEmailToken = () => dispatch => {
     });
 };
 
+/**
+ * @desc Verify the email token sent to the user's email
+ * @param {function} dispatch - function to dispatch the action Object
+ * @returns {Object} - contains the action type
+ */
 export const verifyEmail = token => dispatch => {
     axios.get(`/v1/users/email/token/${token}`)
     .then(() => dispatch({
@@ -165,6 +175,11 @@ export const verifyEmail = token => dispatch => {
     });
 };
 
+/**
+ * @desc Send a token to the user's email to allow them to reset their password
+ * @param {function} dispatch - function to dispatch the action Object
+ * @returns {Object} - contains the action type
+ */
 export const requestNewPassword = () => dispatch => {
     axios.get("/v1/users/password")
     .then(() => dispatch({
@@ -179,6 +194,11 @@ export const requestNewPassword = () => dispatch => {
     });
 };
 
+/**
+ * @desc Verify the token sent to the user's email for password reset
+ * @param {function} dispatch - function to dispatch the action Object
+ * @returns {Object} - contains the action type
+ */
 export const verifyPasswordToken = token => dispatch => {
     axios.get(`/v1/users/password/${token}`)
     .then(() => dispatch({
@@ -193,6 +213,12 @@ export const verifyPasswordToken = token => dispatch => {
     });
 };
 
+
+/**
+ * @desc Configure the authorization token for private requests
+ * @param {function} getState - function to retrieve the token from the auth reducer
+ * @returns {Object} - the configuration properties
+ */
 export const tokenConfig = getState => {
     const token = getState().auth.token;
 
