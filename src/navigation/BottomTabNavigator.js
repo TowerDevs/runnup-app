@@ -5,6 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import MappingScreen from '../screens/MappingScreen';
+import ActivityScreen from '../screens/ActivityScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -33,6 +34,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="map" />,
         }}
       />
+      <BottomTab.Screen
+        name="Activity"
+        component={ActivityScreen}
+        options={{
+          title: "Activity",
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="activity" />,
+        }}
+      />
     </BottomTab.Navigator>
   );
 }
@@ -45,5 +54,7 @@ function getHeaderTitle(route) {
       return 'How to get started';
     case 'Mapping':
       return 'Map a route';
+    case "Activity":
+      return "View your activity"
   }
 }
