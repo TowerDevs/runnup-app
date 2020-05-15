@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Feather } from '@expo/vector-icons';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -39,7 +39,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={ActivityScreen}
         options={{
           title: "Activity",
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="activity" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Feather} name="activity" />,
         }}
       />
     </BottomTab.Navigator>
