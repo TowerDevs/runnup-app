@@ -1,15 +1,23 @@
+/**
+ * MappingScreen component
+ * @module MappingScreen
+ */
+
 import * as React from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Layout from '../constants/Layout';
-import { MetricsContainer } from '../components/Metrics'
+import Metrics from '../components/Metrics'
 
-export default function MapScreen() {
+/**
+ * MappingScreen is a screen component for mapping routes.
+ */
+export default function MappingScreen() {
   return (
     <View style={styles.container}>
       <MapView style={styles.mapStyle}/>
-      <MetricsContainer 
+      <Metrics 
         style={styles.metricContainer}
       />
     </View>
