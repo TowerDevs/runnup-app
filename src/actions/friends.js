@@ -11,7 +11,7 @@ import axios from "axios";
  * @desc Sets the friends reducer state to "Loading.."
  * @returns {Object} - contains the action type
  */
-export const setLoading = () => {
+const setLoading = () => {
     return {
         type: FRIENDS_REQUESTED
     };
