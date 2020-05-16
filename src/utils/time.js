@@ -1,4 +1,10 @@
 /**
+ * Time utils module.
+ * 
+ * @module
+ */
+
+/**
  * Time is a class used for store and converting times.
  * 
  * @property {Number} seconds total seconds in the Time
@@ -11,7 +17,7 @@
  * time.m // 3
  * time.s // 20
  */
-export default class Time {
+export class Time {
   /**
    * Initialize Time.
    * @param {Number} seconds
