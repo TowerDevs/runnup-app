@@ -1,14 +1,16 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as React from 'react';
-import { FontAwesome5, Feather } from '@expo/vector-icons';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from "react";
+import { FontAwesome5, Feather } from "@expo/vector-icons";
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import MappingScreen from '../screens/MappingScreen';
-import ActivityScreen from '../screens/ActivityScreen';
+import TabBarIcon from "../components/TabBarIcon";
+import HomeScreen from "../screens/HomeScreen";
+import MappingScreen from "../screens/MappingScreen";
+import ActivityScreen from "../screens/ActivityScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import LoginScreen from "../screens/LoginScreen";
 
-const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const { Navigator, Screen } = createBottomTabNavigator();
+const INITIAL_ROUTE_NAME = "Home";
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -17,24 +19,24 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      <BottomTab.Screen
+    <Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <Screen
         name="Home"
         component={HomeScreen}
         options={{
-          title: 'Get Started',
+          title: "Get Started",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="home" />,
         }}
       />
-      <BottomTab.Screen
+      <Screen
         name="Mapping"
         component={MappingScreen}
         options={{
-          title: 'Map',
+          title: "Map",
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="map" />,
         }}
       />
-      <BottomTab.Screen
+      <Screen
         name="Activity"
         component={ActivityScreen}
         options={{
@@ -42,19 +44,37 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Feather} name="activity" />,
         }}
       />
-    </BottomTab.Navigator>
+      <Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{
+          title: "Register"
+        }}
+      />
+      <Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          title: "Login"
+        }}
+      />
+    </Navigator>
   );
 }
 
-function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+function getHeaderTitle({ state }) {
+  const routeName = state?.routes[state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'Mapping':
-      return 'Map a route';
+    case "Home":
+      return "How to get started";
+    case "Mapping":
+      return "Map a route";
     case "Activity":
-      return "View your activity"
+      return "View your activity";
+    case "Register":
+      return "Create Account";
+    case "Login":
+      return "Create Account";
   }
 }
