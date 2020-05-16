@@ -1,4 +1,8 @@
-/* ACTION TYPE CONSTANTS BELOW */
+/**
+ *  
+ * DATA ACTION TYPES 
+ * 
+ */
 
 // Auth
 export const AUTH_ERROR = "AUTH_ERROR";
@@ -56,3 +60,13 @@ export const FRIEND_ADDED = "FRIEND_ADDED";
 export const FRIEND_READ = "FRIEND_READ";
 export const FRIEND_ACCEPTED = "FRIEND_ACCEPTED"
 export const FRIEND_DELETED = "FRIEND_DELETED";
+
+/**
+ *  
+ * UI ACTION TYPES 
+ * 
+ */
+
+// MappingScreen
+export const EDIT_METRIC = "EDIT_METRIC";
+export const CHANGE_METRIC = "CHANGE_METRIC";

@@ -1,3 +1,8 @@
+/**
+ * Styles constants
+ * @module
+ */
+
 export default {
   centeredView: {
     flex: 1,

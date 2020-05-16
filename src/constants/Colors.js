@@ -1,4 +1,9 @@
-const tintColor = "#2F95DC";
+/**
+ * Colors constants
+ * @module
+ */
+
+const tintColor = '#2f95dc';
 
 export default {
   brand: "#E04B39",
