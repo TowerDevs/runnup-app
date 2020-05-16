@@ -1,7 +1,7 @@
 import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED } from "../actions/types";
 
 const initialState = {
-    message: {},
+    message: null,
     status: null,
     id: null
 };
