@@ -20,7 +20,7 @@ export default (state = initialState, action) => {
             };
         case ERRORS_CLEARED:
             return {
-                message: {},
+                message: null,
                 status: null,
                 id: null
             };
