@@ -6,15 +6,15 @@
 const tintColor = '#2f95dc';
 
 export default {
-  brand: "#E04B39",
+  primary: "#E04B39",
+  info: "#5BC0DE",
+  success: "#51CB20",
   white: "#FFFFFA",
   offWhite: "#F7F7F7",
   lightGrey: "#EEE",
   offBlack: "#292B2C",
-  success: "#51CB20",
   danger: "#D9534F",
   warning: "#F0AD4E",
-  info: "#5BC0DE",
 
   // TODO: Remove unused Expo colors
   tintColor,
