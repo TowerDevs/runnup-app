@@ -2,8 +2,8 @@ import {
     ROUTES_REQUESTED,
     ROUTE_CREATED, ROUTES_FETCHED,
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
-} from "./types";
-import { returnErrors } from "./errors";
+} from "../types";
+import { returnErrors } from "../errors";
 import { tokenConfig } from "./auth";
 import axios from 'axios';
 

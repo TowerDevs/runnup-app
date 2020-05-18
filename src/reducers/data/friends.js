@@ -1,8 +1,8 @@
 import {
-    RUNS_REQUESTED, RUNS_ERROR,
-    RUN_CREATED, RUNS_FETCHED,
-    RUN_READ, RUN_UPDATED, RUN_DELETED
-} from "../actions/types";
+    FRIENDS_REQUESTED, FRIENDS_ERROR,
+    FRIEND_ADDED, FRIENDS_FETCHED,
+    FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED
+} from "../../actions/types";
 
 const initialState = {
     isLoading: false,
@@ -11,64 +11,62 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch(action.type) {
-        case RUNS_REQUESTED:
+        case FRIENDS_REQUESTED:
             return {
                 ...state,
                 isLoading: true
             };
-        case RUNS_ERROR:
+        case FRIENDS_ERROR:
             return {
                 ...state,
                 isLoading: false
             };
-        case RUN_CREATED:
+        case FRIEND_ADDED:
             return {
                 ...state,
                 isLoading: false,
                 data: [...state.data, action.payload]
-            };
-        case RUNS_FETCHED:
+            }
+        case FRIENDS_FETCHED:
             return {
                 ...state,
                 isLoading: false,
                 data: action.payload
-            };
-        case RUN_READ:
+            }
+        case FRIEND_READ:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.map(run => {
+                data: state.data.map(friend => {
                     const { id } = action.payload;
 
-                    if(run.id !== id) return run;
+                    if(friend.id !== id) return friend;
 
                     return {
-                        run: action.payload
+                        friend: action.payload
                     };
                 })
             };
-        case RUN_UPDATED:
+        case FRIEND_ACCEPTED:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.map(run => {
-                    const { id } = action.payload;
+                data: state.data.map(friend => {
+                    const { _id } = action.payload;
 
-                    if(run.id !== id) return run;
+                    if(friend._id != _id) return friend;
 
                     return {
-                        ...state.data,
-                        run: {
-
-                        }
+                        ...state.friend,
+                        isPending: false
                     };
                 })
-            };
-        case RUN_DELETED:
+            }
+        case FRIEND_DELETED:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.filter(run => run.id !== action.payload)
+                data: state.data.filter(friend => friend.id !== action.payload)
             };
         default:
             return state;

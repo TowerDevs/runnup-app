@@ -7,7 +7,7 @@ import {
     LOGOUT_SUCCESS,
     EMAIL_TOKEN_SENT, EMAIL_TOKEN_ERROR, EMAIL_VERIFIED,
     PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED
-} from "../actions/types";
+} from "../../actions/types";
 import * as Storage from "expo-secure-store";
 
 const initialState = {
