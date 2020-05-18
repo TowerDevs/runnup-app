@@ -6,17 +6,18 @@
 import React, { useEffect, useState } from 'react';
 import MapView from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
-import * as Location from 'expo-location';
 
 import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics'
 import DebugValues from '../components/debug/DebugValues';
+import { getLocation } from '../utils/location';
 
+// Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.03
 
 // Enum of the states that `hasLocation` can have
 const HAS_LOCATION = {
-  REQUESING: 0,
+  REQUESTING: 0,
   DENIED: 1,
   GRANTED: 2
 }
@@ -26,41 +27,49 @@ const HAS_LOCATION = {
  */
 export default function MappingScreen() {
   const [location, setLocation] = useState(null);
-  const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESING);
+  const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
+  const [region, setRegion] = useState(null); // eslint-disable-line no-unused-vars
+  const [initialRegion, setInitialRegion] = useState(null);
 
+  // Update location every update
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        console.log('Permission to access location was denied');
+      let { status, location } = await getLocation();
+      if (status !== "granted") {
+        console.log("Location not granted...");
         setHasLocation(HAS_LOCATION.DENIED);
       }
-      
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setHasLocation(HAS_LOCATION.GRANTED);
+
+      setLocation(location)
+      setHasLocation(HAS_LOCATION.GRANTED)
     })();
   });
 
-  // Calculate initial region
-  let initialRegion = {};
-  switch (hasLocation) {
-    case HAS_LOCATION.GRANTED:
-      if (location !== null) {
-        initialRegion = {
-          latitude: location.coords.latitude - 0.004, // FIXME: Fix the height of the map rather than moving the region center
+  // Set the region to the current location when granted
+  // FIXME: Currently the initial region is not centered because the map goes under the metrics component
+  useEffect(() => {
+    if (hasLocation == HAS_LOCATION.GRANTED) {
+      setInitialRegion(
+        {
+          latitude: location.coords.latitude,
           longitude: location.coords.longitude,
           latitudeDelta: INITIAL_LATITUDE_DELTA,
           longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
-        };
-      }
-      break;
-    case HAS_LOCATION.DENIED:
-      // TODO: Try to use IP to find approx location
-      break;
-    default:
-      break;
-  }
+        }
+      );
+    } else if (hasLocation == HAS_LOCATION.DENIED) {
+      // TODO: If location is denied try to use IP to estimate location
+      // Currently focuses on Toronto
+      setInitialRegion(
+        {
+          latitude: 43.6532,
+          longitude: 79.3832,
+          latitudeDelta: INITIAL_LATITUDE_DELTA,
+          longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
+        }
+      );
+    }
+  }, [hasLocation]);
 
   return (
     <View style={styles.container}>
@@ -70,16 +79,17 @@ export default function MappingScreen() {
           hasLocation
         }}
       />
-      {hasLocation == HAS_LOCATION.REQUESING &&
+      {hasLocation == HAS_LOCATION.REQUESTING &&
         <Text>Requesting location...</Text>
       }
-      {(hasLocation === HAS_LOCATION.GRANTED || hasLocation === HAS_LOCATION.DENIED) &&
+      {((hasLocation === HAS_LOCATION.GRANTED || hasLocation === HAS_LOCATION.DENIED) && initialRegion !== null) &&
         <MapView
           style={styles.mapStyle}
           initialRegion={initialRegion}
+          onRegionChange={setRegion}
         />
       }
-      <Metrics 
+      <Metrics
         style={styles.metricContainer}
       />
     </View>
