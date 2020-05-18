@@ -2,8 +2,8 @@ import {
     FRIENDS_REQUESTED,
     FRIEND_ADDED, FRIENDS_FETCHED,
     FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED
-} from "./types";
-import { returnErrors } from "./errors";
+} from "../types";
+import { returnErrors } from "../errors";
 import { tokenConfig } from "./auth";
 import axios from "axios";
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux"
-import { fetchRuns } from "../actions/runs";
+import { fetchRuns } from "../actions/data/runs";
 import { clearErrors } from "../actions/errors";
 import PropTypes from "prop-types";
 

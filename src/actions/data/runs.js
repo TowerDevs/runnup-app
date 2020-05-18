@@ -2,8 +2,8 @@ import {
     RUNS_REQUESTED,
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED
-} from "./types";
-import { returnErrors } from "./errors";
+} from "../types";
+import { returnErrors } from "../errors";
 import { tokenConfig } from "./auth";
 import axios from 'axios';
 

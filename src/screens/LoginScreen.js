@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { View, Button, Text, TextInput, StyleSheet } from "react-native";
 
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser } from "../actions/auth";
+import { loginUser } from "../actions/data/auth";
 
 import Colors from "../constants/Colors";
 import Styles from "../constants/Styles";

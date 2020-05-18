@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
 
-// import auth from "./auth";
+// import auth from "./data/auth";
 import errors from "./errors";
-import friends from "./friends";
-import routes from "./routes";
-import runs from "./runs";
+import friends from "./data/friends";
+import routes from "./data/routes";
+import runs from "./data/runs";
 
 import mapping from "./ui/mapping";
 
