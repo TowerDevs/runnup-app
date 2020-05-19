@@ -29,7 +29,7 @@ const RegisterScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [securePassword, togglePasswordVisibility] = useState(true);
+    const [securePassword, togglePasswordSecurity] = useState(true);
 
     /* Store-derived state and dispatch */
     const errors = useSelector(state => state.errors);
@@ -82,20 +82,19 @@ const RegisterScreen = ({ navigation }) => {
                         />
 
                         <Right>
-                            <TouchableOpacity onPress={() => togglePasswordVisibility(!securePassword)}>
+                            <TouchableOpacity onPress={() => togglePasswordSecurity(!securePassword)}>
                                 <MaterialCommunityIcons name={ securePassword ? "eye-off": "eye" } size={24} color="black" />
                             </TouchableOpacity>
                         </Right>
                     </Item>
                     <Body>
                         <TouchableOpacity
-                            style={styles.callToAction}
+                            style={styles.ctaButton}
                             onPress={() => dispatch(registerUser({ firstName, lastName, email, password }))}
                         >
-                            <Text>Create Account</Text>
+                            <Text style={styles.ctaText}>Create Account</Text>
                         </TouchableOpacity>
                     </Body>
-
                 </Form>
 
                 <Body>
@@ -130,18 +129,17 @@ const styles = StyleSheet.create({
     },
     error: {
         color: Colors.danger,
+        fontSize: 18
     },
-    callToAction: {
+    ctaButton: {
         backgroundColor: Colors.primary,
         borderRadius: 2,
         padding: 13,
         marginTop: 30
     },
-    label: {
-
-    },
-    input: {
-
+    ctaText: {
+        color: "white",
+        fontSize: 20
     },
     button: {
         color: Colors.primary,
