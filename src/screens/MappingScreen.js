@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
 
 import Layout from '../constants/Layout';
@@ -26,11 +26,13 @@ const HAS_LOCATION = {
  * MappingScreen is a screen component for mapping routes.
  */
 export default function MappingScreen() {
+  /** State */
   const [location, setLocation] = useState(null);
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
   const [region, setRegion] = useState(null); // eslint-disable-line no-unused-vars
   const [initialRegion, setInitialRegion] = useState(null);
 
+  /** Effects */
   // Update location every update
   useEffect(() => {
     (async () => {
@@ -49,25 +51,21 @@ export default function MappingScreen() {
   // FIXME: Currently the initial region is not centered because the map goes under the metrics component
   useEffect(() => {
     if (hasLocation == HAS_LOCATION.GRANTED) {
-      setInitialRegion(
-        {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: INITIAL_LATITUDE_DELTA,
-          longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
-        }
-      );
+      setInitialRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: INITIAL_LATITUDE_DELTA,
+        longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
+      });
     } else if (hasLocation == HAS_LOCATION.DENIED) {
       // TODO: If location is denied try to use IP to estimate location
       // Currently focuses on Toronto
-      setInitialRegion(
-        {
+      setInitialRegion({
           latitude: 43.6532,
           longitude: 79.3832,
           latitudeDelta: INITIAL_LATITUDE_DELTA,
           longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
-        }
-      );
+      });
     }
   }, [hasLocation]);
 
@@ -87,7 +85,9 @@ export default function MappingScreen() {
           style={styles.mapStyle}
           initialRegion={initialRegion}
           onRegionChange={setRegion}
-        />
+          showsUserLocation={true}
+        >
+        </MapView>
       }
       <Metrics
         style={styles.metricContainer}
