@@ -64,7 +64,7 @@ const RegisterScreen = ({ navigation }) => {
                         />
                     </Item>
 
-                    <Item floatingLabel last>
+                    <Item floatingLabel>
                         <Label>Password</Label>
                         <Input
                             autoCapitalize="none"
