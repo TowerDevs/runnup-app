@@ -5,8 +5,13 @@
 
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, Button } from "react-native";
-import { Container, Content, Body, H1, Form, Item, Label, Input, Text } from "native-base";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet, TouchableOpacity } from "react-native";
+import { Container, Content,
+    Body, Right,
+    H1,
+    Form, Item, Label, Input, Text
+} from "native-base";
 
 import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "../actions/data/auth";
@@ -24,6 +29,7 @@ const RegisterScreen = ({ navigation }) => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [securePassword, togglePasswordSecurity] = useState(true);
 
     /* Store-derived state and dispatch */
     const errors = useSelector(state => state.errors);
@@ -37,8 +43,10 @@ const RegisterScreen = ({ navigation }) => {
                     <Text>* Logo here *</Text>
                     <H1 style={styles.brandTitle}>Runnup</H1>
                 </Body>
-                { errors.message ? <Text style={styles.error}>{errors.message}</Text> : null }
                 <Form style={styles.form}>
+                    <Body>
+                        { errors.message ? <Text style={styles.error}>{errors.message}</Text> : null }
+                    </Body>
                     <Item floatingLabel>
                         <Label>First Name</Label>
                         <Input
@@ -64,20 +72,29 @@ const RegisterScreen = ({ navigation }) => {
                         />
                     </Item>
 
-                    <Item floatingLabel last>
+                    <Item floatingLabel>
                         <Label>Password</Label>
                         <Input
                             autoCapitalize="none"
-                            passwordRules={true}
+                            secureTextEntry={securePassword}
                             onChange={e => setPassword(e.target.value)}
                             value={password}
                         />
-                    </Item>
 
-                    <Button
-                        title="Create Account"
-                        onPress={() => dispatch(registerUser({ firstName, lastName, email, password }))}
-                    />
+                        <Right>
+                            <TouchableOpacity onPress={() => togglePasswordSecurity(!securePassword)}>
+                                <MaterialCommunityIcons name={ securePassword ? "eye-off": "eye" } size={24} color="black" />
+                            </TouchableOpacity>
+                        </Right>
+                    </Item>
+                    <Body>
+                        <TouchableOpacity
+                            style={styles.ctaButton}
+                            onPress={() => dispatch(registerUser({ firstName, lastName, email, password }))}
+                        >
+                            <Text style={styles.ctaText}>Create Account</Text>
+                        </TouchableOpacity>
+                    </Body>
                 </Form>
 
                 <Body>
@@ -85,10 +102,9 @@ const RegisterScreen = ({ navigation }) => {
                         Already have an account?
                     </Text>
 
-                    <Button
-                        title="Login"
-                        onPress={() => navigation.navigate("Login")}
-                    />
+                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.button}>Login</Text>
+                    </TouchableOpacity>
                 </Body>
             </Content>
         </Container>
@@ -103,26 +119,34 @@ RegisterScreen.propTypes = {
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 100
+        marginTop: 120
+    },
+    form: {
+        marginTop: 50
     },
     brandTitle: {
         // fontSize: 100
     },
     error: {
-        color: Colors.danger
+        color: Colors.danger,
+        fontSize: 18
     },
-    callToAction: {
+    ctaButton: {
+        backgroundColor: Colors.primary,
+        borderRadius: 2,
+        padding: 13,
+        marginTop: 30
+    },
+    ctaText: {
+        color: "white",
+        fontSize: 20
+    },
+    button: {
         color: Colors.primary,
-        marginTop: 20
-    },
-    label: {
-
-    },
-    input: {
-
+        fontSize: 18
     },
     small: {
-        marginTop: 180
+        marginTop: 50
     }
 });
 
