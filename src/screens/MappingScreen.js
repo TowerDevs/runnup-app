@@ -3,8 +3,8 @@
  * @module MappingScreen
  */
 
-import React, { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
+import MapView, { Marker, MAP_TYPES, PROVIDER_DEFAULT, UrlTile } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
 
 import Layout from '../constants/Layout';
@@ -31,6 +31,8 @@ export default function MappingScreen() {
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
   const [region, setRegion] = useState(null); // eslint-disable-line no-unused-vars
   const [initialRegion, setInitialRegion] = useState(null);
+  const [markers, setMarkers] = useState([]);
+  
 
   /** Effects */
   // Update location every update
@@ -61,13 +63,23 @@ export default function MappingScreen() {
       // TODO: If location is denied try to use IP to estimate location
       // Currently focuses on Toronto
       setInitialRegion({
-          latitude: 43.6532,
-          longitude: 79.3832,
-          latitudeDelta: INITIAL_LATITUDE_DELTA,
-          longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
+        latitude: 43.6532,
+        longitude: 79.3832,
+        latitudeDelta: INITIAL_LATITUDE_DELTA,
+        longitudeDelta: INITIAL_LATITUDE_DELTA * (Layout.window.width / Layout.window.height)
       });
     }
   }, [hasLocation]);
+
+  useLayoutEffect(() => {
+  }, []);
+
+  /** Methods */
+  const addMarker = ({ nativeEvent }) => {
+    setMarkers([...markers, {
+      coordinate: nativeEvent.coordinate
+    }])
+  }
 
   return (
     <View style={styles.container}>
@@ -86,7 +98,21 @@ export default function MappingScreen() {
           initialRegion={initialRegion}
           onRegionChange={setRegion}
           showsUserLocation={true}
+          onPress={addMarker}
+          rotateEnabled={false}
+          pitchEnabled={false}
         >
+          {/* <UrlTile
+            urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+            shouldReplaceMapContent={true}
+          /> */}
+          {markers.map((marker, index) => (
+            <Marker
+              draggable
+              key={index}
+              coordinate={marker.coordinate}
+            />
+          ))}
         </MapView>
       }
       <Metrics
@@ -104,8 +130,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   mapStyle: {
-    width: Layout.window.width,
-    height: Layout.window.height,
+    width: "100%",
+    height: "100%",
   },
   metricContainer: {
     position: 'absolute'
