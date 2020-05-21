@@ -4,8 +4,9 @@
  */
 
 import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import MapView, { Marker, MAP_TYPES, PROVIDER_DEFAULT, UrlTile } from 'react-native-maps';
+import MapView, { Marker, MAP_TYPES, PROVIDER_DEFAULT, PROVIDER_GOOGLE, UrlTile } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics'
@@ -47,9 +48,10 @@ export default function MappingScreen() {
       setLocation(location)
       setHasLocation(HAS_LOCATION.GRANTED)
     })();
-  });
+  }, []);
 
   // Set the region to the current location when granted
+  // TODO: Move to separate map component, this should be the default functionality
   // FIXME: Currently the initial region is not centered because the map goes under the metrics component
   useEffect(() => {
     if (hasLocation == HAS_LOCATION.GRANTED) {
@@ -71,14 +73,19 @@ export default function MappingScreen() {
     }
   }, [hasLocation]);
 
-  useLayoutEffect(() => {
-  }, []);
+  // TODO: Use layout effect to resize map depending on the height of the metrics drawer
+  // useLayoutEffect(() => {
+  // }, []);
 
   /** Methods */
   const addMarker = ({ nativeEvent }) => {
     setMarkers([...markers, {
       coordinate: nativeEvent.coordinate
-    }])
+    }]);
+  }
+  
+  const removeMarker = (i) => {
+    setMarkers(markers.filter((_, index) => i !== index ));
   }
 
   return (
@@ -96,21 +103,35 @@ export default function MappingScreen() {
         <MapView
           style={styles.mapStyle}
           initialRegion={initialRegion}
-          onRegionChange={setRegion}
-          showsUserLocation={true}
+          // showsUserLocation={true}
           onPress={addMarker}
           rotateEnabled={false}
           pitchEnabled={false}
+          zoomTapEnabled={false}
         >
-          {/* <UrlTile
-            urlTemplate={"http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+          <UrlTile
+            urlTemplate={"http://b.tile.openstreetmap.org/{z}/{x}/{y}.png"}
             shouldReplaceMapContent={true}
-          /> */}
+          />
+          {/* Location marker */}
+          <Marker
+            coordinate={{
+              latitude: location?.coords.latitude,
+              longitude: location?.coords.longitude
+            }}
+            image={require("../assets/images/person-icon-50x50.png")}
+          />
+
+          {/* Route markers */}
           {markers.map((marker, index) => (
             <Marker
               draggable
               key={index}
               coordinate={marker.coordinate}
+              onPress={e => {
+                e.stopPropagation(); 
+                removeMarker(index); 
+              }}
             />
           ))}
         </MapView>
