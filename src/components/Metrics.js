@@ -109,7 +109,7 @@ export default function Metrics(props) {
         />
       </View>
       <View style={[styles.row, styles.buttonRow]}>
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity style={styles.saveButton} onPress={props.onSave}>
           <Text style={{ color: COLORS.white }}>Save</Text>
         </TouchableOpacity>
       </View>
@@ -119,7 +119,9 @@ export default function Metrics(props) {
 
 Metrics.propTypes = {
   // Additional styling for the container component
-  style: PropTypes.object
+  style: PropTypes.object,
+  // Callback when the save button is pressed
+  onSave: PropTypes.func
 }
 
 const CONTAINER_HEIGHT = LAYOUT.window.height / 3.75;

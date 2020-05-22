@@ -177,6 +177,8 @@ describe("MapBoxMapper tests", () => {
 
     const route = await mapper.route(coords);
 
+    console.log(route);
+
     expect(route).toMatchObject(targetRoute);
   });
 });

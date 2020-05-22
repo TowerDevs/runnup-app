@@ -3,15 +3,19 @@
  * @module MappingScreen
  */
 
-import React, { useEffect, useState, useLayoutEffect, useRef } from 'react';
-import MapView, { Marker, MAP_TYPES, PROVIDER_DEFAULT, PROVIDER_GOOGLE, UrlTile } from 'react-native-maps';
+import React, { useEffect, useState } from 'react';
+import MapView, { Marker, UrlTile, Geojson } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
-import { FontAwesome5 } from "@expo/vector-icons";
+import {
+  MAPBOX_PUBLIC_TOKEN,
+  MAPBOX_SECRET_KEY
+} from "react-native-dotenv";
 
 import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics'
 import DebugValues from '../components/debug/DebugValues';
 import { getLocation } from '../utils/location';
+import { MapBoxMapper, Route } from '../utils/mapping';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.03
@@ -23,6 +27,8 @@ const HAS_LOCATION = {
   GRANTED: 2
 }
 
+const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
+
 /**
  * MappingScreen is a screen component for mapping routes.
  */
@@ -33,7 +39,8 @@ export default function MappingScreen() {
   const [region, setRegion] = useState(null); // eslint-disable-line no-unused-vars
   const [initialRegion, setInitialRegion] = useState(null);
   const [markers, setMarkers] = useState([]);
-  
+  const [route, setRoute] = useState(null);
+
 
   /** Effects */
   // Update location every update
@@ -78,14 +85,21 @@ export default function MappingScreen() {
   // }, []);
 
   /** Methods */
-  const addMarker = ({ nativeEvent }) => {
-    setMarkers([...markers, {
-      coordinate: nativeEvent.coordinate
-    }]);
+  const addMarker = async ({ nativeEvent }) => {
+    let _markers = [...markers, {
+      ...nativeEvent.coordinate
+    }];
+
+    setMarkers(_markers);
+
+    if (markers.length > 0) {
+      const route = await mapper.route(_markers);
+      setRoute(route);
+    }
   }
-  
+
   const removeMarker = (i) => {
-    setMarkers(markers.filter((_, index) => i !== index ));
+    setMarkers(markers.filter((_, index) => i !== index));
   }
 
   return (
@@ -109,10 +123,10 @@ export default function MappingScreen() {
           pitchEnabled={false}
           zoomTapEnabled={false}
         >
-          <UrlTile
+          {/* <UrlTile
             urlTemplate={"http://b.tile.openstreetmap.org/{z}/{x}/{y}.png"}
             shouldReplaceMapContent={true}
-          />
+          /> */}
           {/* Location marker */}
           <Marker
             coordinate={{
@@ -127,17 +141,34 @@ export default function MappingScreen() {
             <Marker
               draggable
               key={index}
-              coordinate={marker.coordinate}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
               onPress={e => {
-                e.stopPropagation(); 
-                removeMarker(index); 
+                e.stopPropagation();
+                removeMarker(index);
               }}
             />
           ))}
+
+          {/* Route path */}
+          {route !== null &&
+            <Geojson
+              geojson={{features: [{
+                "type": "Feature",
+                "geometry": route.geometry,
+                "properties": {
+                  "name": "Dinagat Islands"
+                }
+              }]}}
+            />
+          }
         </MapView>
       }
       <Metrics
         style={styles.metricContainer}
+        onSave={() => console.log(markers)}
       />
     </View>
   );

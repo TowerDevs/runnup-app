@@ -21,11 +21,11 @@ export class Route {
 
   /**
    * Initialize route.
-   * @param {Object} path GeoJSON object containing the path of the route
+   * @param {Object} geometry GeoJSON object containing the geometry of the route
    * @param {float} distance Distance of the route in KM
    */
-  constructor(path, distance) {
-    this.path = path;
+  constructor(geometry, distance) {
+    this.geometry = geometry;
     this.distance = distance;
   }
 }
@@ -56,18 +56,23 @@ export class MapBoxMapper {
   async route(coords) {
     // TODO: Expand this into more lines, I thought this would look better but it doesn't
     const endpoint = `\
-${MAPBOX_DOMAIN}/matching/${MAPBOX_VERSION}/mapbox/driving/\
+${MAPBOX_DOMAIN}/directions/${MAPBOX_VERSION}/mapbox/driving/\
 ${coords.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0, -1)}\
-?access_token=${this.publicToken}`;
+?geometries=polyline&access_token=${this.publicToken}`;
+
+    console.log(endpoint);
 
     try {
       const res = await axios.get(endpoint);
+
+      // const route = res.data.matchings[0]; // for mapmatching
+      const route = res.data.routes[0]; // for directions
+      let geometry = polyline.toGeoJSON(route.geometry);
       
-      const match = res.data.matchings[0];
-      const path = polyline.toGeoJSON(match.geometry);
-      const distance = match.distance;
-      return new Route(path, distance);
+      const distance = route.distance;
+      return new Route(geometry, distance);
     } catch (error) {
+      // TODO: Handle error if MapBox returns non-200
       console.error(error)
     }
   }
