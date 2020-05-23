@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import MapView, { Marker, UrlTile, Geojson } from 'react-native-maps';
+import MapView, { Marker, Geojson } from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
 import {
   MAPBOX_PUBLIC_TOKEN,
@@ -15,7 +15,7 @@ import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics'
 import DebugValues from '../components/debug/DebugValues';
 import { getLocation } from '../utils/location';
-import { MapBoxMapper, Route } from '../utils/mapping';
+import { MapBoxMapper } from '../utils/mapping';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.03
@@ -85,6 +85,11 @@ export default function MappingScreen() {
       if (markers.length > 1) {
         const route = await mapper.route(markers);
         setRoute(route);
+      } else if (markers.length <= 1) {
+        setRoute({
+          ...route,
+          geometry: {}
+        });
       }
     })()
   }, [markers]);
@@ -102,6 +107,17 @@ export default function MappingScreen() {
 
   const removeMarker = (i) => {
     setMarkers(markers.filter((_, index) => i !== index));
+  }
+
+  const moveMarker = ({ nativeEvent }, i) => {
+    setMarkers(markers.map((val, index) => {
+      if (index == i) {
+        return {
+          ...nativeEvent.coordinate
+        }
+      }
+      return val;
+    }));
   }
 
   return (
@@ -151,7 +167,7 @@ export default function MappingScreen() {
                 e.stopPropagation();
                 removeMarker(index);
               }}
-              onDragEnd={(e) => { console.log(e) }}
+              onDragEnd={(e) => moveMarker(e, index)}
             />
           ))}
 
@@ -160,10 +176,7 @@ export default function MappingScreen() {
             <Geojson
               geojson={{features: [{
                 "type": "Feature",
-                "geometry": route.geometry,
-                "properties": {
-                  "name": "Dinagat Islands"
-                }
+                "geometry": route?.geometry,
               }]}}
             />
           }

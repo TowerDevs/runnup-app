@@ -59,7 +59,9 @@ export class MapBoxMapper {
     const endpoint = `\
 ${MAPBOX_DOMAIN}/matching/${MAPBOX_VERSION}/mapbox/driving/\
 ${coords.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0, -1)}\
-?geometries=polyline&access_token=${this.publicToken}`;
+?geometries=polyline\
+&radiuses=${coords.reduce((p) => p += "15.0;", "").slice(0, -1)}\
+&access_token=${this.publicToken}`;
 
     try {
       const res = await axios.get(endpoint);
@@ -67,10 +69,12 @@ ${coords.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0, -1)
       const route = res.data.matchings[0];
       const geometry = polyline.toGeoJSON(route.geometry);
       let { tracepoints } = res.data;
-      const waypoints = tracepoints.map((v) => ({
-        longitude: v.location[0],
-        latitude: v.location[1]
-      }));
+      const waypoints = tracepoints.map((v) => {
+        return {
+          longitude: v.location[0],
+          latitude: v.location[1]
+        }
+      });
 
       const distance = route.distance;
       return new Route(waypoints, geometry, distance);
