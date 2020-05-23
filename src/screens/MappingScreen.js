@@ -80,22 +80,24 @@ export default function MappingScreen() {
     }
   }, [hasLocation]);
 
+  useEffect(() => {
+    (async () => {
+      if (markers.length > 1) {
+        const route = await mapper.route(markers);
+        setRoute(route);
+      }
+    })()
+  }, [markers]);
+
   // TODO: Use layout effect to resize map depending on the height of the metrics drawer
   // useLayoutEffect(() => {
   // }, []);
 
   /** Methods */
   const addMarker = async ({ nativeEvent }) => {
-    let _markers = [...markers, {
+    setMarkers([...markers, {
       ...nativeEvent.coordinate
-    }];
-
-    setMarkers(_markers);
-
-    if (markers.length > 0) {
-      const route = await mapper.route(_markers);
-      setRoute(route);
-    }
+    }]);
   }
 
   const removeMarker = (i) => {
@@ -149,6 +151,7 @@ export default function MappingScreen() {
                 e.stopPropagation();
                 removeMarker(index);
               }}
+              onDragEnd={(e) => { console.log(e) }}
             />
           ))}
 
