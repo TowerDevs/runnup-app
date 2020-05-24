@@ -15,7 +15,7 @@ import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics'
 import DebugValues from '../components/debug/DebugValues';
 import { getLocation } from '../utils/location';
-import { MapBoxMapper } from '../utils/mapping';
+import { MapBoxMapper, Route } from '../utils/mapping';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.03
@@ -39,8 +39,7 @@ export default function MappingScreen() {
   const [region, setRegion] = useState(null); // eslint-disable-line no-unused-vars
   const [initialRegion, setInitialRegion] = useState(null);
   const [markers, setMarkers] = useState([]);
-  const [route, setRoute] = useState(null);
-
+  const [route, setRoute] = useState(new Route());
 
   /** Effects */
   // Update location every update
@@ -80,19 +79,10 @@ export default function MappingScreen() {
     }
   }, [hasLocation]);
 
+  // Update store when the route changes
   useEffect(() => {
-    (async () => {
-      if (markers.length > 1) {
-        const route = await mapper.route(markers);
-        setRoute(route);
-      } else if (markers.length <= 1) {
-        setRoute({
-          ...route,
-          geometry: {}
-        });
-      }
-    })()
-  }, [markers]);
+    
+  }, [route]);
 
   // TODO: Use layout effect to resize map depending on the height of the metrics drawer
   // useLayoutEffect(() => {
@@ -100,24 +90,31 @@ export default function MappingScreen() {
 
   /** Methods */
   const addMarker = async ({ nativeEvent }) => {
-    setMarkers([...markers, {
-      ...nativeEvent.coordinate
-    }]);
+    const newRoute = await mapper.route([
+      ...route.waypoints, {
+        ...nativeEvent.coordinate
+      }
+    ]);
+    setRoute(newRoute);
   }
 
-  const removeMarker = (i) => {
-    setMarkers(markers.filter((_, index) => i !== index));
+  const removeMarker = async (i) => {
+    const newWaypoints = route.waypoints.filter((_, index) => i !== index);
+    const newRoute = await mapper.route(newWaypoints);
+    setRoute(newRoute);
   }
 
-  const moveMarker = ({ nativeEvent }, i) => {
-    setMarkers(markers.map((val, index) => {
+  const moveMarker = async ({ nativeEvent }, i) => {
+    const newWaypoints = route.waypoints.map((val, index) => {
       if (index == i) {
         return {
           ...nativeEvent.coordinate
         }
       }
       return val;
-    }));
+    });
+    const newRoute = await mapper.route(newWaypoints);
+    setRoute(newRoute);
   }
 
   return (
@@ -125,7 +122,9 @@ export default function MappingScreen() {
       <DebugValues
         values={{
           ...location?.coords,
-          hasLocation
+          hasLocation,
+          markers,
+          waypoints: route.waypoints
         }}
       />
       {hasLocation == HAS_LOCATION.REQUESTING &&
@@ -155,29 +154,36 @@ export default function MappingScreen() {
           />
 
           {/* Route markers */}
-          {markers.map((marker, index) => (
-            <Marker
-              draggable
-              key={index}
-              coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-              }}
-              onPress={e => {
-                e.stopPropagation();
-                removeMarker(index);
-              }}
-              onDragEnd={(e) => moveMarker(e, index)}
-            />
-          ))}
+          {route !== null &&
+            route.waypoints.map((marker, index) => {
+              return (
+                <Marker
+                  draggable
+                  key={index}
+                  image={require("../assets/images/filled-circle-50x50.png")}
+                  coordinate={{
+                    latitude: marker.latitude,
+                    longitude: marker.longitude,
+                  }}
+                  onPress={e => {
+                    e.stopPropagation();
+                    removeMarker(index);
+                  }}
+                  onDragEnd={(e) => moveMarker(e, index)}
+                />
+              )
+            })
+          }
 
           {/* Route path */}
           {route !== null &&
             <Geojson
-              geojson={{features: [{
-                "type": "Feature",
-                "geometry": route?.geometry,
-              }]}}
+              geojson={{
+                features: [{
+                  "type": "Feature",
+                  "geometry": route.geometry,
+                }]
+              }}
             />
           }
         </MapView>

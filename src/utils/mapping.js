@@ -24,7 +24,7 @@ export class Route {
    * @param {Object} geometry GeoJSON object containing the geometry of the route
    * @param {float} distance Distance of the route in KM
    */
-  constructor(waypoints, geometry, distance) {
+  constructor(waypoints=[], geometry={}, distance=0.0) {
     this.waypoints = waypoints;
     this.geometry = geometry;
     this.distance = distance;
@@ -55,14 +55,28 @@ export class MapBoxMapper {
    * @returns {Route}
    */
   async route(coords) {
+    let coordsCopy = coords.slice();
+
+    // Handle only one coord given
+    let oneCoord = false;
+    if (coordsCopy.length < 2) {
+      oneCoord = true;
+      coordsCopy.push({
+        longitude: coordsCopy[0].longitude,
+        latitude: coordsCopy[0].latitude,
+      })
+    }
+
     // TODO: Expand this into more lines, I thought this would look better but it doesn't
+    // FIXME: Use the MapBox SDK instead
     const endpoint = `\
 ${MAPBOX_DOMAIN}/matching/${MAPBOX_VERSION}/mapbox/driving/\
-${coords.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0, -1)}\
+${coordsCopy.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0, -1)}\
 ?geometries=polyline\
-&radiuses=${coords.reduce((p) => p += "15.0;", "").slice(0, -1)}\
+&radiuses=${coordsCopy.reduce((p) => p += "15.0;", "").slice(0, -1)}\
 &access_token=${this.publicToken}`;
 
+    
     try {
       const res = await axios.get(endpoint);
 
@@ -77,10 +91,16 @@ ${coords.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0, -1)
       });
 
       const distance = route.distance;
+
+      if (oneCoord) {
+        return new Route([waypoints[0]]);
+      }
+
       return new Route(waypoints, geometry, distance);
     } catch (error) {
       // TODO: Handle error if MapBox returns non-200
-      console.error(error)
+      console.error(typeof error)
+      console.error(error.response.status, error.response.data)
     }
   }
 }

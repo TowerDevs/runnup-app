@@ -27,7 +27,6 @@ const TEST_ROUTE_DATA = {
   calories: 523
 };
 
-// TODO: Modify for live-running
 // TODO: Make collapsable and fullscreenable
 /**
  * Metrics is a component that displays and allows for the editing of route metrics.
