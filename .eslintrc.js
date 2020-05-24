@@ -2,7 +2,8 @@ module.exports = {
     "env": {
         "browser": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "extends": [
         "eslint:recommended",
@@ -25,6 +26,7 @@ module.exports = {
     "parser": "babel-eslint",
     "plugins": [
         "react",
+        "jest"
     ],
     "rules": {
         "strict": 0,
