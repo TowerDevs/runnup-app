@@ -12,17 +12,17 @@ import testData from "../../test-data/utils/mapping";
 jest.mock("axios");
 
 describe("MapBoxMapper tests", () => {
-  // test("get a route from a list of coords", async () => {
-  //   axios.get.mockResolvedValue(testData.mapboxMatchingRes);
+  test("get a route from a list of coords", async () => {
+    axios.get.mockResolvedValue(testData.mapboxMatchingRes);
 
-  //   const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
+    const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
 
-  //   const coords = testData.markers;
+    const coords = testData.markers;
 
-  //   const route = await mapper.route(coords);
+    const route = await mapper.route(coords);
 
-  //   expect(route).toMatchObject(testData.route);
-  // });
+    expect(route).toMatchObject(testData.route);
+  });
 
   test("get a route from one coord", async () => {
     axios.get.mockResolvedValue({
