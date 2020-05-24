@@ -1,10 +1,11 @@
 import {
-    FRIENDS_REQUESTED,
+    FRIENDS_REQUESTED, FRIENDS_ERROR,
     FRIEND_ADDED, FRIENDS_FETCHED,
-    FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED
-} from "../types";
+    FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED,
+    Friend
+} from "../../types/Friend";
+import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors";
-import { tokenConfig } from "./auth";
 import axios from "axios";
 
 /**
@@ -20,11 +21,11 @@ const setLoading = () => {
 /**
  * @desc Send a friend request to the designated email address
  * @param {Object} friend - new friend's info
- * @param {function} dispatch - dispatch the action Object
+ * @param {function} dispatch - dispatch the action Object to the redux store
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const sendFriendRequest = friend => (dispatch, getState) => {
+export const sendFriendRequest = (friend: Friend) => (dispatch: Function, getState: Function) => {
     dispatch(setLoading());
 
     axios.post("/api/v1/friends", friend, tokenConfig(getState))
@@ -33,21 +34,21 @@ export const sendFriendRequest = friend => (dispatch, getState) => {
         payload: res.data
     }))
     .catch(err => {
-        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "FRIENDS_ERROR"));
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
-        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "FRIENDS_ERROR"));
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
 
-        dispatch(returnErrors("An internal error occurred", 500, "FRIENDS_ERROR"));
+        dispatch(returnErrors("An internal error occurred", 500, FRIENDS_ERROR));
     });
 };
 
 /**
  * @desc Retrieve a list of the user's friends
- * @param {function} dispatch - function to dispatch the action Object
+ * @param {function} dispatch - dispatch the action Object to the redux store
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const fetchFriends = () => (dispatch, getState) => {
+export const fetchFriends = () => (dispatch: Function, getState: Function) => {
     dispatch(setLoading());
 
     axios.get("/api/v1/friends", tokenConfig(getState))
@@ -56,82 +57,82 @@ export const fetchFriends = () => (dispatch, getState) => {
         payload: res.data
     }))
     .catch(err => {
-        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "FRIENDS_ERROR"));
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
-        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "FRIENDS_ERROR"));
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
 
-        dispatch(returnErrors("An internal error occurred", 500, "FRIENDS_ERROR"));
+        dispatch(returnErrors("An internal error occurred", 500, FRIENDS_ERROR));
     });
 };
 
 /**
  * @desc Return the details of a user's friend
- * @param {string} id - the ObjectId of the specified friend
- * @param {function} dispatch - function to dispatch the action Object
+ * @param {string} _id - the ObjectId of the specified friend
+ * @param {function} dispatch - dispatch the action Object to the redux store
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const readFriend = id => (dispatch, getState) => {
+export const readFriend = (_id: string) => (dispatch: Function, getState: Function) => {
     dispatch(setLoading());
 
-    axios.get(`/api/v1/friends${id}`, tokenConfig(getState))
+    axios.get(`/api/v1/friends${_id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: FRIEND_READ,
         payload: res.data
     }))
     .catch(err => {
-        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "FRIENDS_ERROR"));
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
-        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "FRIENDS_ERROR"));
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
 
-        dispatch(returnErrors("An internal error occurred", 500, "FRIENDS_ERROR"));
+        dispatch(returnErrors("An internal error occurred", 500, FRIENDS_ERROR));
     });
 };
 
 /**
  * @desc Accept the friend request from the specified friend
- * @param {string} id - the ObjectId of the specified friend
- * @param {function} dispatch - dispatch the action Object
+ * @param {string} _id - the ObjectId of the specified friend
+ * @param {function} dispatch - dispatch the action Object to the redux store
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const acceptFriendRequest = id => (dispatch, getState) => {
+export const acceptFriendRequest = (_id: string) => (dispatch: Function, getState: Function) => {
     dispatch(setLoading());
 
-    axios.put(`/api/v1/friends${id}`, tokenConfig(getState))
+    axios.put(`/api/v1/friends${_id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: FRIEND_ACCEPTED,
         payload: res.data
     }))
     .catch(err => {
-        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "FRIENDS_ERROR"));
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
-        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "FRIENDS_ERROR"));
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
 
-        dispatch(returnErrors("An internal error occurred", 500, "FRIENDS_ERROR"));
+        dispatch(returnErrors("An internal error occurred", 500, FRIENDS_ERROR));
     });
 };
 
 /**
  * @desc Delete the friend with the specified ObjectId
- * @param {string} id - the ObjectId of the specified friend
- * @param {function} dispatch - dispatch the action Object
+ * @param {string} _id - the ObjectId of the specified friend
+ * @param {function} dispatch - dispatch the action Object to the redux store
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const deleteFriend = id => (dispatch, getState) => {
+export const deleteFriend = (_id: string) => (dispatch: Function, getState: Function) => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/friends${id}`, tokenConfig(getState))
+    axios.delete(`/api/v1/friends${_id}`, tokenConfig(getState))
     .then(() => dispatch({
         type: FRIEND_DELETED,
-        payload: id
+        payload: _id
     }))
     .catch(err => {
-        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "FRIENDS_ERROR"));
+        if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
-        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "FRIENDS_ERROR"));
+        else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
 
-        dispatch(returnErrors("An internal error occurred", 500, "FRIENDS_ERROR"));
+        dispatch(returnErrors("An internal error occurred", 500, FRIENDS_ERROR));
     });
 };
