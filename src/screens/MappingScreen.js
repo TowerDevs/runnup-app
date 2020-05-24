@@ -38,7 +38,6 @@ export default function MappingScreen() {
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
   const [region, setRegion] = useState(null); // eslint-disable-line no-unused-vars
   const [initialRegion, setInitialRegion] = useState(null);
-  const [markers, setMarkers] = useState([]);
   const [route, setRoute] = useState(new Route());
 
   /** Effects */
@@ -81,7 +80,7 @@ export default function MappingScreen() {
 
   // Update store when the route changes
   useEffect(() => {
-    
+
   }, [route]);
 
   // TODO: Use layout effect to resize map depending on the height of the metrics drawer
@@ -90,31 +89,50 @@ export default function MappingScreen() {
 
   /** Methods */
   const addMarker = async ({ nativeEvent }) => {
-    const newRoute = await mapper.route([
-      ...route.waypoints, {
-        ...nativeEvent.coordinate
-      }
-    ]);
-    setRoute(newRoute);
-  }
-
-  const removeMarker = async (i) => {
-    const newWaypoints = route.waypoints.filter((_, index) => i !== index);
-    const newRoute = await mapper.route(newWaypoints);
-    setRoute(newRoute);
-  }
-
-  const moveMarker = async ({ nativeEvent }, i) => {
-    const newWaypoints = route.waypoints.map((val, index) => {
-      if (index == i) {
-        return {
+    try {
+      const newRoute = await mapper.route([
+        ...route.waypoints, {
           ...nativeEvent.coordinate
         }
+      ]);
+      setRoute(newRoute);
+    } catch(e) {
+      // FIXME: Flash error message
+      console.log("Mapper error: ", e);
+    }
+  }
+  
+  const removeMarker = async (i) => {
+    const newWaypoints = route.waypoints.filter((_, index) => i !== index);
+    if (newWaypoints.length > 0) {
+      try {
+        const newRoute = await mapper.route(newWaypoints);
+        setRoute(newRoute);
+      } catch(e) {
+        // FIXME: Flash error message
+        console.log("Mapper error: ", e);
       }
-      return val;
-    });
-    const newRoute = await mapper.route(newWaypoints);
-    setRoute(newRoute);
+    } else {
+      setRoute(new Route());
+    }
+  }
+  
+  const moveMarker = async ({ nativeEvent }, i) => {
+    try {
+      const newWaypoints = route.waypoints.map((val, index) => {
+        if (index == i) {
+          return {
+            ...nativeEvent.coordinate
+          }
+        }
+        return val;
+      });
+      const newRoute = await mapper.route(newWaypoints);
+      setRoute(newRoute);
+    } catch(e) {
+      // FIXME: Flash error message
+      console.log("Mapper error: ", e);
+    }
   }
 
   return (
@@ -123,7 +141,6 @@ export default function MappingScreen() {
         values={{
           ...location?.coords,
           hasLocation,
-          markers,
           waypoints: route.waypoints
         }}
       />
@@ -190,7 +207,6 @@ export default function MappingScreen() {
       }
       <Metrics
         style={styles.metricContainer}
-        onSave={() => console.log(markers)}
       />
     </View>
   );

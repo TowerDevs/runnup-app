@@ -24,7 +24,7 @@ export class Route {
    * @param {Object} geometry GeoJSON object containing the geometry of the route
    * @param {float} distance Distance of the route in KM
    */
-  constructor(waypoints=[], geometry={}, distance=0.0) {
+  constructor(waypoints = [], geometry = {}, distance = 0.0) {
     this.waypoints = waypoints;
     this.geometry = geometry;
     this.distance = distance;
@@ -59,7 +59,7 @@ export class MapBoxMapper {
 
     // Handle only one coord given
     let oneCoord = false;
-    if (coordsCopy.length < 2) {
+    if (coordsCopy.length == 1) {
       oneCoord = true;
       coordsCopy.push({
         longitude: coordsCopy[0].longitude,
@@ -76,31 +76,42 @@ ${coordsCopy.reduce((p, c) => p += `${c.longitude},${c.latitude};`, "").slice(0,
 &radiuses=${coordsCopy.reduce((p) => p += "15.0;", "").slice(0, -1)}\
 &access_token=${this.publicToken}`;
 
-    
+    let res;
     try {
-      const res = await axios.get(endpoint);
-
-      const route = res.data.matchings[0];
-      const geometry = polyline.toGeoJSON(route.geometry);
-      let { tracepoints } = res.data;
-      const waypoints = tracepoints.map((v) => {
-        return {
-          longitude: v.location[0],
-          latitude: v.location[1]
-        }
-      });
-
-      const distance = route.distance;
-
-      if (oneCoord) {
-        return new Route([waypoints[0]]);
-      }
-
-      return new Route(waypoints, geometry, distance);
-    } catch (error) {
+      res = await axios.get(endpoint);
+    } catch (e) {
       // TODO: Handle error if MapBox returns non-200
-      console.error(typeof error)
-      console.error(error.response.status, error.response.data)
+      console.error(e.response.status, e.response.data)
+    }
+
+    const { code } = res.data;
+
+    switch (code) {
+      case "Ok": {
+        const route = res.data.matchings[0];
+        const geometry = polyline.toGeoJSON(route.geometry);
+        let { tracepoints } = res.data;
+        const waypoints = tracepoints.map((v) => {
+          return {
+            longitude: v.location[0],
+            latitude: v.location[1]
+          }
+        });
+
+        const distance = route.distance;
+
+        if (oneCoord) {
+          return new Route([waypoints[0]]);
+        }
+
+        return new Route(waypoints, geometry, distance);
+      }
+      case "NoMatch":
+      case "NoSegment":
+      case "TooManyCoordinates":
+        throw Error(code);
+      default:
+        break;
     }
   }
 }
