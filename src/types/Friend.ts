@@ -15,39 +15,41 @@ export interface Friend {
 };
 
 /* action interfaces */
-export interface requestFriendAction {
-    type: typeof FRIENDS_REQUESTED
-};
-
 export interface addFriendAction {
     type: typeof FRIEND_ADDED,
-    friend: Friend
+    payload: Friend
 };
 
 export interface fetchFriendsAction {
     type: typeof FRIENDS_FETCHED,
-    friend: Friend[]
+    payload: Friend[]
 };
 
 export interface readFriendAction {
     type: typeof FRIEND_READ,
-    friend: Friend
+    payload: Friend
 };
 
 export interface acceptFriendAction {
     type: typeof FRIEND_ACCEPTED,
-    _id: string
+    payload: string
 };
 
 export interface blockFriendAction {
     type: typeof FRIEND_BLOCKED,
-    _id: string
+    payload: string
 };
 
 export interface deleteFriendAction {
     type: typeof FRIEND_DELETED,
-    _id: string
+    payload: string
 };
 
 /* Aggregated action interface */
-export type FriendActionTypes = requestFriendAction | addFriendAction | fetchFriendsAction | readFriendAction | acceptFriendAction | blockFriendAction| deleteFriendAction;
+export type FriendActions =
+    addFriendAction |
+    fetchFriendsAction |
+    readFriendAction |
+    acceptFriendAction |
+    blockFriendAction|
+    deleteFriendAction;

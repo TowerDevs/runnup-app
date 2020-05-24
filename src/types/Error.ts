@@ -25,4 +25,7 @@ export interface clearErrorAction {
 };
 
 /* aggregated action interface */
-export type ErrorActionTypes = returnErrorAction | logErrorAction | clearErrorAction;
+export type ErrorActions =
+    returnErrorAction |
+    logErrorAction |
+    clearErrorAction;

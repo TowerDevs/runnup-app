@@ -17,34 +17,35 @@ export interface Run {
 };
 
 /* action interfaces */
-export interface requestRunAction {
-    type: typeof RUNS_REQUESTED
-};
-
 export interface createRunAction {
     type: typeof RUN_CREATED,
-    run: Run
+    payload: Run
 }
 
 export interface fetchRunsAction {
     type: typeof RUNS_FETCHED,
-    runs: Run[]
+    payload: Run[]
 };
 
 export interface readRunAction {
     type: typeof RUN_READ,
-    run: Run
+    payload: Run
 };
 
 export interface updateRunAction {
     type: typeof RUN_UPDATED,
-    run: Run
+    payload: Run
 };
 
 export interface deleteRunAction {
     type: typeof RUN_DELETED,
-    _id: string
+    payload: string
 };
 
 /* Aggregated action interface */
-export type RunActionTypes = requestRunAction | createRunAction | fetchRunsAction | readRunAction |updateRunAction | deleteRunAction;
+export type RunActions =
+    createRunAction |
+    fetchRunsAction |
+    readRunAction |
+    updateRunAction |
+    deleteRunAction;

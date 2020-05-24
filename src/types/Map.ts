@@ -17,4 +17,6 @@ export interface changeMetricAction {
 };
 
 /* aggregated action interfaces */
-// export type MapActionTypes =
+export type MapActions =
+    selectMetricAction |
+    changeMetricAction

@@ -18,34 +18,35 @@ export interface Route {
 };
 
 /* action interfaces */
-export interface requestRouteAction {
-    type: typeof ROUTES_REQUESTED
-};
-
 export interface createRouteAction {
     type: typeof ROUTE_CREATED,
-    route: Route
+    payload: Route
 }
 
 export interface fetchRoutesAction {
     type: typeof ROUTES_FETCHED,
-    routes: Route[]
+    payload: Route[]
 };
 
 export interface readRouteAction {
     type: typeof ROUTES_FETCHED,
-    route: Route
+    payload: Route
 };
 
 export interface updateRouteAction {
     type: typeof ROUTES_FETCHED,
-    route: Route
+    payload: Route
 };
 
 export interface deleteRouteAction {
     type: typeof ROUTES_FETCHED,
-    _id: string
+    payload: string
 };
 
 /* Aggregated action interface */
-export type RouteActionTypes = requestRouteAction | createRouteAction | fetchRoutesAction | readRouteAction | updateRouteAction | deleteRouteAction;
+export type RouteActions =
+    createRouteAction |
+    fetchRoutesAction |
+    readRouteAction |
+    updateRouteAction |
+    deleteRouteAction;
