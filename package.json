@@ -7,7 +7,7 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "tests": "jest",
+    "tests": "jest --verbose",
     "docs": "jsdoc ./src/** -d jsdoc && echo 'Open ./jsdoc/index.html in a browser to browse the docs.'"
   },
   "jest": {
