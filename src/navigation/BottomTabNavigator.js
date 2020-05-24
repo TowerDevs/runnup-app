@@ -1,12 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { FontAwesome5, Feather } from "@expo/vector-icons";
+import { FontAwesome5, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TabBarIcon from "../components/TabBarIcon";
 import HomeScreen from "../screens/HomeScreen";
 import MappingScreen from "../screens/MappingScreen";
 import ActivityScreen from "../screens/ActivityScreen";
-import RegisterScreen from "../screens/RegisterScreen";
+import MenuScreen from "../screens/MenuScreen";
+
+import RegisterScreen from "../screens/RegisterScreen"; // move out of bottom-nav in production
 import LoginScreen from "../screens/LoginScreen";
 
 const { Navigator, Screen } = createBottomTabNavigator();
@@ -58,6 +60,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           title: "Login"
         }}
       />
+      <Screen
+        name="menu"
+        component={MenuScreen}
+        options={{
+          title: "Menu",
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={MaterialCommunityIcons} name="menu" />,
+        }}
+      />
     </Navigator>
   );
 }
@@ -75,6 +85,8 @@ function getHeaderTitle({ state }) {
     case "Register":
       return "Create Account";
     case "Login":
-      return "Create Account";
+      return "Login";
+    case "Menu":
+      return "Menu";
   }
 }
