@@ -24,6 +24,18 @@ export const PASSWORD_TOKEN_ERROR = "PASSWORD_TOKEN_ERROR";
 export const PASSWORD_TOKEN_VERIFIED = "PASSWORD_TOKEN_VERIFIED";
 
 /* model interfaces */
+export interface RegisterReq {
+    first: string;
+    last: string;
+    email: string;
+    password: string;
+};
+
+export interface LoginReq {
+    email: string;
+    password: string;
+};
+
 export interface TokenRes {
     token: string;
 };
