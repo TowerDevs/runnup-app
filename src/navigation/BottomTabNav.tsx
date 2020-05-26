@@ -1,5 +1,5 @@
+import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
 import { FontAwesome5, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TabBarIcon from "../components/TabBarIcon";
@@ -14,7 +14,14 @@ import LoginScreen from "../screens/LoginScreen";
 const { Navigator, Screen } = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = "Home";
 
-export default function BottomTabNavigator({ navigation, route }) {
+type Props = {
+  navigation: {
+    setOptions: Function;
+  }
+  route: { state: any; }
+};
+
+const BottomTabNav: FC<Props> = ({ navigation, route }) => {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
@@ -72,7 +79,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   );
 }
 
-function getHeaderTitle({ state }) {
+const getHeaderTitle = ({ state }) => {
   const routeName = state?.routes[state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
@@ -90,3 +97,5 @@ function getHeaderTitle({ state }) {
       return "Menu";
   }
 }
+
+export default BottomTabNav;
