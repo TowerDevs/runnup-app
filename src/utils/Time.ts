@@ -25,7 +25,7 @@ export class Time {
    * Initialize Time.
    * @param {Number} seconds
    */
-  constructor(seconds) {
+  constructor(seconds: number) {
     // Total seconds
     this.seconds = seconds;
 
@@ -42,14 +42,14 @@ export class Time {
    *
    * @returns {Time}
    */
-  static fromMinutes(minutes, seconds = 0) {
+  static fromMinutes(minutes: number, seconds: number = 0) {
     let totalSeconds = Math.floor(minutes * 60 + seconds);
     return new Time(totalSeconds);
   }
 
   /**
    * minuteString returns a string formatted as mm:ss.
-   * 
+   *
    * @returns {string} the formatted minute string
    */
   minuteString() {
