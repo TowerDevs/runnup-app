@@ -1,8 +1,8 @@
-import { EDIT_METRIC, CHANGE_METRIC } from "../types";
+import { METRIC_SELECTED, METRIC_CHANGED } from "../../types/Map";
 
 export const editMetric = (metric) => {
   return {
-    type: EDIT_METRIC,
+    type: METRIC_SELECTED,
     editing: true,
     metric
   }
@@ -10,7 +10,7 @@ export const editMetric = (metric) => {
 
 export const changeMetric = (metric, value) => {
   return {
-    type: CHANGE_METRIC,
+    type: METRIC_CHANGED,
     editing: false,
     metric,
     value
