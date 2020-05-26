@@ -6,8 +6,9 @@ import {
     LOGIN_SUCCESS, LOGIN_FAILED,
     LOGOUT_SUCCESS,
     EMAIL_TOKEN_SENT, EMAIL_TOKEN_ERROR, EMAIL_VERIFIED,
-    PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED
-} from "../../actions/types";
+    PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED,
+    AuthState, AuthActions
+} from "../../types/Auth";
 import * as Storage from "expo-secure-store";
 
 const initialState = {
@@ -17,7 +18,7 @@ const initialState = {
     user: null
 };
 
-export default (state = initialState, action) => {
+export default (state: AuthState = initialState, action: AuthActions) => {
     switch(action.type) {
         case USER_REQUESTED:
             return {

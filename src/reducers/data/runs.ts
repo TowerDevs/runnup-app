@@ -1,74 +1,85 @@
 import {
-    ROUTES_REQUESTED, ROUTES_ERROR,
-    ROUTE_CREATED, ROUTES_FETCHED,
-    ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED
-} from "../../actions/types";
+    RUNS_REQUESTED, RUNS_ERROR,
+    RUN_CREATED, RUNS_FETCHED,
+    RUN_READ, RUN_UPDATED, RUN_DELETED,
+    Run
+} from "../../types/Run";
 
 const initialState = {
     isLoading: false,
     data: []
 };
 
-export default (state = initialState, action) => {
+interface State {
+    isLoading: boolean,
+    data: Run[]
+}
+
+interface Action {
+    type: string,
+    payload: string | Run[]
+}
+
+export default (state: State = initialState, action: Action) => {
     switch(action.type) {
-        case ROUTES_REQUESTED:
+        case RUNS_REQUESTED:
             return {
                 ...state,
                 isLoading: true
             };
-        case ROUTES_ERROR:
+        case RUNS_ERROR:
             return {
                 ...state,
                 isLoading: false
             };
-        case ROUTE_CREATED:
+        case RUN_CREATED:
             return {
                 ...state,
                 isLoading: false,
                 data: [...state.data, action.payload]
             };
-        case ROUTES_FETCHED:
+        case RUNS_FETCHED:
             return {
                 ...state,
                 isLoading: false,
                 data: action.payload
             };
-        case ROUTE_READ:
+        case RUN_READ:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.map(route => {
-                    const { id } = action.payload;
+                data: state.data.map(run => {
+                    const { _id } = action.payload;
 
-                    if(route.id !== id) return route;
+                    if(run._id !== _id) return run;
 
                     return {
-                        route: action.payload
+                        run: action.payload
                     };
                 })
             };
-        case ROUTE_UPDATED:
+        case RUN_UPDATED:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.map(route => {
-                    const { id } = action.payload;
+                data: state.data.map(run => {
+                    const { _id } = action.payload;
 
-                    if(route.id !== id) return route;
+                    if(run._id !== _id) return run;
 
                     return {
                         ...state.data,
-                        route: {
+                        run: {
 
                         }
                     };
                 })
             };
-        case ROUTE_DELETED:
+        case RUN_DELETED:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.filter(route => route.id !== action.payload)
+                data: state.data.filter(run => run._id !== action.payload)
             };
         default:
             return state;
