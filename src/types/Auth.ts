@@ -34,10 +34,10 @@ export interface UserRes {
 
 // state interface
 export interface AuthState {
-    token: Promise<string>;
-    isAuthenticated: boolean;
+    token: Promise<string | null>;
+    isAuthenticated: null | boolean;
     isLoading: boolean;
-    user: UserRes
+    user: null | UserRes
 };
 
 // action interfaces
