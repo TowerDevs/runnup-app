@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
 
-// import auth from "./data/auth";
 import errors from "./errors";
+
+// import auth from "./data/auth";
 import friends from "./data/friends";
 import routes from "./data/routes";
 import runs from "./data/runs";

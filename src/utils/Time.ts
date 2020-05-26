@@ -18,6 +18,9 @@
  * time.s // 20
  */
 export class Time {
+  seconds: number;
+  m: number;
+  s: number;
   /**
    * Initialize Time.
    * @param {Number} seconds
@@ -36,12 +39,12 @@ export class Time {
    * a Time instance.
    * @param {Number} minutes
    * @param {Number} seconds
-   * 
+   *
    * @returns {Time}
    */
   static fromMinutes(minutes, seconds = 0) {
     let totalSeconds = Math.floor(minutes * 60 + seconds);
-    return Time(totalSeconds);
+    return new Time(totalSeconds);
   }
 
   /**

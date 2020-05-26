@@ -1,4 +1,14 @@
-import { AUTH_ERROR, USER_REQUESTED, USER_LOADED, REGISTER_SUCCESS, DEREGISTER_SUCCESS, LOGIN_SUCCESS, LOGOUT_SUCCESS, EMAIL_TOKEN_SENT, EMAIL_VERIFIED, PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_VERIFIED } from "../types";
+import {
+    AUTH_ERROR,
+    USER_REQUESTED, USER_LOADED,
+    REGISTER_SUCCESS, REGISTER_FAILED,
+    DEREGISTER_SUCCESS, DEREGISTER_FAILED,
+    LOGIN_SUCCESS, LOGIN_FAILED,
+    LOGOUT_SUCCESS,
+    EMAIL_TOKEN_SENT, EMAIL_VERIFIED,
+    PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_VERIFIED
+} from "../../types/Auth";
+import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors";
 import axios from "axios";
 
@@ -211,24 +221,4 @@ export const verifyPasswordToken = token => dispatch => {
 
         dispatch(returnErrors("An internal error occurred", 500, "PASSWORD_TOKEN_ERROR"));
     });
-};
-
-
-/**
- * @desc Configure the authorization token for private requests
- * @param {function} getState - function to retrieve the token from the auth reducer
- * @returns {Object} - the configuration properties
- */
-export const tokenConfig = getState => {
-    const token = getState().auth.token;
-
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-
-    if (token) config.headers["Authorization"] = `Basic ${token}`;
-
-    return config;
 };

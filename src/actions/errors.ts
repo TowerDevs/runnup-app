@@ -1,5 +1,5 @@
-import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED } from "./types";
-import axios from 'axios';
+import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED, Error, ErrorActions} from "../types/Error";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**
  * @desc Show error details to user
@@ -8,7 +8,7 @@ import axios from 'axios';
  * @param  {string} id - error action type
  * @returns {Object} - error details for client/user
  */
-export const returnErrors = (message, status, id = null) => {
+export const returnErrors = (message: string, status: number, id: string = null):ErrorActions => {
     return {
         type: ERRORS_RETURNED,
         payload: { message, status, id }
@@ -21,13 +21,15 @@ export const returnErrors = (message, status, id = null) => {
  * @param  {string} dispatch - function to dispatch action
  * @returns {string} - confirmation message from backend service
  */
-export const logErrors = error => dispatch => {
-    axios.post("/api/v1/errors", error)
-    .then(res => dispatch({
+export const logErrors = (error:Error) => (
+    dispatch: Function
+):void => {
+    axios.post<Error>("/api/v1/errors", error)
+    .then((res: AxiosResponse<Error>) => dispatch({
         type: ERRORS_LOGGED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, "LOGGING_ERROR"));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, "LOGGING_ERROR"));
@@ -40,7 +42,7 @@ export const logErrors = error => dispatch => {
  * @desc Clear errors from UI
  * @returns {Object} - contains action type
  */
-export const clearErrors = () => {
+export const clearErrors = ():ErrorActions => {
     return {
         type: ERRORS_CLEARED
     };

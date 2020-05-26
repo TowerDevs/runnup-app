@@ -1,15 +1,16 @@
 import {
     FRIENDS_REQUESTED, FRIENDS_ERROR,
     FRIEND_ADDED, FRIENDS_FETCHED,
-    FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED
-} from "../../actions/types";
+    FRIEND_READ, FRIEND_ACCEPTED, FRIEND_BLOCKED, FRIEND_DELETED,
+    FriendState, FriendActions
+} from "../../types/Friend";
 
 const initialState = {
     isLoading: false,
     data: []
 };
 
-export default (state = initialState, action) => {
+export default (state: FriendState = initialState, action: FriendActions) => {
     switch(action.type) {
         case FRIENDS_REQUESTED:
             return {
@@ -38,9 +39,9 @@ export default (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 data: state.data.map(friend => {
-                    const { id } = action.payload;
+                    const { _id } = action.payload;
 
-                    if(friend.id !== id) return friend;
+                    if(friend._id !== _id) return friend;
 
                     return {
                         friend: action.payload
@@ -57,7 +58,7 @@ export default (state = initialState, action) => {
                     if(friend._id != _id) return friend;
 
                     return {
-                        ...state.friend,
+                        ...state.data,
                         isPending: false
                     };
                 })
@@ -66,7 +67,7 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.filter(friend => friend.id !== action.payload)
+                data: state.data.filter(friend => friend._id !== action.payload)
             };
         default:
             return state;
