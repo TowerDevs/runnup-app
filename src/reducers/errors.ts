@@ -1,4 +1,4 @@
-import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED } from "../actions/types";
+import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED, ErrorState, ErrorActions } from "../types/Error";
 
 const initialState = {
     message: null,
@@ -6,7 +6,7 @@ const initialState = {
     id: null
 };
 
-export default (state = initialState, action) => {
+export default (state: ErrorState = initialState, action: ErrorActions) => {
     switch(action.type) {
         case ERRORS_RETURNED:
             return {
