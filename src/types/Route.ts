@@ -8,7 +8,11 @@ export const ROUTE_UPDATED = "ROUTE_UPDATED";
 export const ROUTE_DELETED = "ROUTE_DELETED";
 
 /* model interface */
-export interface Route {
+export interface RouteReq {
+
+};
+
+export interface RouteRes {
     _id: string
     name: string,
     distance: number,
@@ -17,34 +21,50 @@ export interface Route {
     calories: number
 };
 
+/* state interface */
+export interface RouteState {
+    isLoading: boolean;
+    data: RouteRes[]
+};
+
 /* action interfaces */
-export interface createRouteAction {
+interface loadRouteAction {
+    type: typeof ROUTES_REQUESTED;
+};
+
+interface errorRouteAction {
+    type: typeof ROUTES_ERROR;
+};
+
+interface createRouteAction {
     type: typeof ROUTE_CREATED,
-    payload: Route
-}
-
-export interface fetchRoutesAction {
-    type: typeof ROUTES_FETCHED,
-    payload: Route[]
+    payload: RouteRes
 };
 
-export interface readRouteAction {
+interface fetchRoutesAction {
     type: typeof ROUTES_FETCHED,
-    payload: Route
+    payload: RouteRes[]
 };
 
-export interface updateRouteAction {
-    type: typeof ROUTES_FETCHED,
-    payload: Route
+interface readRouteAction {
+    type: typeof ROUTE_READ,
+    payload: RouteRes
 };
 
-export interface deleteRouteAction {
-    type: typeof ROUTES_FETCHED,
+interface updateRouteAction {
+    type: typeof ROUTE_UPDATED,
+    payload: RouteRes
+};
+
+interface deleteRouteAction {
+    type: typeof ROUTE_DELETED,
     payload: string
 };
 
 /* Aggregated action interface */
 export type RouteActions =
+    loadRouteAction |
+    errorRouteAction |
     createRouteAction |
     fetchRoutesAction |
     readRouteAction |

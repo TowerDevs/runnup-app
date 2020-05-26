@@ -5,15 +5,21 @@ export const ERRORS_CLEARED = "ERRORS_CLEARED";
 
 /* model interface */
 export interface Error {
-    message: string,
-    status: number,
-    id: string
+    message: string;
+    status: number;
+    id: string;
 };
+
+export interface ErrorState {
+    message: string | null;
+    status: number| null;
+    id: string | null;
+}
 
 /* action interfaces */
 export interface returnErrorAction {
     type: typeof ERRORS_RETURNED,
-    error: Error
+    payload: Error
 };
 
 export interface logErrorAction {

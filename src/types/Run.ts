@@ -1,3 +1,4 @@
+/* actions */
 export const RUNS_REQUESTED = "RUNS_REQUESTED";
 export const RUNS_ERROR = "RUNS_ERROR";
 export const RUN_CREATED = "RUN_CREATED";
@@ -6,44 +7,64 @@ export const RUN_READ = "RUN_READ";
 export const RUN_UPDATED = "RUN_UPDATED";
 export const RUN_DELETED = "RUN_DELETED";
 
-/* model interface */
-export interface Run {
+/* model interfaces */
+export interface RunReq {
+
+};
+
+export interface RunRes {
     _id: string,
-    timestamp: number, // convert to date on the UI
+    timestamp: number,
     route: string,
     avgPace: number,
     totalTime: number,
     distanceRan: number
 };
 
+/* state interface */
+export interface RunState {
+    isLoading: boolean;
+    data: RunRes[];
+};
+
 /* action interfaces */
-export interface createRunAction {
+interface loadRunAction {
+    type: typeof RUNS_REQUESTED;
+};
+
+interface errorRunAction {
+    type: typeof RUNS_ERROR;
+};
+
+interface createRunAction {
     type: typeof RUN_CREATED,
-    payload: Run
+    payload: RunRes
 }
 
-export interface fetchRunsAction {
+interface fetchRunsAction {
     type: typeof RUNS_FETCHED,
-    payload: Run[]
+    payload: RunRes[]
 };
 
-export interface readRunAction {
+interface readRunAction {
     type: typeof RUN_READ,
-    payload: Run
+    payload: RunRes
 };
 
-export interface updateRunAction {
+interface updateRunAction {
     type: typeof RUN_UPDATED,
-    payload: Run
+    payload: RunRes
 };
 
-export interface deleteRunAction {
+interface deleteRunAction {
     type: typeof RUN_DELETED,
     payload: string
 };
 
 /* Aggregated action interface */
 export type RunActions =
+    loadRunAction |
+    errorRunAction |
     createRunAction |
     fetchRunsAction |
     readRunAction |

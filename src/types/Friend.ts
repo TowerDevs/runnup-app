@@ -8,34 +8,52 @@ export const FRIEND_ACCEPTED = "FRIEND_ACCEPTED"
 export const FRIEND_BLOCKED = "FRIEND_BLOCKED";
 export const FRIEND_DELETED = "FRIEND_DELETED";
 
-/* model interface */
-export interface Friend {
+/* model interfaces */
+export interface FriendReq {
     _id: string,
     email: string
 };
 
+export interface FriendRes {
+    _id: string
+};
+
+/* state interface */
+export interface FriendState {
+    isLoading: boolean;
+    data: FriendRes[]
+};
+
 /* action interfaces */
-export interface addFriendAction {
+interface loadFriendAction {
+    type: typeof FRIENDS_REQUESTED;
+};
+
+interface errorFriendAction {
+    type: typeof FRIENDS_ERROR;
+};
+
+interface addFriendAction {
     type: typeof FRIEND_ADDED,
-    payload: Friend
+    payload: FriendRes
 };
 
-export interface fetchFriendsAction {
+interface fetchFriendsAction {
     type: typeof FRIENDS_FETCHED,
-    payload: Friend[]
+    payload: FriendRes[]
 };
 
-export interface readFriendAction {
+interface readFriendAction {
     type: typeof FRIEND_READ,
-    payload: Friend
+    payload: FriendRes
 };
 
-export interface acceptFriendAction {
+interface acceptFriendAction {
     type: typeof FRIEND_ACCEPTED,
     payload: string
 };
 
-export interface blockFriendAction {
+interface blockFriendAction {
     type: typeof FRIEND_BLOCKED,
     payload: string
 };
@@ -47,6 +65,8 @@ export interface deleteFriendAction {
 
 /* Aggregated action interface */
 export type FriendActions =
+    loadFriendAction |
+    errorFriendAction |
     addFriendAction |
     fetchFriendsAction |
     readFriendAction |
