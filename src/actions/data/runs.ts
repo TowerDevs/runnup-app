@@ -2,17 +2,17 @@ import {
     RUNS_REQUESTED, RUNS_ERROR,
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED,
-    Run
+    RunReq, RunRes, RunActions
 } from "../../types/Run";
 import { returnErrors } from "../errors";
 import tokenConfig from "../../utils/tokenConfig";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**
  * @desc Sets the Run reducer state to "isLoading"
  * @returns {Object} - contains the action type
  */
-const setLoading = () => {
+const setLoading = ():RunActions => {
     return {
         type: RUNS_REQUESTED
     };
@@ -25,15 +25,18 @@ const setLoading = () => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const createRun = (run: Run) => (dispatch: Function, getState: Function) => {
+export const createRun = (run: RunReq) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.post("/api/v1/runs", run, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.post<RunRes>("/api/v1/runs", run, tokenConfig(getState))
+    .then((res: AxiosResponse<RunRes>) => dispatch({
         type: RUN_CREATED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, RUNS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, RUNS_ERROR));
@@ -48,15 +51,18 @@ export const createRun = (run: Run) => (dispatch: Function, getState: Function) 
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const fetchRuns = () => (dispatch: Function, getState: Function) => {
+export const fetchRuns = () => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/runs", tokenConfig(getState))
-    .then(res => dispatch({
+    axios.get<RunRes[]>("/api/v1/runs", tokenConfig(getState))
+    .then((res: AxiosResponse<RunRes[]>) => dispatch({
         type: RUNS_FETCHED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, RUNS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, RUNS_ERROR));
@@ -72,15 +78,18 @@ export const fetchRuns = () => (dispatch: Function, getState: Function) => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const readRun = (_id: string) => (dispatch: Function, getState: Function) => {
+export const readRun = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.get(`/api/v1/runs/${_id}`, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.get<RunRes>(`/api/v1/runs/${_id}`, tokenConfig(getState))
+    .then((res: AxiosResponse<RunRes>) => dispatch({
         type: RUN_READ,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, RUNS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, RUNS_ERROR));
@@ -97,15 +106,18 @@ export const readRun = (_id: string) => (dispatch: Function, getState: Function)
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const updateRun = (_id: string, run: Run) => (dispatch: Function, getState: Function) => {
+export const updateRun = (_id: string, run: RunReq) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.put(`/api/v1/runs/${_id}`, run, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.put<RunRes>(`/api/v1/runs/${_id}`, run, tokenConfig(getState))
+    .then((res: AxiosResponse<RunRes>) => dispatch({
         type: RUN_UPDATED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, RUNS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, RUNS_ERROR));
@@ -121,15 +133,18 @@ export const updateRun = (_id: string, run: Run) => (dispatch: Function, getStat
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const deleteRun = (_id: string) => (dispatch: Function, getState: Function) => {
+export const deleteRun = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/runs/${_id}`, tokenConfig(getState))
+    axios.delete<string>(`/api/v1/runs/${_id}`, tokenConfig(getState))
     .then(() => dispatch({
         type: RUN_DELETED,
         payload: _id
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, RUNS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, RUNS_ERROR));

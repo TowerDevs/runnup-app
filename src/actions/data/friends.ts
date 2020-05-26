@@ -2,17 +2,17 @@ import {
     FRIENDS_REQUESTED, FRIENDS_ERROR,
     FRIEND_ADDED, FRIENDS_FETCHED,
     FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED,
-    Friend
+    FriendReq, FriendRes, FriendActions
 } from "../../types/Friend";
 import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**
  * @desc Sets the friends reducer state to "Loading.."
  * @returns {Object} - contains the action type
  */
-const setLoading = () => {
+const setLoading = ():object => {
     return {
         type: FRIENDS_REQUESTED
     };
@@ -25,7 +25,7 @@ const setLoading = () => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const sendFriendRequest = (friend: Friend) => (dispatch: Function, getState: Function) => {
+export const sendFriendRequest = (friend: FriendReq) => (dispatch: Function, getState: Function):void => {
     dispatch(setLoading());
 
     axios.post("/api/v1/friends", friend, tokenConfig(getState))
@@ -48,7 +48,7 @@ export const sendFriendRequest = (friend: Friend) => (dispatch: Function, getSta
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const fetchFriends = () => (dispatch: Function, getState: Function) => {
+export const fetchFriends = () => (dispatch: Function, getState: Function):void => {
     dispatch(setLoading());
 
     axios.get("/api/v1/friends", tokenConfig(getState))
@@ -72,7 +72,7 @@ export const fetchFriends = () => (dispatch: Function, getState: Function) => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const readFriend = (_id: string) => (dispatch: Function, getState: Function) => {
+export const readFriend = (_id: string) => (dispatch: Function, getState: Function):void => {
     dispatch(setLoading());
 
     axios.get(`/api/v1/friends${_id}`, tokenConfig(getState))
@@ -96,10 +96,10 @@ export const readFriend = (_id: string) => (dispatch: Function, getState: Functi
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const acceptFriendRequest = (_id: string) => (dispatch: Function, getState: Function) => {
+export const acceptFriendRequest = (_id: string) => (dispatch: Function, getState: Function):void => {
     dispatch(setLoading());
 
-    axios.put(`/api/v1/friends${_id}`, tokenConfig(getState))
+    axios.put<string>(`/api/v1/friends${_id}`, tokenConfig(getState))
     .then(res => dispatch({
         type: FRIEND_ACCEPTED,
         payload: res.data
@@ -120,10 +120,10 @@ export const acceptFriendRequest = (_id: string) => (dispatch: Function, getStat
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const deleteFriend = (_id: string) => (dispatch: Function, getState: Function) => {
+export const deleteFriend = (_id: string) => (dispatch: Function, getState: Function):void => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/friends${_id}`, tokenConfig(getState))
+    axios.delete<string>(`/api/v1/friends${_id}`, tokenConfig(getState))
     .then(() => dispatch({
         type: FRIEND_DELETED,
         payload: _id

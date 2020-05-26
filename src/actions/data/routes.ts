@@ -2,17 +2,17 @@ import {
     ROUTES_REQUESTED, ROUTES_ERROR,
     ROUTE_CREATED, ROUTES_FETCHED,
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED,
-    Route
+    RouteReq, RouteRes, RouteActions
 } from "../../types/Route";
 import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**
  * @desc Set the Routes reducer to a loading state
  * @returns {Object} - contains the action type
  */
-const setLoading = () => {
+const setLoading = ():RouteActions => {
     return {
         type: ROUTES_REQUESTED
     };
@@ -25,15 +25,18 @@ const setLoading = () => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const createRoute = (route: Route) => (dispatch: Function, getState: Function) => {
+export const createRoute = (route: RouteReq) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.post("/api/v1/routes", route, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.post<RouteRes>("/api/v1/routes", route, tokenConfig(getState))
+    .then((res: AxiosResponse<RouteRes>) => dispatch({
         type: ROUTE_CREATED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, ROUTES_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, ROUTES_ERROR));
@@ -48,15 +51,18 @@ export const createRoute = (route: Route) => (dispatch: Function, getState: Func
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const fetchRoutes = () => (dispatch: Function, getState: Function) => {
+export const fetchRoutes = () => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/routes", tokenConfig(getState))
-    .then(res => dispatch({
+    axios.get<RouteRes[]>("/api/v1/routes", tokenConfig(getState))
+    .then((res: AxiosResponse<RouteRes[]>) => dispatch({
         type: ROUTES_FETCHED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError)=> {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, ROUTES_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, ROUTES_ERROR));
@@ -72,15 +78,18 @@ export const fetchRoutes = () => (dispatch: Function, getState: Function) => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const readRoute = (_id: string) => (dispatch: Function, getState: Function) => {
+export const readRoute = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.get(`/api/v1/routes/${_id}`, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.get<RouteRes>(`/api/v1/routes/${_id}`, tokenConfig(getState))
+    .then((res: AxiosResponse<RouteRes>) => dispatch({
         type: ROUTE_READ,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, ROUTES_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, ROUTES_ERROR));
@@ -97,15 +106,18 @@ export const readRoute = (_id: string) => (dispatch: Function, getState: Functio
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const updateRoute = (_id: string, route: Route) => (dispatch: Function, getState: Function) => {
+export const updateRoute = (_id: string, route: RouteReq) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.put(`/api/v1/routes/${_id}`, route, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.put<RouteRes>(`/api/v1/routes/${_id}`, route, tokenConfig(getState))
+    .then((res: AxiosResponse<RouteRes>) => dispatch({
         type: ROUTE_UPDATED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, ROUTES_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, ROUTES_ERROR));
@@ -121,15 +133,18 @@ export const updateRoute = (_id: string, route: Route) => (dispatch: Function, g
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const deleteRoute = (_id: string) => (dispatch: Function, getState: Function) => {
+export const deleteRoute = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.delete(`/api/v1/routes/${_id}`, tokenConfig(getState))
+    axios.delete<string>(`/api/v1/routes/${_id}`, tokenConfig(getState))
     .then(() => dispatch({
         type: ROUTE_DELETED,
         payload: _id
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, ROUTES_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, ROUTES_ERROR));
