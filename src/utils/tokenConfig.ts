@@ -1,5 +1,5 @@
 export interface Config {
-    header: object;
+    headers: any;
 };
 
 /**
@@ -10,7 +10,7 @@ export interface Config {
 export default (getState: Function) => {
     const token = getState().auth.token;
 
-    const config = {
+    const config: Config = {
         headers: {
             "Content-Type": "application/json"
         }
