@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+	{
+		"label": "typelint",
+		"command": "node_modules/.bin/tsc",
+		"args": ["-p", ".", "--noEmit"],
+		"type": "shell",
+		"problemMatcher": "$tsc-watch",
+		"presentation": {
+			"echo": false,
+			"reveal": "never",
+		}
+	}
+]
+}
