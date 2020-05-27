@@ -1,4 +1,4 @@
-import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED, ErrorState, ErrorActions } from "../types/Error";
+import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED, ErrorState, ErrorActions } from "../types/errors";
 
 const initialState = {
     message: null,

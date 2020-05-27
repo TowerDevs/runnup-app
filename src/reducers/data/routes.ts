@@ -3,7 +3,7 @@ import {
     ROUTE_CREATED, ROUTES_FETCHED,
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED,
     RouteState, RouteActions
-} from "../../types/Route";
+} from "../../types/routes";
 
 const initialState = {
     isLoading: false,
