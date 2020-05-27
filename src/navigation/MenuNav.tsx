@@ -28,7 +28,7 @@ const MenuNav: FC<Props> = ({ navigation }) => {
             <Screen name="Friends"
                 component={FriendsNav}
                 options={{
-                    drawerIcon: () => <DrawerIcon name="human-male-male"/>
+                    drawerIcon: () => <DrawerIcon name="account-group"/>
                 }}
             />
             <Screen
