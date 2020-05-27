@@ -7,7 +7,7 @@ export const ERRORS_CLEARED = "ERRORS_CLEARED";
 export interface Error {
     message: string;
     status: number;
-    id: string;
+    id: string | null;
 };
 
 export interface ErrorState {

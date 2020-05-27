@@ -79,7 +79,7 @@ const BottomTabNav: FC<Props> = ({ navigation, route }) => {
   );
 }
 
-const getHeaderTitle = ({ state }) => {
+const getHeaderTitle = ({ state }: { state: any }) => {
   const routeName = state?.routes[state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {

@@ -18,7 +18,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { loginUser } from "../actions/data/auth";
 
 import Colors from "../constants/Colors";
-import Styles from "../constants/Styles";
 
 /**
  * LoginScreen is a screen component that let's user's login to their account

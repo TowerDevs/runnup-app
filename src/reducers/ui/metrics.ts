@@ -1,4 +1,4 @@
-import { METRIC_SELECTED, METRIC_CHANGED } from "../../types/Map";
+import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "../../types/metrics";
 
 const initialState = {
   editing: false,
@@ -6,9 +6,9 @@ const initialState = {
   value: ""
 };
 
-export default (state = initialState, action) => {
+export default (state = initialState, action: MetricAction) => {
   switch(action.type) {
-      case METRIC_SELECTED:
+      case METRIC_EDIT:
         return {
           editing: true,
           metric: action.metric,

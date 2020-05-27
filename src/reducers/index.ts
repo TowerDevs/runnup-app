@@ -7,7 +7,7 @@ import friends from "./data/friends";
 import routes from "./data/routes";
 import runs from "./data/runs";
 
-import mapping from "./ui/mapping";
+import metrics from "./ui/metrics";
 
 export default combineReducers({
     // Data Reducers
@@ -18,5 +18,5 @@ export default combineReducers({
     runs,
 
     // UI Reducers
-    mapping
+    metrics
 });

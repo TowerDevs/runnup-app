@@ -41,7 +41,7 @@ export default (state: AuthState = initialState, action: AuthActions) => {
             };
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
-            Storage.setItemAsync("accessToken", action.payload);
+            Storage.setItemAsync("accessToken", action.payload.token);
             return {
                 ...state,
                 ...action.payload,

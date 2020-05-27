@@ -8,7 +8,7 @@ import axios, { AxiosResponse, AxiosError } from "axios";
  * @param  {string} id - error action type
  * @returns {Object} - error details for client/user
  */
-export const returnErrors = (message: string, status: number, id: string = null):ErrorActions => {
+export const returnErrors = (message: string, status: number, id: string | null = null): ErrorActions => {
     return {
         type: ERRORS_RETURNED,
         payload: { message, status, id }
