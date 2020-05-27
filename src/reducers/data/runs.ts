@@ -2,7 +2,7 @@ import {
     RUNS_REQUESTED, RUNS_ERROR,
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED,
-    Run
+    RunState, RunActions
 } from "../../types/Run";
 
 const initialState = {
@@ -10,17 +10,8 @@ const initialState = {
     data: []
 };
 
-interface State {
-    isLoading: boolean,
-    data: Run[]
-}
 
-interface Action {
-    type: string,
-    payload: string | Run[]
-}
-
-export default (state: State = initialState, action: Action) => {
+export default (state: RunState = initialState, action: RunActions) => {
     switch(action.type) {
         case RUNS_REQUESTED:
             return {
