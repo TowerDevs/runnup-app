@@ -34,15 +34,7 @@ const BottomTabNav: FC<Props> = ({ navigation, route }) => {
         component={HomeScreen}
         options={{
           title: "Get Started",
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="home" />,
-        }}
-      />
-      <Screen
-        name="Mapping"
-        component={MappingScreen}
-        options={{
-          title: "Map",
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={FontAwesome5} name="map" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="home" />,
         }}
       />
       <Screen
@@ -50,7 +42,15 @@ const BottomTabNav: FC<Props> = ({ navigation, route }) => {
         component={ActivityScreen}
         options={{
           title: "Activity",
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={Feather} name="activity" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="chart-line" />,
+        }}
+      />
+      <Screen
+        name="Mapping"
+        component={MappingScreen}
+        options={{
+          title: "Map",
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="map" />,
         }}
       />
       <Screen
@@ -68,11 +68,11 @@ const BottomTabNav: FC<Props> = ({ navigation, route }) => {
         }}
       />
       <Screen
-        name="menu"
+        name="Menu"
         component={MenuScreen}
         options={{
           title: "Menu",
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} Icon={MaterialCommunityIcons} name="menu" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="menu" />,
         }}
       />
     </Navigator>
