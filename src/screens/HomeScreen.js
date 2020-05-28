@@ -45,7 +45,7 @@ export default function HomeScreen() {
         <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
         <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+          <MonoText style={styles.codeHighlightText}>navigation/AppNav.tsx</MonoText>
         </View>
       </View>
     </View>
