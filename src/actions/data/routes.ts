@@ -3,7 +3,7 @@ import {
     ROUTE_CREATED, ROUTES_FETCHED,
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED,
     RouteReq, RouteRes, RouteActions
-} from "../../types/Route";
+} from "../../types/routes";
 import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors";
 import axios, { AxiosResponse, AxiosError } from "axios";

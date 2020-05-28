@@ -2,8 +2,8 @@ import {
     RUNS_REQUESTED, RUNS_ERROR,
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED,
-    RunState, RunActions
-} from "../../types/Run";
+    Run
+} from "../../types/runs";
 
 const initialState = {
     isLoading: false,

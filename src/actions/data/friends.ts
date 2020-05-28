@@ -3,7 +3,7 @@ import {
     FRIEND_ADDED, FRIENDS_FETCHED,
     FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED,
     FriendReq, FriendRes, FriendActions
-} from "../../types/Friend";
+} from "../../types/friends";
 import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors";
 import axios, { AxiosResponse, AxiosError } from "axios";

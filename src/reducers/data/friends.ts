@@ -3,7 +3,7 @@ import {
     FRIEND_ADDED, FRIENDS_FETCHED,
     FRIEND_READ, FRIEND_ACCEPTED, FRIEND_BLOCKED, FRIEND_DELETED,
     FriendState, FriendActions
-} from "../../types/Friend";
+} from "../../types/friends";
 
 const initialState = {
     isLoading: false,

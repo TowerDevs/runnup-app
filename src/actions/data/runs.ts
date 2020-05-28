@@ -3,7 +3,7 @@ import {
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED,
     RunReq, RunRes, RunActions
-} from "../../types/Run";
+} from "../../types/runs";
 import { returnErrors } from "../errors";
 import tokenConfig from "../../utils/tokenConfig";
 import axios, { AxiosResponse, AxiosError } from "axios";

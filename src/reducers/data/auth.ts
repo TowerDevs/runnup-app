@@ -8,7 +8,7 @@ import {
     EMAIL_TOKEN_SENT, EMAIL_TOKEN_ERROR, EMAIL_VERIFIED,
     PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED,
     AuthState, AuthActions
-} from "../../types/Auth";
+} from "../../types/auth";
 import * as Storage from "expo-secure-store";
 
 const initialState = {
