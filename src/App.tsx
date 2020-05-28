@@ -6,7 +6,7 @@ import * as Font from "expo-font";
 import React, { useState, useEffect, FC } from "react";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 
-import BottomTabNav from "./navigation/BottomTabNav";
+import AppNav from "./navigation/AppNav";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import { useDispatch } from "react-redux";
@@ -49,8 +49,8 @@ const App: FC<Props> = ({ skipLoadingScreen }) => {
     <View style={styles.container}>
       {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
       <NavigationContainer linking={LinkingConfiguration}>
-        <Navigator>
-          <Screen name="Root" component={BottomTabNav} />
+        <Navigator headerMode="none">
+          <Screen name="App" component={AppNav} />
         </Navigator>
       </NavigationContainer>
     </View>

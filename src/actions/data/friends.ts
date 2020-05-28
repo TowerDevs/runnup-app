@@ -25,15 +25,18 @@ const setLoading = ():object => {
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const sendFriendRequest = (friend: FriendReq) => (dispatch: Function, getState: Function):void => {
+export const sendFriendRequest = (friend: FriendReq) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.post("/api/v1/friends", friend, tokenConfig(getState))
-    .then(res => dispatch({
+    axios.post<FriendRes>("/api/v1/friends", friend, tokenConfig(getState))
+    .then((res: AxiosResponse<FriendRes>) => dispatch({
         type: FRIEND_ADDED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
@@ -48,15 +51,18 @@ export const sendFriendRequest = (friend: FriendReq) => (dispatch: Function, get
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const fetchFriends = () => (dispatch: Function, getState: Function):void => {
+export const fetchFriends = () => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
-    axios.get("/api/v1/friends", tokenConfig(getState))
-    .then(res => dispatch({
+    axios.get<FriendRes[]>("/api/v1/friends", tokenConfig(getState))
+    .then((res: AxiosResponse<FriendRes[]>) => dispatch({
         type: FRIENDS_FETCHED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
@@ -72,15 +78,18 @@ export const fetchFriends = () => (dispatch: Function, getState: Function):void 
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const readFriend = (_id: string) => (dispatch: Function, getState: Function):void => {
+export const readFriend = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
     axios.get(`/api/v1/friends${_id}`, tokenConfig(getState))
-    .then(res => dispatch({
+    .then((res: AxiosResponse<FriendRes>) => dispatch({
         type: FRIEND_READ,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
@@ -96,7 +105,10 @@ export const readFriend = (_id: string) => (dispatch: Function, getState: Functi
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const acceptFriendRequest = (_id: string) => (dispatch: Function, getState: Function):void => {
+export const acceptFriendRequest = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
     axios.put<string>(`/api/v1/friends${_id}`, tokenConfig(getState))
@@ -104,7 +116,7 @@ export const acceptFriendRequest = (_id: string) => (dispatch: Function, getStat
         type: FRIEND_ACCEPTED,
         payload: res.data
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
@@ -120,7 +132,10 @@ export const acceptFriendRequest = (_id: string) => (dispatch: Function, getStat
  * @param {function} getState - fetches the auth token from the reducer
  * @returns {Object} - contains the action type and server payload
  */
-export const deleteFriend = (_id: string) => (dispatch: Function, getState: Function):void => {
+export const deleteFriend = (_id: string) => (
+    dispatch: Function,
+    getState: Function
+):void => {
     dispatch(setLoading());
 
     axios.delete<string>(`/api/v1/friends${_id}`, tokenConfig(getState))
@@ -128,7 +143,7 @@ export const deleteFriend = (_id: string) => (dispatch: Function, getState: Func
         type: FRIEND_DELETED,
         payload: _id
     }))
-    .catch(err => {
+    .catch((err: AxiosError) => {
         if(err.response) dispatch(returnErrors(err.response.data, err.response.status, FRIENDS_ERROR));
 
         else if(err.request) dispatch(returnErrors(err.request.data, err.request.status, FRIENDS_ERROR));
