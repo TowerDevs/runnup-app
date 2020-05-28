@@ -16,7 +16,7 @@ export default (state: ErrorState = initialState, action: ErrorActions) => {
             };
         case ERRORS_LOGGED:
             return {
-                message: action.payload
+                ...state
             };
         case ERRORS_CLEARED:
             return {
