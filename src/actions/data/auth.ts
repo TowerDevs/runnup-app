@@ -9,9 +9,10 @@ import {
     PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED,
     RegisterReq, LoginReq, TokenRes, UserRes, AuthActions
 } from "../../types/auth";
-import tokenConfig, { Config } from "../../utils/tokenConfig";
+import { tokenConfig, Config } from "../../AuthManager";
 import { returnErrors } from "../errors";
 import axios, { AxiosResponse, AxiosError } from "axios";
+import * as SecureStore from "expo-secure-store";
 
 /**
  * @desc Set the Auth branch to isLoading
@@ -29,9 +30,7 @@ const setLoading = ():AuthActions => {
  * @param {function} dispatch - function to dispatch the action
  * @returns {Object} - the new User and the access token for automatic login upon registration
  */
-export const registerUser = (user: RegisterReq) => (
-    dispatch: Function
-):void => {
+export const registerUser = (user: RegisterReq) => (dispatch: Function):void => {
     const config: Config = {
         headers: {
             "Content-Type": "application/json"
@@ -39,10 +38,14 @@ export const registerUser = (user: RegisterReq) => (
     };
 
     axios.post<TokenRes>("/api/v1/users", user, config)
-    .then((res: AxiosResponse<TokenRes>) => dispatch({
-        type: REGISTER_SUCCESS,
-        payload: res.data
-    }))
+    .then((res: AxiosResponse<TokenRes>) => {
+        SecureStore.setItemAsync("accessToken", res.data.token);
+
+        dispatch({
+            type: REGISTER_SUCCESS,
+            payload: res.data
+        });
+    })
     .catch((err: AxiosError) => {
         if(err.response) {
             dispatch(returnErrors(err.response.data, err.response.status, REGISTER_FAILED))
@@ -62,9 +65,7 @@ export const registerUser = (user: RegisterReq) => (
  * @param {function} dispatch - function for dispatching the action
  * @returns {Object} - returns the user's _id, name, email, etc.
  */
-export const deleteUser = () => (
-    dispatch: Function
-):void => {
+export const deleteUser = () => (dispatch: Function):void => {
     axios.delete("/api/v1/users")
     .then(() => dispatch({
         type: DEREGISTER_SUCCESS
@@ -83,13 +84,10 @@ export const deleteUser = () => (
     });
 };
 
-export const loadUser = () => (
-    dispatch: Function,
-    getState: Function
-):void => {
+export const loadUser = () => (dispatch: Function,):void => {
     dispatch(setLoading());
 
-    axios.get<UserRes>("/api/v1/users", tokenConfig(getState))
+    axios.get<UserRes>("/api/v1/users", tokenConfig())
     .then((res: AxiosResponse<UserRes>) => dispatch({
         type: USER_LOADED,
         payload: res.data
@@ -114,20 +112,23 @@ export const loadUser = () => (
  * @param {function} dispatch - function to dispatch the action
  * @returns {Object} - contains the newly created access token for the login
  */
-export const loginUser = (credentials: LoginReq) => (
-    dispatch: Function
-):void => {
+export const loginUser = (credentials: LoginReq) => (dispatch: Function):void => {
     const config: Config = {
         headers: {
             "Content-Type": "application/json"
         }
     };
 
+
     axios.post<TokenRes>("/api/v1/users/access-token", credentials, config)
-    .then((res: AxiosResponse<TokenRes>) => dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data
-    }))
+    .then((res: AxiosResponse<TokenRes>) => {
+        SecureStore.setItemAsync("accessToken", res.data.token);
+
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: res.data
+        });
+    })
     .catch((err: AxiosError) => {
         if(err.response) {
             dispatch(returnErrors(err.response.data, err.response.status, LOGIN_FAILED))
@@ -147,9 +148,7 @@ export const loginUser = (credentials: LoginReq) => (
  * @param {function} dispatch - function to dispatch the action Object
  * @returns {Object} - contains the action type
  */
-export const logoutUser = () => (
-    dispatch: Function
-):void => {
+export const logoutUser = () => (dispatch: Function):void => {
     axios.delete("/api/v1/users/access-token")
     .then(() => dispatch({
         type: LOGOUT_SUCCESS
@@ -164,9 +163,7 @@ export const logoutUser = () => (
  * @param {function} dispatch - function to dispatch the action Object
  * @returns {Object} - contains the action type
  */
-export const sendEmailToken = () => (
-    dispatch: Function
-):void => {
+export const sendEmailToken = () => (dispatch: Function):void => {
     axios.get("/v1/users/email/token")
     .then(() => dispatch({
         type: EMAIL_TOKEN_SENT
@@ -185,9 +182,7 @@ export const sendEmailToken = () => (
  * @param {function} dispatch - function to dispatch the action Object
  * @returns {Object} - contains the action type
  */
-export const verifyEmail = (token: string) => (
-    dispatch: Function
-):void => {
+export const verifyEmail = (token: string) => (dispatch: Function):void => {
     axios.get(`/v1/users/email/token/${token}`)
     .then(() => dispatch({
         type: EMAIL_VERIFIED
@@ -206,9 +201,7 @@ export const verifyEmail = (token: string) => (
  * @param {function} dispatch - function to dispatch the action Object
  * @returns {Object} - contains the action type
  */
-export const requestNewPassword = () => (
-    dispatch: Function
-):void => {
+export const requestNewPassword = () => (dispatch: Function):void => {
     axios.get("/v1/users/password")
     .then(() => dispatch({
         type: PASSWORD_TOKEN_SENT
@@ -227,9 +220,7 @@ export const requestNewPassword = () => (
  * @param {function} dispatch - function to dispatch the action Object
  * @returns {Object} - contains the action type
  */
-export const verifyPasswordToken = (token: string) => (
-    dispatch: Function
-):void => {
+export const verifyPasswordToken = (token: string) => (dispatch: Function):void => {
     axios.get(`/v1/users/password/${token}`)
     .then(() => dispatch({
         type: PASSWORD_TOKEN_VERIFIED
