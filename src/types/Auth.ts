@@ -46,7 +46,6 @@ export interface UserRes {
 
 // state interface
 export interface AuthState {
-    token: Promise<string | null>;
     isAuthenticated: null | boolean;
     isLoading: boolean;
     user: null | UserRes

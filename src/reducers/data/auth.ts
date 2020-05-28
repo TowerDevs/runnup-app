@@ -9,10 +9,8 @@ import {
     PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED,
     AuthState, AuthActions
 } from "../../types/auth";
-import * as Storage from "expo-secure-store";
 
 const initialState = {
-    token: Storage.getItemAsync("accessToken"),
     isAuthenticated: null,
     isLoading: false,
     user: null
@@ -29,6 +27,9 @@ export default (state: AuthState = initialState, action: AuthActions) => {
         case EMAIL_VERIFIED:
         case PASSWORD_TOKEN_SENT:
         case PASSWORD_TOKEN_VERIFIED:
+        case EMAIL_TOKEN_ERROR:
+        case PASSWORD_TOKEN_ERROR:
+        case DEREGISTER_SUCCESS:
         return {
             ...state,
             isLoading: false
@@ -41,28 +42,19 @@ export default (state: AuthState = initialState, action: AuthActions) => {
             };
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
-            Storage.setItemAsync("accessToken", action.payload.token);
             return {
                 ...state,
                 ...action.payload,
                 isAuthenticated: true,
                 isLoading: false
             };
-        case DEREGISTER_SUCCESS:
-            return {
-
-            };
         case AUTH_ERROR:
         case REGISTER_FAILED:
         case DEREGISTER_FAILED:
         case LOGIN_FAILED:
         case LOGOUT_SUCCESS:
-        case EMAIL_TOKEN_ERROR:
-        case PASSWORD_TOKEN_ERROR:
-            Storage.deleteItemAsync("accessToken");
             return {
                 ...state,
-                token: null,
                 user: null,
                 isAuthenticated: false,
                 isLoading: false
