@@ -15,7 +15,7 @@ import {
 } from "native-base";
 
 import { useSelector, useDispatch } from "react-redux";
-import { loginUser } from "../actions/data/auth";
+import { loginUser } from "../store/auth/actions";
 
 import Colors from "../constants/Colors";
 
