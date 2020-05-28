@@ -1,75 +1,73 @@
 import {
-    ROUTES_REQUESTED, ROUTES_ERROR,
-    ROUTE_CREATED, ROUTES_FETCHED,
-    ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED,
-    RouteState, RouteActions
-} from "../../types/routes";
+    FRIENDS_REQUESTED, FRIENDS_ERROR,
+    FRIEND_ADDED, FRIENDS_FETCHED,
+    FRIEND_READ, FRIEND_ACCEPTED, FRIEND_BLOCKED, FRIEND_DELETED,
+    FriendState, FriendActions
+} from "./types";
 
 const initialState = {
     isLoading: false,
     data: []
 };
 
-export default (state: RouteState = initialState, action: RouteActions) => {
+export default (state: FriendState = initialState, action: FriendActions) => {
     switch(action.type) {
-        case ROUTES_REQUESTED:
+        case FRIENDS_REQUESTED:
             return {
                 ...state,
                 isLoading: true
             };
-        case ROUTES_ERROR:
+        case FRIENDS_ERROR:
             return {
                 ...state,
                 isLoading: false
             };
-        case ROUTE_CREATED:
+        case FRIEND_ADDED:
             return {
                 ...state,
                 isLoading: false,
                 data: [...state.data, action.payload]
-            };
-        case ROUTES_FETCHED:
+            }
+        case FRIENDS_FETCHED:
             return {
                 ...state,
                 isLoading: false,
                 data: action.payload
-            };
-        case ROUTE_READ:
+            }
+        case FRIEND_READ:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.map(route => {
+                data: state.data.map(friend => {
                     const { _id } = action.payload;
 
-                    if(route._id !== _id) return route;
+                    if(friend._id !== _id) return friend;
 
                     return {
-                        route: action.payload
+                        friend: action.payload
                     };
                 })
             };
-        case ROUTE_UPDATED:
+        case FRIEND_ACCEPTED:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.map(route => {
+                data: state.data.map(friend => {
                     const { _id } = action.payload;
 
-                    if(route._id !== _id) return route;
+                    if(friend._id != _id) return friend;
 
                     return {
                         ...state.data,
-                        route: {
-
-                        }
+                        isPending: false
                     };
                 })
-            };
-        case ROUTE_DELETED:
+            }
+        case FRIEND_DELETED:
             return {
                 ...state,
                 isLoading: false,
-                data: state.data.filter(route => route._id !== action.payload)
+                data: state.data.filter(friend => friend._id !== action.payload)
             };
         default:
             return state;

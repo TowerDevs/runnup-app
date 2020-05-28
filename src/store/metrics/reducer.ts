@@ -1,4 +1,4 @@
-import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "../../types/metrics";
+import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "./types";
 
 const initialState = {
   editing: false,

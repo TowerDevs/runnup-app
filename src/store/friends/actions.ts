@@ -3,9 +3,9 @@ import {
     FRIEND_ADDED, FRIENDS_FETCHED,
     FRIEND_READ, FRIEND_ACCEPTED, FRIEND_DELETED,
     FriendReq, FriendRes, FriendActions
-} from "../../types/friends";
+} from "./types";
 import { tokenConfig } from "../../AuthManager";
-import { returnErrors } from "../errors";
+import { returnErrors } from "../errors/actions";
 import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**
