@@ -9,7 +9,6 @@ import {
     PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED,
     AuthState, AuthActions
 } from "../../types/auth";
-import * as Storage from "expo-secure-store";
 
 const initialState = {
     isAuthenticated: null,
@@ -28,6 +27,9 @@ export default (state: AuthState = initialState, action: AuthActions) => {
         case EMAIL_VERIFIED:
         case PASSWORD_TOKEN_SENT:
         case PASSWORD_TOKEN_VERIFIED:
+        case EMAIL_TOKEN_ERROR:
+        case PASSWORD_TOKEN_ERROR:
+        case DEREGISTER_SUCCESS:
         return {
             ...state,
             isLoading: false
@@ -46,17 +48,11 @@ export default (state: AuthState = initialState, action: AuthActions) => {
                 isAuthenticated: true,
                 isLoading: false
             };
-        case DEREGISTER_SUCCESS:
-            return {
-
-            };
         case AUTH_ERROR:
         case REGISTER_FAILED:
         case DEREGISTER_FAILED:
         case LOGIN_FAILED:
         case LOGOUT_SUCCESS:
-        case EMAIL_TOKEN_ERROR:
-        case PASSWORD_TOKEN_ERROR:
             return {
                 ...state,
                 user: null,
