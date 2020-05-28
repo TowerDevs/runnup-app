@@ -3,7 +3,7 @@ import {
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED,
     Run
-} from "../../types/runs";
+} from "./types";
 
 const initialState = {
     isLoading: false,

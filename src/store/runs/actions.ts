@@ -3,8 +3,8 @@ import {
     RUN_CREATED, RUNS_FETCHED,
     RUN_READ, RUN_UPDATED, RUN_DELETED,
     RunReq, RunRes, RunActions
-} from "../../types/runs";
-import { returnErrors } from "../errors";
+} from "./types";
+import { returnErrors } from "../errors/actions";
 import { tokenConfig } from "../../AuthManager";
 import axios, { AxiosResponse, AxiosError } from "axios";
 

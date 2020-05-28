@@ -1,4 +1,4 @@
-import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED, Error, ErrorActions} from "../types/errors";
+import { ERRORS_RETURNED, ERRORS_LOGGED, ERRORS_CLEARED, Error, ErrorActions} from "./types";
 import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**

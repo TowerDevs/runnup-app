@@ -10,7 +10,7 @@ import AppNav from "./navigation/AppNav";
 import LinkingConfiguration from "./navigation/LinkingConfiguration";
 
 import { useDispatch } from "react-redux";
-import { logErrors } from "./actions/errors";
+import { logErrors } from "./store/errors/actions";
 
 const { Navigator, Screen } = createStackNavigator();
 

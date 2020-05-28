@@ -1,4 +1,4 @@
-import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "../../types/metrics";
+import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "./types";
 
 export const editMetric = (metric: string): MetricAction => {
   return {

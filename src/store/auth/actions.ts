@@ -8,9 +8,9 @@ import {
     EMAIL_TOKEN_SENT, EMAIL_TOKEN_ERROR, EMAIL_VERIFIED,
     PASSWORD_TOKEN_SENT, PASSWORD_TOKEN_ERROR, PASSWORD_TOKEN_VERIFIED,
     RegisterReq, LoginReq, TokenRes, UserRes, AuthActions
-} from "../../types/auth";
+} from "./types";
 import { tokenConfig, Config } from "../../AuthManager";
-import { returnErrors } from "../errors";
+import { returnErrors } from "../errors/actions";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import * as SecureStore from "expo-secure-store";
 

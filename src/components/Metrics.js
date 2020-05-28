@@ -13,7 +13,7 @@ import LAYOUT from '../constants/Layout';
 import COLORS from '../constants/Colors';
 import METRICS from '../constants/Metrics';
 import { Time } from '../utils/Time';
-import { editMetric, changeMetric } from '../actions/ui/metrics';
+import { editMetric, changeMetric } from '../store/metrics/actions';
 
 import MetricInputModal from './MetricInputModal';
 import Metric from './Metric';
