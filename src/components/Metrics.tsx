@@ -37,9 +37,6 @@ type Props = {
 export default function Metrics(props: Props) {
   const dispatch = useDispatch();
   const metrics = useTypedSelector((state) => state.metrics.metrics);
-  // const isEditing = useTypedSelector((state) => state.metrics.editing);
-  // const lockedMetric = useTypedSelector((state) => state.metrics.lockedMetric);
-  // const lockedMetricType = useTypedSelector((state) => state.metrics.lockedMetricType);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [lockedMetric, setLockedMetric] = useState<METRICS>(METRICS.PACE);
