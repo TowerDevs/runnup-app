@@ -4,16 +4,20 @@
  */
 
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Modal, View, Text, TextInput, StyleSheet } from 'react-native';
+import { Modal, View, Text, TextInput, StyleSheet, NativeSyntheticEvent, TextInputEndEditingEventData } from 'react-native';
 
 import STYLES from '../constants/Styles';
-import METRICS, { METRIC_TYPES } from '../constants/Metrics';
+import { METRIC_TYPES } from '../constants/Metrics';
 
-const EDITABLE_METRICS = Object.keys(METRICS).filter((key) => METRICS[key].editable);
+type Props = {
+  entering: string;
+  initialValue: string;
+  type: string;
+  onEndEditing: (value: number) => void;
+}
 
-export default function MetricInputModal({ entering, initialValue, type, onEndEditing }) {
-  const [value, setValue] = useState(initialValue);
+export default function MetricInputModal({ entering, initialValue, type, onEndEditing }: Props) {
+  const [value, setValue] = useState<string>(initialValue);
 
   const InputComponent = ((type) => {
     switch (type) {
@@ -25,12 +29,12 @@ export default function MetricInputModal({ entering, initialValue, type, onEndEd
             style={styles.input}
             returnKeyType="done"
             onChangeText={(text) => {
-              const numericRegex = /^([0-9]{1,100})+$/
+              const numericRegex = /^([0-9]{0,8})+$/
               if (numericRegex.test(text)) {
                 setValue(text);
               }
             }}
-            onEndEditing={onEndEditing}
+            onEndEditing={() => { onEndEditing(parseInt(value)) }}
             keyboardType={'numeric'}
           />
         );
@@ -56,14 +60,6 @@ export default function MetricInputModal({ entering, initialValue, type, onEndEd
       </View>
     </Modal>
   )
-}
-
-MetricInputModal.propTypes = {
-  entering: PropTypes.oneOf(EDITABLE_METRICS).isRequired,
-  initialValue: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  onChangeText: PropTypes.func.isRequired,
-  onEndEditing: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
