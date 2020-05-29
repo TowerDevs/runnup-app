@@ -3,29 +3,23 @@
  * @module Metrics
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
 import STYLES from '../constants/Styles';
 import LAYOUT from '../constants/Layout';
 import COLORS from '../constants/Colors';
 import METRICS from '../constants/Metrics';
-import { Time } from '../utils/Time';
 import { editMetric, changeMetric } from '../store/metrics/actions';
 
-import MetricInputModal from './MetricInputModal';
-import Metric from './Metric';
+import MetricInputModal from "./MetricInputModal";
+import Metric from "./Metric";
+import { Time } from '../utils/Time';
 
-// TODO: Remove and use store
-const TEST_ROUTE_DATA = {
-  distance: 3.67,
-  elevation: 10,
-  pace: new Time(4 * 60 + 32),
-  duration: new Time(16 * 60 + 38),
-  calories: 523
-};
+// TODO: Load from preferences, maybe a modal to pick a metric to lock when map screen is opened
+const DEFAULT_PACE = Time.fromMinutes(6, 30);
 
 // TODO: Make collapsable and fullscreenable
 /**
@@ -33,78 +27,81 @@ const TEST_ROUTE_DATA = {
  * @param {Object} props
  */
 export default function Metrics(props) {
-  const [inputValue, setInputValue] = useState("");
-
   const dispatch = useDispatch();
-  const isEditing = useSelector(state => state.mapping.editing);
-  const selectedMetric = useSelector(state => state.mapping.metric);
+  const metrics = useSelector((state) => state.metrics.metrics);
+  const isEditing = useSelector((state) => state.metrics.editing);
+  const lockedMetric = useSelector((state) => state.metrics.lockedMetric);
+  const lockedMetricType = useSelector((state) => state.metrics.lockedMetricType);
+
+  useEffect(() => {
+    dispatch(changeMetric(METRICS.pace.name, DEFAULT_PACE));
+  }, [dispatch]);
 
   const EditMetric = useCallback(
-    (metric) => dispatch(editMetric(metric)),
+    (metric) => {
+      dispatch(editMetric(metric, METRICS[metric].type));
+    },
     [dispatch]
-  )
+  );
 
-  const ChangeMetric = useCallback(
-    () => dispatch(changeMetric(selectedMetric, inputValue)),
-    [dispatch, selectedMetric, inputValue]
-  )
-  
-  // TODO: Use store to get route data
-  let routeData = TEST_ROUTE_DATA;
+  // const ChangeMetric = useCallback(
+  //   () => dispatch(changeMetric(lockedMetric, inputValue)),
+  //   [dispatch, lockedMetric, inputValue]
+  // );
+
   return (
     <View style={[props.style, styles.container]}>
       {/* Modal */}
-      {
-        isEditing &&
+      {isEditing && (
         <View style={[STYLES.centeredView, { position: "absolute" }]}>
           <MetricInputModal
-            entering={selectedMetric}
-            value={inputValue}
-            onChangeText={val => setInputValue(val)}
-            onEndEditing={ChangeMetric}
+            value={""}
+            entering={lockedMetric}
+            onEndEditing={({ nativeEvent }) => console.log(nativeEvent)}
+            type={lockedMetricType}
           />
         </View>
-      }
+      )}
 
       {/* Metrics */}
       <View style={styles.row}>
         <Metric
           style={styles.metric}
-          value={routeData.distance}
+          value={metrics.distance}
           label="Distance (km)"
           editable={false}
         />
-        <Metric
+        {/* <Metric
           style={styles.metric}
-          value={routeData.elevation}
+          value={metrics.elevation}
           label="Elevation (m)"
           editable={false}
-        />
+        /> */}
       </View>
       <View style={styles.row}>
         <Metric
           style={styles.metric}
-          value={routeData.pace.minuteString()}
+          value={metrics.pace}
           label="Pace (min/km)"
           editable={true}
-          locked={selectedMetric === METRICS.PACE.name}
-          onTouchStart={() => EditMetric(METRICS.PACE.name)}
+          locked={lockedMetric === METRICS.pace.name}
+          onTouchStart={() => EditMetric(METRICS.pace.name)}
         />
         <Metric
           style={styles.metric}
-          value={routeData.duration.minuteString()}
+          value={metrics.duration}
           label="Duration (min)"
           editable={true}
-          locked={selectedMetric === METRICS.DURATION.name}
-          onTouchStart={() => EditMetric(METRICS.DURATION.name)}
+          locked={lockedMetric === METRICS.duration.name}
+          onTouchStart={() => EditMetric(METRICS.duration.name)}
         />
         <Metric
           style={styles.metric}
-          value={routeData.calories}
+          value={metrics.calories}
           label="Calories"
           editable={true}
-          locked={selectedMetric === METRICS.CALORIES.name}
-          onTouchStart={() => EditMetric(METRICS.CALORIES.name)}
+          locked={lockedMetric === METRICS.calories.name}
+          onTouchStart={() => EditMetric(METRICS.calories.name)}
         />
       </View>
       <View style={[styles.row, styles.buttonRow]}>
@@ -113,15 +110,15 @@ export default function Metrics(props) {
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 
 Metrics.propTypes = {
   // Additional styling for the container component
   style: PropTypes.object,
   // Callback when the save button is pressed
-  onSave: PropTypes.func
-}
+  onSave: PropTypes.func,
+};
 
 const CONTAINER_HEIGHT = LAYOUT.window.height / 3.75;
 const CONTAINER_WIDTH = LAYOUT.window.width;
@@ -132,37 +129,37 @@ const SAVE_BUTTON_WIDTH = CONTAINER_WIDTH / 1.5;
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     height: CONTAINER_HEIGHT,
     width: CONTAINER_WIDTH,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     bottom: 0,
-    justifyContent: 'center',
-    paddingVertical: METRIC_MARGIN_VERTICAL
+    justifyContent: "center",
+    paddingVertical: METRIC_MARGIN_VERTICAL,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     flex: 1,
-    marginVertical: METRIC_MARGIN_VERTICAL
+    marginVertical: METRIC_MARGIN_VERTICAL,
   },
   metric: {
     width: METRIC_WIDTH,
-    marginHorizontal: METRIC_MARGIN_HORIZONTAL
+    marginHorizontal: METRIC_MARGIN_HORIZONTAL,
   },
   metricTouchable: {
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    width: METRIC_WIDTH
+    width: METRIC_WIDTH,
   },
   buttonRow: {
     height: STYLES.button.height,
-    flex: 0
+    flex: 0,
   },
   saveButton: {
     ...STYLES.button,
     backgroundColor: COLORS.success,
     width: SAVE_BUTTON_WIDTH,
-  }
+  },
 });

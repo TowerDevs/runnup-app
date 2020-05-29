@@ -26,7 +26,7 @@ export default function Metric({ value, label, editable = false, locked = false,
       {...props}
     >
       <TouchableOpacity style={styles.metricTouchable}>
-        <Text style={styles.metricValue}>{value}</Text>
+        <Text style={styles.metricValue}>{String(value)}</Text>
         <Text style={styles.metricLabel}>{label}</Text>
       </TouchableOpacity>
     </View>
@@ -57,10 +57,12 @@ const styles = StyleSheet.create({
   },
   metricValue: {
     fontSize: METRIC_VALUE_FONT_SIZE,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    textAlign: "center"
   },
   metricLabel: {
     fontSize: METRIC_LABEL_FONT_SIZE,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    textAlign: "center"
   },
 });
