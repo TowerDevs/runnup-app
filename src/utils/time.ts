@@ -42,7 +42,7 @@ export class Time {
    *
    * @returns {Time}
    */
-  static fromMinutes(minutes: number, seconds: number = 0) {
+  static fromMinutes(minutes: number, seconds: number = 0): Time {
     let totalSeconds = Math.floor(minutes * 60 + seconds);
     return new Time(totalSeconds);
   }
@@ -52,7 +52,7 @@ export class Time {
    *
    * @returns {string} the formatted minute string
    */
-  minuteString() {
+  toString(): string {
     return `${this.m}:${this.s}`;
   }
 }

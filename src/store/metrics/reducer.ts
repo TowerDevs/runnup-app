@@ -1,25 +1,26 @@
-import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "./types";
+import { METRIC_CHANGED, MetricAction, MetricsState } from "./types";
 
-const initialState = {
-  editing: false,
-  metric: null,
-  value: ""
+const initialState: MetricsState = {
+  metrics: {
+    distance: 0.0,
+    elevation: 0.0,
+    pace: 0.0,
+    duration: 0.0,
+    calories: 0.0,
+  },
 };
 
-export default (state = initialState, action: MetricAction) => {
-  switch(action.type) {
-      case METRIC_EDIT:
-        return {
-          editing: true,
-          metric: action.metric,
+export default (state = initialState, action: MetricAction): MetricsState => {
+  switch (action.type) {
+    case METRIC_CHANGED:
+      return {
+        ...state,
+        metrics: {
+          ...state.metrics,
+          [action.editingMetric]: action.editingMetricValue
         }
-      case METRIC_CHANGED:
-        return {
-          editing: false,
-          metric: action.metric,
-          value: action.value
-        }
-      default:
-        return state;
+      };
+    default:
+      return state;
   }
 };

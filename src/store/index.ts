@@ -9,6 +9,7 @@ import routes from "./routes/reducer";
 import runs from "./runs/reducer";
 
 import metrics from "./metrics/reducer";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 const rootReducer = combineReducers({
     // Data Reducers
@@ -23,6 +24,8 @@ const rootReducer = combineReducers({
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
+
+export const useTypedSelector: TypedUseSelectorHook<AppState> = useSelector;
 
 const initialState = {};
 

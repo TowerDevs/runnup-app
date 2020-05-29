@@ -1,16 +1,9 @@
-import { METRIC_EDIT, METRIC_CHANGED, MetricAction } from "./types";
+import { METRIC_CHANGED, MetricAction } from "./types";
 
-export const editMetric = (metric: string): MetricAction => {
-  return {
-    type: METRIC_EDIT,
-    metric
-  }
-}
-
-export const changeMetric = (metric: string, value: string | number): MetricAction => {
+export const changeMetric = (editingMetric: string, editingMetricValue: number): MetricAction => {
   return {
     type: METRIC_CHANGED,
-    metric,
-    value
+    editingMetric,
+    editingMetricValue
   }
 }
