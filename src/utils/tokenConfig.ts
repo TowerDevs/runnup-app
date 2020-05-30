@@ -1,14 +1,16 @@
+import * as SecureStore from "expo-secure-store";
+
 export interface Config {
     headers: any;
 };
 
 /**
- * @desc Configure the authorization token for private requests
- * @param {function} getState - function to retrieve the token from the auth reducer
+ * Configure the authorization token for private requests
+ *
  * @returns {Object} - the configuration properties
  */
-export default (getState: Function) => {
-    const token = getState().auth.token;
+const tokenConfig = () => {
+    const token = SecureStore.getItemAsync("accessToken");
 
     const config: Config = {
         headers: {
@@ -20,3 +22,5 @@ export default (getState: Function) => {
 
     return config;
 };
+
+export default tokenConfig;

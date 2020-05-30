@@ -5,7 +5,7 @@ import {
     RunReq, RunRes, RunActions
 } from "./types";
 import { returnErrors } from "../errors/actions";
-import { tokenConfig } from "../../AuthManager";
+import tokenConfig from "../../utils/tokenConfig";
 import axios, { AxiosResponse, AxiosError } from "axios";
 
 /**

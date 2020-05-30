@@ -18,13 +18,12 @@ export const returnErrors = (message: string, status: number, id: string | null 
 /**
  * @desc Log errors to the backend
  * @param  {Object} error - contains error properties
+ * @param {Object} errorInfo - additional errorInfo
  * @param  {string} dispatch - function to dispatch action
  * @returns {string} - confirmation message from backend service
  */
-export const logErrors = (error:Error) => (
-    dispatch: Function
-):void => {
-    axios.post<Error>("/api/v1/errors", error)
+export const logErrors = (error:Error, errorInfo: object | null) => (dispatch: Function):void => {
+    axios.post<Error>("/api/v1/errors", { error, errorInfo})
     .then((res: AxiosResponse<Error>) => dispatch({
         type: ERRORS_LOGGED,
         payload: res.data
