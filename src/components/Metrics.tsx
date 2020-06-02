@@ -42,14 +42,14 @@ export default function Metrics(props: Props) {
   const [lockedMetric, setLockedMetric] = useState<METRICS>(METRICS.PACE);
 
   const fields: Map<METRICS, MetricField> = new Map([
-    [METRICS.DISTANCE, new MetricField("distance", false, METRIC_TYPES.NUMBER, "Distance (km)", metrics.distance)],
-    [METRICS.PACE, new MetricField("pace", true, METRIC_TYPES.TIME, "Pace (min/km)", new Time(metrics.pace))],
-    [METRICS.DURATION, new MetricField("duration", true, METRIC_TYPES.TIME, "Duration (min)", new Time(metrics.duration))],
-    [METRICS.CALORIES, new MetricField("calories", true, METRIC_TYPES.NUMBER, "Calories", metrics.calories)],
+    [METRICS.DISTANCE, new MetricField(METRICS.DISTANCE, false, METRIC_TYPES.NUMBER, "Distance (km)", metrics.distance)],
+    [METRICS.CALORIES, new MetricField(METRICS.CALORIES, false, METRIC_TYPES.NUMBER, "Calories", metrics.calories)],
+    [METRICS.PACE, new MetricField(METRICS.PACE, true, METRIC_TYPES.TIME, "Pace (min/km)", new Time(metrics.pace))],
+    [METRICS.DURATION, new MetricField(METRICS.DURATION, true, METRIC_TYPES.TIME, "Duration (min)", new Time(metrics.duration))],
   ]);
 
   useEffect(() => {
-    dispatch(changeMetric(fields.get(METRICS.PACE)!.name, DEFAULT_PACE.seconds));
+    dispatch(changeMetric(METRICS.PACE, DEFAULT_PACE.seconds));
   }, [dispatch]);
 
   const editMetric = (metric: METRICS) => {
@@ -84,34 +84,24 @@ export default function Metrics(props: Props) {
         <Metric
           field={fields.get(METRICS.DISTANCE)!}
           style={styles.metric}
-          label="Distance (km)"
-          editable={false}
+        />
+        <Metric
+          field={fields.get(METRICS.CALORIES)!}
+          style={styles.metric}
         />
       </View>
       <View style={styles.row}>
         <Metric
           field={fields.get(METRICS.PACE)!}
           style={styles.metric}
-          label="Pace (min/km)"
-          editable={true}
           locked={lockedMetric === fields.get(METRICS.PACE)!.name}
           onTouchStart={() => editMetric(METRICS.PACE)}
         />
         <Metric
           field={fields.get(METRICS.DURATION)!}
           style={styles.metric}
-          label="Duration (min)"
-          editable={true}
           locked={lockedMetric === fields.get(METRICS.DURATION)!.name}
           onTouchStart={() => editMetric(METRICS.DURATION)}
-        />
-        <Metric
-          field={fields.get(METRICS.CALORIES)!}
-          style={styles.metric}
-          label="Calories"
-          editable={true}
-          locked={lockedMetric === fields.get(METRICS.CALORIES)!.name}
-          onTouchStart={() => editMetric(METRICS.CALORIES)}
         />
       </View>
       <View style={[styles.row, styles.buttonRow]}>

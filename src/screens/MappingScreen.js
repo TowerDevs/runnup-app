@@ -12,10 +12,13 @@ import {
 } from "react-native-dotenv";
 
 import Layout from '../constants/Layout';
-import Metrics from '../components/Metrics'
+import Metrics from '../components/Metrics';
+import { METRICS } from '../constants/Metrics';
 import DebugValues from '../components/debug/DebugValues';
 import { getLocation } from '../utils/location';
 import { MapBoxMapper, Route } from '../utils/mapping';
+import { useDispatch } from 'react-redux';
+import { changeMetric } from '../store/metrics/actions';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.03
@@ -33,6 +36,9 @@ const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
  * MappingScreen is a screen component for mapping routes.
  */
 export default function MappingScreen() {
+  /** Store */
+  const dispatch = useDispatch();
+
   /** State */
   const [location, setLocation] = useState(null);
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
@@ -41,7 +47,7 @@ export default function MappingScreen() {
   const [route, setRoute] = useState(new Route());
 
   /** Effects */
-  // Update location every update
+  // Get user location on mount
   useEffect(() => {
     (async () => {
       let { status, location } = await getLocation();
@@ -80,7 +86,7 @@ export default function MappingScreen() {
 
   // Update store when the route changes
   useEffect(() => {
-
+    dispatch(changeMetric(METRICS.DISTANCE, route.distance))
   }, [route]);
 
   // TODO: Use layout effect to resize map depending on the height of the metrics drawer
@@ -96,19 +102,19 @@ export default function MappingScreen() {
         }
       ]);
       setRoute(newRoute);
-    } catch(e) {
+    } catch (e) {
       // FIXME: Flash error message
       console.log("Mapper error: ", e);
     }
   }
-  
+
   const removeMarker = async (i) => {
     const newWaypoints = route.waypoints.filter((_, index) => i !== index);
     if (newWaypoints.length > 0) {
       try {
         const newRoute = await mapper.route(newWaypoints);
         setRoute(newRoute);
-      } catch(e) {
+      } catch (e) {
         // FIXME: Flash error message
         console.log("Mapper error: ", e);
       }
@@ -116,7 +122,7 @@ export default function MappingScreen() {
       setRoute(new Route());
     }
   }
-  
+
   const moveMarker = async ({ nativeEvent }, i) => {
     try {
       const newWaypoints = route.waypoints.map((val, index) => {
@@ -129,7 +135,7 @@ export default function MappingScreen() {
       });
       const newRoute = await mapper.route(newWaypoints);
       setRoute(newRoute);
-    } catch(e) {
+    } catch (e) {
       // FIXME: Flash error message
       console.log("Mapper error: ", e);
     }

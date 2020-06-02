@@ -5,14 +5,15 @@
 
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, GestureResponderEvent } from 'react-native';
+
+import Colors from '../constants/Colors';
 import { MetricField } from '../utils/metrics';
 
 type Props = {
   field: MetricField;
-  label: string;
   onTouchStart?: undefined | (() => void) | ((event: GestureResponderEvent) => void);
-  editable?: boolean;
   locked?: boolean;
+  disabled?: boolean;
   style?: ViewStyle;
 }
 
@@ -21,9 +22,10 @@ type Props = {
  * or locked with props.
  * @param {Object} props
  */
-export default function Metric({ field, label, onTouchStart = undefined, editable = false, locked = false, style = {} }: Props) {
-  let borderWidth = editable ? styles.metric.borderWidth : 0;
-  let borderColor = locked ? "#fe5f55" : styles.metric.borderColor;
+export default function Metric({ field, onTouchStart = undefined, locked = false, disabled = false, style = {} }: Props) {
+  let borderWidth = field.editable ? styles.metric.borderWidth : 0;
+  let borderColor = locked ? Colors.primary : styles.metric.borderColor;
+  let textColor = disabled ? Colors.lightGrey : Colors.offBlack;
 
   return (
     <View
@@ -34,9 +36,10 @@ export default function Metric({ field, label, onTouchStart = undefined, editabl
       ]}
       onTouchStart={onTouchStart}
     >
+      {/* TODO: Remove touchable opacity if not editable */}
       <TouchableOpacity>
-        <Text style={styles.metricValue}>{String(field.value)}</Text>
-        <Text style={styles.metricLabel}>{label}</Text>
+        <Text style={[styles.metricValue, { color: textColor }]}>{String(field.value)}</Text>
+        <Text style={styles.metricLabel}>{field.label}</Text>
       </TouchableOpacity>
     </View>
   )
