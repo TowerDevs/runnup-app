@@ -10,17 +10,19 @@ import { useDispatch } from "react-redux";
 import STYLES from '../constants/Styles';
 import LAYOUT from '../constants/Layout';
 import COLORS from '../constants/Colors';
-import { METRICS, METRIC_TYPES } from '../constants/Metrics';
-import { changeMetric } from '../store/metrics/actions';
+import { METRICS } from '../constants/Metrics';
+import { changeMetrics } from '../store/metrics/actions';
 
 import MetricInputModal from "./MetricInputModal";
 import Metric from "./Metric";
 import { Time } from '../utils/time';
-import { MetricField } from '../utils/metrics';
+import { RouteMetrics } from '../utils/metrics';
 import { useTypedSelector } from "../store";
 
 // TODO: Load from preferences, maybe a modal to pick a metric to lock when map screen is opened
 const DEFAULT_PACE = Time.fromMinutes(6, 30);
+
+const fields = new RouteMetrics();
 
 type Props = {
   // Additional styling for the container component
@@ -38,28 +40,23 @@ export default function Metrics(props: Props) {
   const dispatch = useDispatch();
   const metrics = useTypedSelector((state) => state.metrics.metrics);
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [lockedMetric, setLockedMetric] = useState<METRICS>(METRICS.PACE);
+  fields.loadState(metrics);
 
-  const fields: Map<METRICS, MetricField> = new Map([
-    [METRICS.DISTANCE, new MetricField(METRICS.DISTANCE, false, METRIC_TYPES.NUMBER, "Distance (km)", metrics.distance)],
-    [METRICS.CALORIES, new MetricField(METRICS.CALORIES, false, METRIC_TYPES.NUMBER, "Calories", metrics.calories)],
-    [METRICS.PACE, new MetricField(METRICS.PACE, true, METRIC_TYPES.TIME, "Pace (min/km)", new Time(metrics.pace))],
-    [METRICS.DURATION, new MetricField(METRICS.DURATION, true, METRIC_TYPES.TIME, "Duration (min)", new Time(metrics.duration))],
-  ]);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [entering, setEntering] = useState<METRICS>(METRICS.PACE);
 
   useEffect(() => {
-    dispatch(changeMetric(METRICS.PACE, DEFAULT_PACE.seconds));
-  }, [dispatch]);
+    dispatch(changeMetrics(fields));
+  }, [dispatch, fields]);
 
   const editMetric = (metric: METRICS) => {
     setIsEditing(true);
-    setLockedMetric(metric);
+    setEntering(metric);
   };
 
   const ChangeMetric = useCallback(
-    (value: number) => dispatch(changeMetric(lockedMetric, value)),
-    [dispatch, lockedMetric]
+    () => dispatch(changeMetrics(fields)),
+    [dispatch, fields]
   );
 
   return (
@@ -69,12 +66,13 @@ export default function Metrics(props: Props) {
         <View style={[STYLES.centeredView, { position: "absolute" }]}>
           <MetricInputModal
             initialValue={""} // Could set an initial value here but a better UX is to start blank
-            entering={lockedMetric}
+            entering={entering}
             onEndEditing={(value: number) => {
               setIsEditing(false);
-              ChangeMetric(value);
+              fields.update(entering, value);
+              ChangeMetric();
             }}
-            type={fields.get(lockedMetric)!.type}
+            type={fields.get(entering)!.type}
           />
         </View>
       )}
@@ -94,13 +92,13 @@ export default function Metrics(props: Props) {
         <Metric
           field={fields.get(METRICS.PACE)!}
           style={styles.metric}
-          locked={lockedMetric === fields.get(METRICS.PACE)!.name}
+          locked={fields.getLocked()?.name === fields.get(METRICS.PACE)!.name}
           onTouchStart={() => editMetric(METRICS.PACE)}
         />
         <Metric
           field={fields.get(METRICS.DURATION)!}
           style={styles.metric}
-          locked={lockedMetric === fields.get(METRICS.DURATION)!.name}
+          locked={fields.getLocked()?.name === fields.get(METRICS.DURATION)!.name}
           onTouchStart={() => editMetric(METRICS.DURATION)}
         />
       </View>

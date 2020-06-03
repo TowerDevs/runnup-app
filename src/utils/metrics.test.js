@@ -70,4 +70,36 @@ describe("RouteMetrics tests", () => {
     expect(metrics.duration).toBe(1950);
     expect(metrics.calories).toBe(760.5);
   });
+
+  test("test loadState", async () => {
+    console.log("test update pace");
+    // Instantiate metrics
+    const metrics: RouteMetrics = new RouteMetrics();
+
+    // Update distance metric to 5 km
+    metrics.update(METRICS.DISTANCE, 5.0);
+
+    // Update pace metric to 6 min 30 sec
+    metrics.update(METRICS.PACE, 6 * 60 + 30);
+  
+    // Check that resulting metrics are as expected
+    expect(metrics.duration).toBe(1950);
+    expect(metrics.calories).toBe(760.5);
+  });
+
+  test("test toState", async () => {
+    console.log("test update pace");
+    // Instantiate metrics
+    const metrics: RouteMetrics = new RouteMetrics();
+
+    // Update distance metric to 5 km
+    metrics.update(METRICS.DISTANCE, 5.0);
+
+    // Update pace metric to 6 min 30 sec
+    metrics.update(METRICS.PACE, 6 * 60 + 30);
+  
+    // Check that resulting metrics are as expected
+    expect(metrics.duration).toBe(1950);
+    expect(metrics.calories).toBe(760.5);
+  });
 });

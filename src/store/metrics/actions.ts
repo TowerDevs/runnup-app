@@ -1,10 +1,11 @@
-import { METRIC_CHANGED, MetricAction } from "./types";
-import { METRICS } from "../../constants/Metrics";
+import { METRICS_CHANGED, MetricAction } from "./types";
+import { RouteMetrics } from "../../utils/metrics";
 
-export const changeMetric = (editingMetric: METRICS, editingMetricValue: number): MetricAction => {
+export const changeMetrics = (metrics: RouteMetrics): MetricAction => {
+  console.log(metrics);
+  console.log(metrics.toState);
   return {
-    type: METRIC_CHANGED,
-    editingMetric,
-    editingMetricValue
+    type: METRICS_CHANGED,
+    metrics: metrics.toState()
   }
 }

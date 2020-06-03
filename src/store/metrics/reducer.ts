@@ -1,8 +1,7 @@
-import { METRIC_CHANGED, MetricAction, MetricsState } from "./types";
-import { Metrics, calculateMetrics } from '../../utils/metrics';
+import { METRICS_CHANGED, MetricAction, RouteMetricsState } from "./types";
 
 type State = {
-  metrics: MetricsState
+  metrics: RouteMetricsState
 }
 
 const initialState = {
@@ -11,21 +10,17 @@ const initialState = {
     elevation: 0.0,
     pace: 0.0,
     duration: 0.0,
-    calories: 0.0
+    calories: 0.0,
+    locked: null
   }
 };
 
 export default (state: State = initialState, action: MetricAction): State => {
   switch (action.type) {
-    case METRIC_CHANGED: {
-      let newMetrics: Metrics = Metrics.fromState(state.metrics);
-      newMetrics.update(action.editingMetric, action.editingMetricValue);
+    case METRICS_CHANGED: {
       return {
         ...state,
-        metrics: {
-          ...state.metrics,
-          ...newMetrics.toState()
-        }
+        metrics: action.metrics
       };
     }
     default:

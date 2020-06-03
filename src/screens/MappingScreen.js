@@ -14,11 +14,13 @@ import {
 import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics';
 import { METRICS } from '../constants/Metrics';
+import { useTypedSelector } from '../store/index';
 import DebugValues from '../components/debug/DebugValues';
 import { getLocation } from '../utils/location';
 import { MapBoxMapper, Route } from '../utils/mapping';
 import { useDispatch } from 'react-redux';
-import { changeMetric } from '../store/metrics/actions';
+import { changeMetrics } from '../store/metrics/actions';
+import { RouteMetrics } from '../utils/metrics';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.03
@@ -38,7 +40,11 @@ const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
 export default function MappingScreen() {
   /** Store */
   const dispatch = useDispatch();
-
+  const metrics = useTypedSelector((state) => state.metrics.metrics);
+  
+  const fields = new RouteMetrics();
+  fields.loadState(metrics);
+  
   /** State */
   const [location, setLocation] = useState(null);
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
@@ -49,17 +55,19 @@ export default function MappingScreen() {
   /** Effects */
   // Get user location on mount
   useEffect(() => {
-    (async () => {
-      let { status, location } = await getLocation();
-      if (status !== "granted") {
-        console.log("Location not granted...");
-        setHasLocation(HAS_LOCATION.DENIED);
-      }
-
-      setLocation(location)
-      setHasLocation(HAS_LOCATION.GRANTED)
-    })();
-  }, []);
+    console.log("USEEFFECT");
+    getLocation()
+      .then(({ status, location }) => {
+        console.log("Got location")
+        if (status !== "granted") {
+          console.log("Location not granted...");
+          setHasLocation(HAS_LOCATION.DENIED);
+        }
+    
+        setLocation(location)
+        setHasLocation(HAS_LOCATION.GRANTED)
+      });
+  });
 
   // Set the region to the current location when granted
   // TODO: Move to separate map component, this should be the default functionality
@@ -86,8 +94,9 @@ export default function MappingScreen() {
 
   // Update store when the route changes
   useEffect(() => {
-    dispatch(changeMetric(METRICS.DISTANCE, route.distance))
-  }, [route]);
+    fields.update(METRICS.DISTANCE, route.distance);
+    dispatch(changeMetrics(fields));
+  }, [route, fields]);
 
   // TODO: Use layout effect to resize map depending on the height of the metrics drawer
   // useLayoutEffect(() => {

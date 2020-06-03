@@ -5,6 +5,7 @@
 
 import { METRIC_TYPES, METRICS } from "../constants/Metrics";
 import { RouteMetricsState } from "../store/metrics/types";
+import { Route } from "./mapping";
 
 /**
  * MetricField holds data regarding a metric.
@@ -80,17 +81,19 @@ export abstract class Metrics {
     return null;
   }
 
-  setLocked(metric: METRICS) {
-    if (this.metrics.has(metric)) {
-      this.getEditable().forEach((field: MetricField) => {
-        if (metric === field.name) {
-          field.locked = true;
-        } else {
-          field.locked = false;
-        }
-      });
-    } else {
-      throw Error(`${metric} not a metric`);
+  setLocked(metric: METRICS | null) {
+    if (metric != null) {
+      if (this.metrics.has(metric)) {
+        this.getEditable().forEach((field: MetricField) => {
+          if (metric === field.name) {
+            field.locked = true;
+          } else {
+            field.locked = false;
+          }
+        });
+      } else {
+        throw Error(`${metric} is not a metric`);
+      }
     }
   }
 
@@ -157,6 +160,25 @@ export class RouteMetrics extends Metrics {
         0.0
       )
     );
+  }
+
+  loadState(state: RouteMetricsState) {
+    this.setValue(METRICS.DISTANCE, state.distance);
+    this.setValue(METRICS.DURATION, state.duration);
+    this.setValue(METRICS.PACE, state.pace);
+    this.setValue(METRICS.CALORIES, state.calories);
+
+    this.setLocked(state.locked);
+  }
+
+  toState(): RouteMetricsState {
+    return {
+      distance: this.distance,
+      pace: this.pace,
+      duration: this.duration,
+      calories: this.calories,
+      locked: this.getLocked()?.name || null
+    };
   }
 
   public get distance() {

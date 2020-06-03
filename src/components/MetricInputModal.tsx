@@ -11,6 +11,7 @@ import STYLES from '../constants/Styles';
 import COLORS from '../constants/Colors';
 import { METRIC_TYPES } from '../constants/Metrics';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { METRICS } from '../constants/Metrics';
 
 const MINUTES = (
   () => {
@@ -33,7 +34,7 @@ const SECONDS = (
 )();
 
 type Props = {
-  entering: string;
+  entering: METRICS | null;
   initialValue: string;
   type: string;
   onEndEditing: (value: number) => void;
