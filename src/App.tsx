@@ -13,15 +13,16 @@ import { MaterialCommunityIcons as Icon } from "@expo/vector-icons";
 // Navigation
 import AppNav from "./navigation/AppNav";
 import AuthNav from "./navigation/AuthNav";
-import LinkingConfiguration from "./navigation/LinkingConfiguration";
+import LinkingConfig from "./navigation/LinkingConfig";
 
 // Store and Dispatch
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logErrors } from "./store/errors/actions";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 // Token Mgmt
 import * as SecureStore from "expo-secure-store";
+import { useTypedSelector } from "./store"
 import { AUTH_ERROR, REGISTER_FAILED, DEREGISTER_FAILED, LOGIN_FAILED, LOGOUT_SUCCESS,  } from "./store/auth/types";
 
 const TERMINATE_TOKEN = AUTH_ERROR || REGISTER_FAILED || DEREGISTER_FAILED || LOGIN_FAILED || LOGOUT_SUCCESS;
@@ -36,8 +37,8 @@ const App: FC<Props> = ({ skipLoadingScreen }) => {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
 
   /* Store-derived entities */
-  const errors = useSelector((state) => state.errors);
-  // const { isAuthenticated } = useSelector((state) => state.auth);
+  const errors = useTypedSelector(state => state.errors);
+  // const { isAuthenticated } = useTypedSelector(state => state.auth);
   const dispatch = useDispatch();
 
   /* Effects */
@@ -73,7 +74,7 @@ const App: FC<Props> = ({ skipLoadingScreen }) => {
     <ErrorBoundary>
       <View style={styles.container}>
         {Platform.OS === "ios" && <StatusBar barStyle="dark-content" />}
-        <NavigationContainer linking={LinkingConfiguration}>
+        <NavigationContainer linking={LinkingConfig}>
           <Navigator headerMode="none">
             { true ?
               <Screen name="App" component={AppNav} />
