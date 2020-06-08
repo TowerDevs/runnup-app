@@ -207,33 +207,37 @@ export class RouteMetrics extends Metrics {
     this.setValue(metric, value);
 
     // Lock the selected value if it's editable
-    this.getEditable().forEach((field) => {
-      if (field.editable && field.name === metric) {
-        field.locked = true;
-      } else{ 
-        field.locked = false;
-      }
-    });
+    if (this.get(metric)!.editable) {
+      this.getEditable().forEach((field) => {
+        if (field.editable && field.name === metric) {
+          field.locked = true;
+        } else{ 
+          field.locked = false;
+        }
+      });
+    }
 
     // If there is a locked field, calculate all unlocked-editable fields
     const field = this.getLocked();
     if (field !== null) {
       switch (field.name) {
         case METRICS.PACE:
-          this.setValue(METRICS.DURATION, this.distance * this.pace);
-          this.setValue(METRICS.CALORIES, this.pace * this.duration / 1000);
+          this.setValue(METRICS.DURATION, Math.floor(this.distance * this.pace));
+          this.setValue(METRICS.CALORIES, Math.floor(this.pace * this.duration / 1000));
           break;
 
         case METRICS.DURATION:
-          this.setValue(METRICS.PACE, this.duration / this.distance);
-          this.setValue(METRICS.CALORIES, this.pace * this.duration / 1000);
+          this.setValue(METRICS.PACE, Math.floor(this.duration / this.distance));
+          this.setValue(METRICS.CALORIES, Math.floor(this.pace * this.duration / 1000));
           break;
 
         case METRICS.CALORIES:
-          this.setValue(METRICS.PACE, this.calories / this.distance);
-          this.setValue(METRICS.DURATION, this.distance * this.pace);
+          this.setValue(METRICS.PACE, Math.floor(this.calories / this.distance));
+          this.setValue(METRICS.DURATION, Math.floor(this.distance * this.pace));
           break;
-
+        case METRICS.DISTANCE:
+          // FIXME: this is a hack and should be fixed
+          this.update(this.getLocked()!.name, this.getLocked()!.value);
         default:
           break;
       }

@@ -18,6 +18,7 @@ import Metric from "./Metric";
 import { Time } from '../utils/time';
 import { RouteMetrics } from '../utils/metrics';
 import { useTypedSelector } from "../store";
+import { Route } from "../utils/mapping";
 
 // TODO: Load from preferences, maybe a modal to pick a metric to lock when map screen is opened
 const DEFAULT_PACE = Time.fromMinutes(6, 30);
@@ -25,10 +26,12 @@ const DEFAULT_PACE = Time.fromMinutes(6, 30);
 const fields = new RouteMetrics();
 
 type Props = {
+  // Route date
+  route: Route,
   // Additional styling for the container component
   style: object;
   // Callback when the save button is pressed
-  onSave: () => void;
+  onSave?: () => void;
 };
 
 // TODO: Make collapsable and fullscreenable
@@ -46,8 +49,10 @@ export default function Metrics(props: Props) {
   const [entering, setEntering] = useState<METRICS>(METRICS.PACE);
 
   useEffect(() => {
+    // TODO: Make util function for rounding to accuracy
+    fields.update(METRICS.DISTANCE, Math.round((props.route.distance + Number.EPSILON) * 100) / 100 / 1000);
     dispatch(changeMetrics(fields));
-  }, [dispatch, fields]);
+  }, [dispatch, fields, props.route]);
 
   const editMetric = (metric: METRICS) => {
     setIsEditing(true);
