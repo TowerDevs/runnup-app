@@ -29,8 +29,8 @@ DebugValues.propTypes = {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 0,
-    left: 0,
+    top: 50,
+    left: 5,
     zIndex: 99
   }
 });

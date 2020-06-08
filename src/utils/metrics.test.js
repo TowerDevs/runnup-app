@@ -56,7 +56,6 @@ describe("RouteMetrics tests", () => {
   });
 
   test("test update pace", async () => {
-    console.log("test update pace");
     // Instantiate metrics
     const metrics: RouteMetrics = new RouteMetrics();
 
@@ -68,11 +67,10 @@ describe("RouteMetrics tests", () => {
   
     // Check that resulting metrics are as expected
     expect(metrics.duration).toBe(1950);
-    expect(metrics.calories).toBe(760.5);
+    expect(metrics.calories).toBe(760);
   });
 
   test("test loadState", async () => {
-    console.log("test update pace");
     // Instantiate metrics
     const metrics: RouteMetrics = new RouteMetrics();
 
@@ -84,11 +82,10 @@ describe("RouteMetrics tests", () => {
   
     // Check that resulting metrics are as expected
     expect(metrics.duration).toBe(1950);
-    expect(metrics.calories).toBe(760.5);
+    expect(metrics.calories).toBe(760);
   });
 
   test("test toState", async () => {
-    console.log("test update pace");
     // Instantiate metrics
     const metrics: RouteMetrics = new RouteMetrics();
 
@@ -100,6 +97,6 @@ describe("RouteMetrics tests", () => {
   
     // Check that resulting metrics are as expected
     expect(metrics.duration).toBe(1950);
-    expect(metrics.calories).toBe(760.5);
+    expect(metrics.calories).toBe(760);
   });
 });
