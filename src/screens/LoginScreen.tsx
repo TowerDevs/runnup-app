@@ -1,67 +1,56 @@
 /**
- * Register screen
- * @module RegisterScreen
+ * Login screen
+ * @module LoginScreen
  */
 
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import React, { useState, FC } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Container, Content,
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+    Container, Content,
     Body, Right,
     H1,
     Form, Item, Label, Input, Text
 } from "native-base";
 
 import { useSelector, useDispatch } from "react-redux";
-import { registerUser } from "../store/auth/actions";
+import { loginUser } from "../store/auth/actions";
 
 import Colors from "../constants/Colors";
-import Styles from "../constants/Styles";
+
+type Props = {
+    navigation: {
+        navigate: Function;
+    };
+    errors: Error;
+    loginUser: Function
+};
 
 /**
- * RegisterScreen is a screen component that let's new user's create an account
+ * LoginScreen is a screen component that let's user's login to their account
  * @param {Object} navigation - enables navigation to other screens
  */
-const RegisterScreen = ({ navigation }) => {
+const LoginScreen: FC<Props> = ({ navigation }) => {
     /* Local state */
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [securePassword, togglePasswordSecurity] = useState(true);
+    const[securePassword, togglePasswordSecurity] = useState(true);
 
-    /* Store-derived state and dispatch */
-    const errors = useSelector(state => state.errors);
+    /* Store-derived state and props */
+    const errors = useSelector((state) => state.errors);
     const dispatch = useDispatch();
 
-    /* Rendering */
     return (
         <Container>
-            <Content style={styles.container}>
+            <Content>
                 <Body>
-                    <Text>* Logo here *</Text>
-                    <H1 style={styles.brandTitle}>Runnup</H1>
+                    <H1 style={styles.title}>Login</H1>
                 </Body>
+
                 <Form style={styles.form}>
                     <Body>
                         { errors.message ? <Text style={styles.error}>{errors.message}</Text> : null }
                     </Body>
-                    <Item floatingLabel>
-                        <Label>First Name</Label>
-                        <Input
-                            onChange={e => setFirstName(e.target.value)}
-                            value={firstName}
-                        />
-                    </Item>
-
-                    <Item floatingLabel>
-                        <Label>Last Name</Label>
-                        <Input
-                            onChange={e => setLastName(e.target.value)}
-                            value={lastName}
-                        />
-                    </Item>
 
                     <Item floatingLabel>
                         <Label>Email</Label>
@@ -80,30 +69,29 @@ const RegisterScreen = ({ navigation }) => {
                             onChange={e => setPassword(e.target.value)}
                             value={password}
                         />
-
                         <Right>
                             <TouchableOpacity onPress={() => togglePasswordSecurity(!securePassword)}>
                                 <MaterialCommunityIcons name={ securePassword ? "eye-off": "eye" } size={24} color="black" />
                             </TouchableOpacity>
                         </Right>
                     </Item>
+
                     <Body>
                         <TouchableOpacity
                             style={styles.ctaButton}
-                            onPress={() => dispatch(registerUser({ firstName, lastName, email, password }))}
+                            onPress={() => dispatch(loginUser({ email, password }))}
                         >
-                            <Text style={styles.ctaText}>Create Account</Text>
+                            <Text style={styles.ctaText}>Login</Text>
                         </TouchableOpacity>
                     </Body>
                 </Form>
-
                 <Body>
                     <Text style={styles.small}>
-                        Already have an account?
+                        Don&apos;t have an account?
                     </Text>
 
-                    <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-                        <Text style={styles.button}>Login</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+                        <Text style={styles.button}>Create Account</Text>
                     </TouchableOpacity>
                 </Body>
             </Content>
@@ -111,25 +99,16 @@ const RegisterScreen = ({ navigation }) => {
     );
 };
 
-RegisterScreen.propTypes = {
-    navigation: PropTypes.object.isRequired,
-    errors: PropTypes.object,
-    registerUser: PropTypes.func
-};
-
 const styles = StyleSheet.create({
-    container: {
-        marginTop: 120
-    },
-    form: {
-        marginTop: 50
-    },
-    brandTitle: {
-        // fontSize: 100
+    title: {
+        marginTop: 150
     },
     error: {
         color: Colors.danger,
         fontSize: 18
+    },
+    form: {
+        marginTop: 75
     },
     ctaButton: {
         backgroundColor: Colors.primary,
@@ -146,8 +125,8 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     small: {
-        marginTop: 50
+        marginTop: 125
     }
 });
 
-export default RegisterScreen;
+export default LoginScreen;

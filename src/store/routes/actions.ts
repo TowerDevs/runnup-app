@@ -4,7 +4,7 @@ import {
     ROUTE_READ, ROUTE_UPDATED, ROUTE_DELETED,
     RouteReq, RouteRes, RouteActions
 } from "./types";
-import { tokenConfig } from "../../AuthManager";
+import tokenConfig from "../../utils/tokenConfig";
 import { returnErrors } from "../errors/actions";
 import axios, { AxiosResponse, AxiosError } from "axios";
 
