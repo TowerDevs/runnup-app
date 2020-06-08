@@ -5,7 +5,6 @@
 
 import axios from "axios";
 
-import { MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY } from "react-native-dotenv";
 import { MapBoxMapper } from "./mapping";
 import testData from "../../test-data/utils/mapping";
 
@@ -15,7 +14,8 @@ describe("MapBoxMapper tests", () => {
   test("get a route from a list of coords", async () => {
     axios.get.mockResolvedValue(testData.mapboxMatchingRes);
 
-    const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
+    // Should be fine since we mock anyways
+    const mapper = new MapBoxMapper("MAPBOX_PUBLIC_TOKEN", "MAPBOX_SECRET_KEY");
 
     const coords = testData.markers;
 
@@ -62,7 +62,7 @@ describe("MapBoxMapper tests", () => {
       },
     });
 
-    const mapper = new MapBoxMapper(MAPBOX_PUBLIC_TOKEN, MAPBOX_SECRET_KEY);
+    const mapper = new MapBoxMapper("MAPBOX_PUBLIC_TOKEN", "MAPBOX_SECRET_KEY");
 
     const coords = testData.markers.slice(0, 1);
 
