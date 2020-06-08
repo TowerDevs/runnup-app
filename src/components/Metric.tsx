@@ -8,8 +8,6 @@ import { View, TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, Gesture
 
 import Colors from '../constants/Colors';
 import { MetricField } from '../utils/metrics';
-import { METRIC_TYPES } from '../constants/Metrics';
-import { Time } from '../utils/time';
 
 type Props = {
   field: MetricField;
@@ -29,21 +27,6 @@ export default function Metric({ field, onTouchStart = undefined, locked = false
   let borderColor = locked ? Colors.primary : styles.metric.borderColor;
   let textColor = disabled ? Colors.lightGrey : Colors.offBlack;
 
-  let value = "";
-  switch (field.type) {
-    case METRIC_TYPES.NUMBER:
-      value = String(field.value);
-      break;
-    case METRIC_TYPES.TIME: {
-      let seconds = field.value;
-      let time = new Time(seconds);
-      value = String(time);
-      break;
-    }
-    default:
-      break;
-  }
-
   return (
     <View
       style={[
@@ -55,7 +38,7 @@ export default function Metric({ field, onTouchStart = undefined, locked = false
     >
       {/* TODO: Remove touchable opacity if not editable */}
       <TouchableOpacity>
-        <Text style={[styles.metricValue, { color: textColor }]}>{value}</Text>
+        <Text style={[styles.metricValue, { color: textColor }]}>{String(field.value)}</Text>
         <Text style={styles.metricLabel}>{field.label}</Text>
       </TouchableOpacity>
     </View>
