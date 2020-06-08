@@ -5,11 +5,8 @@
 import axios, { AxiosResponse } from "axios";
 import polyline from "@mapbox/polyline";
 
-import { MAPBOX_DOMAIN, MAPBOX_VERSION } from "react-native-dotenv"; //
+import { MAPBOX_DOMAIN, MAPBOX_VERSION } from "react-native-dotenv";
 import { CustomError } from "../errors";
-import { installWebGeolocationPolyfill } from "expo-location";
-import { Metrics, MetricField } from "./metrics";
-import { METRICS, METRIC_TYPES } from "../constants/Metrics";
 
 export class Coord {
   latitude: number;
