@@ -111,7 +111,7 @@ export abstract class Metrics {
 /**
  * RouteMetrics holds the data used for routing a run and calculates
  * values.
- * 
+ *
  * Units:
  *   distance -> km
  *   pace -> sec / km
@@ -177,7 +177,7 @@ export class RouteMetrics extends Metrics {
       pace: this.pace,
       duration: this.duration,
       calories: this.calories,
-      locked: this.getLocked()?.name || null
+      locked: this.getLocked()?.name || null,
     };
   }
 
@@ -185,16 +185,32 @@ export class RouteMetrics extends Metrics {
     return this.get(METRICS.DISTANCE)!.value;
   }
 
+  public set distance(value: number) {
+    this.setValue(METRICS.DISTANCE, value);
+  }
+
   public get pace() {
     return this.get(METRICS.PACE)!.value;
+  }
+
+  public set pace(value: number) {
+    this.setValue(METRICS.PACE, value);
   }
 
   public get duration() {
     return this.get(METRICS.DURATION)!.value;
   }
 
+  public set duration(value: number) {
+    this.setValue(METRICS.DURATION, value);
+  }
+
   public get calories() {
     return this.get(METRICS.CALORIES)!.value;
+  }
+
+  public set calories(value: number) {
+    this.setValue(METRICS.CALORIES, value);
   }
 
   update(metric: METRICS, value: number) {
@@ -211,7 +227,7 @@ export class RouteMetrics extends Metrics {
       this.getEditable().forEach((field) => {
         if (field.editable && field.name === metric) {
           field.locked = true;
-        } else{ 
+        } else {
           field.locked = false;
         }
       });
@@ -222,24 +238,66 @@ export class RouteMetrics extends Metrics {
     if (field !== null) {
       switch (field.name) {
         case METRICS.PACE:
-          this.setValue(METRICS.DURATION, Math.floor(this.distance * this.pace));
-          this.setValue(METRICS.CALORIES, Math.floor(this.pace * this.duration / 1000));
+          this.setValue(
+            METRICS.DURATION,
+            Math.floor(this.distance * this.pace)
+          );
+          this.setValue(
+            METRICS.CALORIES,
+            Math.floor((this.pace * this.duration) / 1000)
+          );
           break;
 
         case METRICS.DURATION:
-          this.setValue(METRICS.PACE, Math.floor(this.duration / this.distance));
-          this.setValue(METRICS.CALORIES, Math.floor(this.pace * this.duration / 1000));
+          this.setValue(
+            METRICS.PACE,
+            Math.floor(this.duration / this.distance)
+          );
+          this.setValue(
+            METRICS.CALORIES,
+            Math.floor((this.pace * this.duration) / 1000)
+          );
           break;
 
         case METRICS.CALORIES:
-          this.setValue(METRICS.PACE, Math.floor(this.calories / this.distance));
-          this.setValue(METRICS.DURATION, Math.floor(this.distance * this.pace));
+          this.setValue(
+            METRICS.PACE,
+            Math.floor(this.calories / this.distance)
+          );
+          this.setValue(
+            METRICS.DURATION,
+            Math.floor(this.distance * this.pace)
+          );
           break;
         case METRICS.DISTANCE:
           // FIXME: this is a hack and should be fixed
-          this.update(this.getLocked()!.name, this.getLocked()!.value);
+          if (value == 0) {
+            this.duration = 0.0;
+            this.pace = 0.0;
+            this.calories = 0.0;
+            this.distance = 0.0;
+
+            this.getEditable().forEach((field) => {
+              field.locked = false;
+            });
+          } else {
+            this.update(this.getLocked()!.name, this.getLocked()!.value);
+          }
         default:
           break;
+      }
+
+      if (this.distance == 0) {
+        if (value == 0) {
+          this.duration = 0.0;
+          this.pace = 0.0;
+          this.calories = 0.0;
+          this.distance = 0.0;
+
+          this.getEditable().forEach((field) => {
+            field.locked = false;
+          });
+        }
       }
     }
   }

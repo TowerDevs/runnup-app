@@ -70,14 +70,13 @@ export default function Metrics(props: Props) {
       {isEditing && (
         <View style={[STYLES.centeredView, { position: "absolute" }]}>
           <MetricInputModal
-            initialValue={""} // Could set an initial value here but a better UX is to start blank
             entering={entering}
             onEndEditing={(value: number) => {
               setIsEditing(false);
               fields.update(entering, value);
               ChangeMetric();
             }}
-            type={fields.get(entering)!.type}
+            field={fields.get(entering)!}
           />
         </View>
       )}
@@ -91,6 +90,8 @@ export default function Metrics(props: Props) {
         <Metric
           field={fields.get(METRICS.CALORIES)!}
           style={styles.metric}
+          locked={fields.getLocked()?.name === fields.get(METRICS.CALORIES)!.name}
+          onTouchStart={() => editMetric(METRICS.CALORIES)}
         />
       </View>
       <View style={styles.row}>
