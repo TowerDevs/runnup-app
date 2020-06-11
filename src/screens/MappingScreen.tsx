@@ -3,9 +3,10 @@
  * @module MappingScreen
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from 'react';
 import MapView, { Marker, MapEvent, Geojson } from 'react-native-maps';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, LayoutChangeEvent, Button } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import {
   MAPBOX_PUBLIC_TOKEN,
   MAPBOX_SECRET_KEY
@@ -13,13 +14,18 @@ import {
 
 import Layout from '../constants/Layout';
 import Metrics from '../components/Metrics';
+import Styles from '../constants/Styles';
 import DebugValues from '../components/debug/DebugValues';
 import { getLocation } from '../utils/location';
 import { MapBoxMapper, Route } from '../utils/mapping';
 import { LocationData } from 'expo-location';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.01
+
+// FIXME: add bottom nav height to redux store
+const BOTTOM_NAV_HEIGHT = 83;
 
 // Enum of the states that `hasLocation` can have
 const HAS_LOCATION = {
@@ -42,6 +48,8 @@ type Region = {
  */
 export default function MappingScreen() {
   /** State */
+  const [metricsCollapsed, setMetricsCollapsed] = useState(false);
+  const [metricsHeight, setMetricsHeight] = useState(0.0);
   const [location, setLocation] = useState<LocationData>();
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
   const [initialRegion, setInitialRegion] = useState<Region>();
@@ -87,9 +95,10 @@ export default function MappingScreen() {
     }
   }, [hasLocation, location]);
 
-  // TODO: Use layout effect to resize map depending on the height of the metrics drawer
-  // useLayoutEffect(() => {
-  // }, []);
+  // Resize map depending on the height of the metrics drawer
+  useLayoutEffect(() => {
+
+  }, []);
 
   /** Methods */
   const addMarker = async ({ nativeEvent }: MapEvent) => {
@@ -152,66 +161,73 @@ export default function MappingScreen() {
         <Text>Requesting location...</Text>
       }
       {((hasLocation === HAS_LOCATION.GRANTED || hasLocation === HAS_LOCATION.DENIED) && initialRegion !== null) &&
-        <MapView
-          style={styles.mapStyle}
-          initialRegion={initialRegion}
-          showsUserLocation={true}
-          onPress={addMarker}
-          rotateEnabled={false}
-          pitchEnabled={false}
-          zoomTapEnabled={false}
-        >
-          {/* <UrlTile
+        <View style={{ position: "absolute", top: 0, width: "100%", height: Layout.window.height - metricsHeight - BOTTOM_NAV_HEIGHT, justifyContent: "flex-end" }}>
+          <MapView
+            style={[styles.mapStyle]}
+            initialRegion={initialRegion}
+            showsUserLocation={true}
+            onPress={addMarker}
+            rotateEnabled={false}
+            pitchEnabled={false}
+            zoomTapEnabled={false}
+          >
+            {/* <UrlTile
             urlTemplate={"http://b.tile.openstreetmap.org/{z}/{x}/{y}.png"}
             shouldReplaceMapContent={true}
           /> */}
-          {/* Location marker */}
-          {/* <Marker
-            coordinate={{
-              latitude: location!.coords.latitude,
-              longitude: location!.coords.longitude
-            }}
-            image={require("../assets/images/person-icon-50x50.png")}
-          /> */}
 
-          {/* Route markers */}
-          {route !== null &&
-            route.waypoints.map((marker, index) => {
-              return (
-                <Marker
-                  draggable
-                  key={index}
-                  image={require("../assets/images/filled-circle-50x50.png")}
-                  coordinate={{
-                    latitude: marker.latitude,
-                    longitude: marker.longitude,
-                  }}
-                  onPress={e => {
-                    e.stopPropagation();
-                    removeMarker(index);
-                  }}
-                  onDragEnd={(e) => moveMarker(e, index)}
-                />
-              )
-            })
-          }
+            {/* Route markers */}
+            {route !== null &&
+              route.waypoints.map((marker, index) => {
+                return (
+                  <Marker
+                    draggable
+                    key={index}
+                    image={require("../assets/images/filled-circle-50x50.png")}
+                    coordinate={{
+                      latitude: marker.latitude,
+                      longitude: marker.longitude,
+                    }}
+                    onPress={e => {
+                      e.stopPropagation();
+                      removeMarker(index);
+                    }}
+                    onDragEnd={(e) => moveMarker(e, index)}
+                  />
+                )
+              })
+            }
 
-          {/* Route path */}
-          {route !== null &&
-            <Geojson
-              geojson={{
-                features: [{
-                  "type": "Feature",
-                  "geometry": route.geometry,
-                }]
-              }}
-            />
-          }
-        </MapView>
+            {/* Route path */}
+            {route !== null &&
+              <Geojson
+                geojson={{
+                  features: [{
+                    "type": "Feature",
+                    "geometry": route.geometry,
+                  }]
+                }}
+              />
+            }
+          </MapView>
+
+          {/* FIXME: If the TouchableOpacity is not wrapped in a view it's bounding box isn't sized right */}
+          <View style={styles.expandButton} onTouchEnd={() => { setMetricsCollapsed(!metricsCollapsed) }}>
+            <TouchableOpacity>
+              {metricsCollapsed ?
+                <FontAwesome name="angle-up" size={24} color="black" />
+                :
+                <FontAwesome name="angle-down" size={24} color="black" />
+              }
+            </TouchableOpacity>
+          </View>
+        </View>
       }
       <Metrics
         style={styles.metricContainer}
         route={route}
+        collapsed={metricsCollapsed}
+        onLayout={(event: LayoutChangeEvent) => { setMetricsHeight(event.nativeEvent.layout.height) }}
       />
     </View>
   );
@@ -227,8 +243,16 @@ const styles = StyleSheet.create({
   mapStyle: {
     width: "100%",
     height: "100%",
+    position: "absolute"
   },
   metricContainer: {
-    position: 'absolute'
+    position: 'absolute',
+  },
+  expandButton: {
+    ...Styles.button,
+    backgroundColor: "#fff",
+    width: 50,
+    marginLeft: 10,
+    marginBottom: 30,
   }
 });
