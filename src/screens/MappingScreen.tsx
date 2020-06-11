@@ -19,7 +19,7 @@ import { MapBoxMapper, Route } from '../utils/mapping';
 import { LocationData } from 'expo-location';
 
 // Sets the zoom, see: 
-const INITIAL_LATITUDE_DELTA = 0.03
+const INITIAL_LATITUDE_DELTA = 0.01
 
 // Enum of the states that `hasLocation` can have
 const HAS_LOCATION = {
@@ -155,7 +155,7 @@ export default function MappingScreen() {
         <MapView
           style={styles.mapStyle}
           initialRegion={initialRegion}
-          // showsUserLocation={true}
+          showsUserLocation={true}
           onPress={addMarker}
           rotateEnabled={false}
           pitchEnabled={false}
