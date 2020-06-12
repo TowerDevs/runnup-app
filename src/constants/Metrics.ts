@@ -10,6 +10,7 @@ export enum METRIC_TYPES {
 
 export enum METRICS {
   DISTANCE = "distance",
+  ELEVATION = "elevation",
   PACE = "pace",
   DURATION = "duration",
   CALORIES = "calories"

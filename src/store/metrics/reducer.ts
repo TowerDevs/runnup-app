@@ -1,25 +1,28 @@
-import { METRIC_CHANGED, MetricAction, MetricsState } from "./types";
+import { METRICS_CHANGED, MetricAction, RouteMetricsState } from "./types";
 
-const initialState: MetricsState = {
+type State = {
+  metrics: RouteMetricsState
+}
+
+const initialState = {
   metrics: {
     distance: 0.0,
     elevation: 0.0,
     pace: 0.0,
     duration: 0.0,
     calories: 0.0,
-  },
+    locked: null
+  }
 };
 
-export default (state = initialState, action: MetricAction): MetricsState => {
+export default (state: State = initialState, action: MetricAction): State => {
   switch (action.type) {
-    case METRIC_CHANGED:
+    case METRICS_CHANGED: {
       return {
         ...state,
-        metrics: {
-          ...state.metrics,
-          [action.editingMetric]: action.editingMetricValue
-        }
+        metrics: action.metrics
       };
+    }
     default:
       return state;
   }

@@ -53,6 +53,6 @@ export class Time {
    * @returns {string} the formatted minute string
    */
   toString(): string {
-    return `${this.m}:${this.s}`;
+    return `${this.m}:${String(this.s).padStart(2, "0")}`;
   }
 }
