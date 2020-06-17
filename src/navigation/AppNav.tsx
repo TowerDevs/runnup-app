@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useLayoutEffect, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 /* Components */
@@ -25,6 +25,7 @@ type Props = {
 };
 
 const AppNav: FC<Props> = ({ navigation }) => {
+
     return (
         <Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
