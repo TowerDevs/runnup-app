@@ -47,7 +47,6 @@ type Region = {
 export default function MappingScreen() {
   /** State */
   const [metricsCollapsed, setMetricsCollapsed] = useState(false);
-  const [metricsHeight, setMetricsHeight] = useState(0.0);
   const [location, setLocation] = useState<LocationData>();
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
   const [initialRegion, setInitialRegion] = useState<Region>();
@@ -219,7 +218,6 @@ export default function MappingScreen() {
       <Metrics
         route={route}
         collapsed={metricsCollapsed}
-        onLayout={(event: LayoutChangeEvent) => { setMetricsHeight(event.nativeEvent.layout.height) }}
       />
     </View>
   );
