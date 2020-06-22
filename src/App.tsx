@@ -23,7 +23,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 // Token Mgmt
 import * as SecureStore from "expo-secure-store";
 import { useTypedSelector } from "./store"
-import { AUTH_ERROR, REGISTER_FAILED, DEREGISTER_FAILED, LOGIN_FAILED, LOGOUT_SUCCESS,  } from "./store/auth/types";
+import { AUTH_ERROR, REGISTER_FAILED, DEREGISTER_FAILED, LOGIN_FAILED, LOGOUT_SUCCESS } from "./store/auth/types";
 
 const TERMINATE_TOKEN = AUTH_ERROR || REGISTER_FAILED || DEREGISTER_FAILED || LOGIN_FAILED || LOGOUT_SUCCESS;
 const { Navigator, Screen } = createStackNavigator();
