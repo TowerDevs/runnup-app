@@ -4,8 +4,8 @@ type Props = {
 
 };
 
-const LiveScreen: FC<Props> = () => {
+const RunScreen: FC<Props> = () => {
     return null;
 };
 
-export default LiveScreen;
+export default RunScreen;
