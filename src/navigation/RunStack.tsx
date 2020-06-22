@@ -1,20 +1,20 @@
 import React, { FC } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import LiveScreen from "../screens/LiveScreen";
+import RunScreen from "../screens/RunScreen";
 
 const { Navigator, Screen } = createStackNavigator();
 
-const INITIAL_ROUTE_NAME = "Live";
+const INITIAL_ROUTE_NAME = "Run";
 
 type Props = {
 
 };
 
 /**
- * Stack Navigator for the LiveScreen and it's child screens
+ * Stack Navigator for the RunScreen and it's child screens
  */
-const LiveNav: FC<Props> = () => {
+const RunNav: FC<Props> = () => {
     return (
         <Navigator
             initialRouteName={INITIAL_ROUTE_NAME}
@@ -23,14 +23,14 @@ const LiveNav: FC<Props> = () => {
             }}
         >
             <Screen
-                name="Live"
-                component={LiveScreen}
+                name="Run"
+                component={RunScreen}
                 options={{
-                    headerTitle: "Live Run"
+                    headerTitle: "Run"
                 }}
             />
         </Navigator>
     );
 };
 
-export default LiveNav;
+export default RunNav;
