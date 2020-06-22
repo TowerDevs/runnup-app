@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import MapView, { Marker, MapEvent, Geojson } from 'react-native-maps';
-import { StyleSheet, View, Text, LayoutChangeEvent, Button } from 'react-native';
+import { StyleSheet, View, Text, LayoutChangeEvent } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import {
   MAPBOX_PUBLIC_TOKEN,
@@ -20,12 +20,10 @@ import { getLocation } from '../utils/location';
 import { MapBoxMapper, Route } from '../utils/mapping';
 import { LocationData } from 'expo-location';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Sets the zoom, see: 
 const INITIAL_LATITUDE_DELTA = 0.01
-
-// FIXME: add bottom nav height to redux store
-const BOTTOM_NAV_HEIGHT = 83;
 
 // Enum of the states that `hasLocation` can have
 const HAS_LOCATION = {
@@ -49,7 +47,6 @@ type Region = {
 export default function MappingScreen() {
   /** State */
   const [metricsCollapsed, setMetricsCollapsed] = useState(false);
-  const [metricsHeight, setMetricsHeight] = useState(0.0);
   const [location, setLocation] = useState<LocationData>();
   const [hasLocation, setHasLocation] = useState(HAS_LOCATION.REQUESTING);
   const [initialRegion, setInitialRegion] = useState<Region>();
@@ -161,7 +158,7 @@ export default function MappingScreen() {
         <Text>Requesting location...</Text>
       }
       {((hasLocation === HAS_LOCATION.GRANTED || hasLocation === HAS_LOCATION.DENIED) && initialRegion !== null) &&
-        <View style={{ position: "absolute", top: 0, width: "100%", height: Layout.window.height - metricsHeight - BOTTOM_NAV_HEIGHT, justifyContent: "flex-end" }}>
+        <View style={{ width: "100%", height: "100%", justifyContent: "flex-end" }}>
           <MapView
             style={[styles.mapStyle]}
             initialRegion={initialRegion}
@@ -171,11 +168,6 @@ export default function MappingScreen() {
             pitchEnabled={false}
             zoomTapEnabled={false}
           >
-            {/* <UrlTile
-            urlTemplate={"http://b.tile.openstreetmap.org/{z}/{x}/{y}.png"}
-            shouldReplaceMapContent={true}
-          /> */}
-
             {/* Route markers */}
             {route !== null &&
               route.waypoints.map((marker, index) => {
@@ -224,10 +216,8 @@ export default function MappingScreen() {
         </View>
       }
       <Metrics
-        style={styles.metricContainer}
         route={route}
         collapsed={metricsCollapsed}
-        onLayout={(event: LayoutChangeEvent) => { setMetricsHeight(event.nativeEvent.layout.height) }}
       />
     </View>
   );
@@ -235,18 +225,15 @@ export default function MappingScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   mapStyle: {
     width: "100%",
     height: "100%",
     position: "absolute"
-  },
-  metricContainer: {
-    position: 'absolute',
   },
   expandButton: {
     ...Styles.button,

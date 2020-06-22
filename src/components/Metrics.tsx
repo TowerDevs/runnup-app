@@ -28,10 +28,10 @@ const fields = new RouteMetrics();
 type Props = {
   // Route date
   route: Route,
-  // Additional styling for the container component
-  style: object;
   // Collapse flag
   collapsed: boolean;
+  // Additional styling for the container component
+  style?: object;
   // Callback when the save button is pressed
   onSave?: () => void;
   // Layout callback to get height
@@ -67,62 +67,64 @@ export default function Metrics(props: Props) {
     () => dispatch(changeMetrics(fields)),
     [dispatch, fields]
   );
-
-  return (
-    <View onLayout={props.onLayout} style={[props.style, styles.container, { height: props.collapsed ? 0 : CONTAINER_HEIGHT }]}>
-      {!props.collapsed &&
-        <View style={{ height: props.collapsed ? 0 : CONTAINER_HEIGHT }}>
-          {/* Modal */}
-          {isEditing && (
-            <View style={[STYLES.centeredView, { position: "absolute" }]}>
-              <MetricInputModal
-                entering={entering}
-                onEndEditing={(value: number) => {
-                  setIsEditing(false);
-                  fields.update(entering, value);
-                  ChangeMetric();
-                }}
-                field={fields.get(entering)!}
+  
+  if (!props.collapsed) {
+    return (
+      <View onLayout={props.onLayout} style={[props.style, styles.container, { height: CONTAINER_HEIGHT }]}>
+          <View style={{ height: CONTAINER_HEIGHT }}>
+            {/* Modal */}
+            {isEditing && (
+              <View style={[STYLES.centeredView, { position: "absolute" }]}>
+                <MetricInputModal
+                  entering={entering}
+                  onEndEditing={(value: number) => {
+                    setIsEditing(false);
+                    fields.update(entering, value);
+                    ChangeMetric();
+                  }}
+                  field={fields.get(entering)!}
+                />
+              </View>
+            )}
+  
+            {/* Metrics */}
+            <View style={styles.row}>
+              <Metric
+                field={fields.get(METRICS.DISTANCE)!}
+                style={styles.metric}
+              />
+              <Metric
+                field={fields.get(METRICS.CALORIES)!}
+                style={styles.metric}
+                locked={fields.getLocked()?.name === fields.get(METRICS.CALORIES)!.name}
+                onTouchStart={() => editMetric(METRICS.CALORIES)}
               />
             </View>
-          )}
-
-          {/* Metrics */}
-          <View style={styles.row}>
-            <Metric
-              field={fields.get(METRICS.DISTANCE)!}
-              style={styles.metric}
-            />
-            <Metric
-              field={fields.get(METRICS.CALORIES)!}
-              style={styles.metric}
-              locked={fields.getLocked()?.name === fields.get(METRICS.CALORIES)!.name}
-              onTouchStart={() => editMetric(METRICS.CALORIES)}
-            />
+            <View style={styles.row}>
+              <Metric
+                field={fields.get(METRICS.PACE)!}
+                style={styles.metric}
+                locked={fields.getLocked()?.name === fields.get(METRICS.PACE)!.name}
+                onTouchStart={() => editMetric(METRICS.PACE)}
+              />
+              <Metric
+                field={fields.get(METRICS.DURATION)!}
+                style={styles.metric}
+                locked={fields.getLocked()?.name === fields.get(METRICS.DURATION)!.name}
+                onTouchStart={() => editMetric(METRICS.DURATION)}
+              />
+            </View>
+            <View style={[styles.row, styles.buttonRow]}>
+              <TouchableOpacity style={styles.saveButton} onPress={props.onSave}>
+                <Text style={{ color: COLORS.white }}>Save</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.row}>
-            <Metric
-              field={fields.get(METRICS.PACE)!}
-              style={styles.metric}
-              locked={fields.getLocked()?.name === fields.get(METRICS.PACE)!.name}
-              onTouchStart={() => editMetric(METRICS.PACE)}
-            />
-            <Metric
-              field={fields.get(METRICS.DURATION)!}
-              style={styles.metric}
-              locked={fields.getLocked()?.name === fields.get(METRICS.DURATION)!.name}
-              onTouchStart={() => editMetric(METRICS.DURATION)}
-            />
-          </View>
-          <View style={[styles.row, styles.buttonRow]}>
-            <TouchableOpacity style={styles.saveButton} onPress={props.onSave}>
-              <Text style={{ color: COLORS.white }}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      }
-    </View>
-  );
+      </View>
+    );
+  } else {
+    return <View onLayout={props.onLayout}></View>;
+  }
 }
 
 const CONTAINER_HEIGHT = LAYOUT.window.height / 3.75;
@@ -142,7 +144,6 @@ interface Styles {
 
 const styles = StyleSheet.create<Styles>({
   container: {
-    position: "absolute",
     width: CONTAINER_WIDTH,
     backgroundColor: "#fff",
     bottom: 0,
