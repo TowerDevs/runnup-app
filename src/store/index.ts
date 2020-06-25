@@ -1,4 +1,6 @@
 import { combineReducers, createStore, applyMiddleware, compose } from "redux";
+import AsyncStorage from "@react-native-community/async-storage";
+import { persistStore, persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 
 import errors from "./errors/reducer";
@@ -27,16 +29,23 @@ export type AppState = ReturnType<typeof rootReducer>;
 
 export const useTypedSelector: TypedUseSelectorHook<AppState> = useSelector;
 
+const persistConfig = {
+    key: "root",
+    storage: AsyncStorage,
+};
+
 const initialState = {};
 
 const middleware = [thunk];
 
 const composeEnhancers = window["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] as typeof compose || compose;
 
-const store = createStore(
-    rootReducer,
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
+export const store = createStore(
+    persistedReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middleware))
 );
 
-export default store;
+export const persistor = persistStore(store);
